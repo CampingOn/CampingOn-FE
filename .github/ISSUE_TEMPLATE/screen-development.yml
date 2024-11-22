@@ -1,6 +1,6 @@
 name: Screen Development 🖥️
 description: 새로운 화면을 개발하거나 기존 화면을 수정할 때 사용하세요.
-title: "[Feat] 제목을 입력하세요"
+title: "[FEAT] 제목을 입력하세요"
 labels: ["feature"]
 body:
   - type: markdown
