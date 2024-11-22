@@ -1,0 +1,61 @@
+name: Bug Report 🐞
+description: 발견한 버그나 문제를 보고할 때 사용하세요.
+title: "[BUG] 제목을 입력하세요"
+labels: ["bug"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🐞 버그 보고 안내
+        발견한 버그나 문제를 아래 항목에 맞춰 작성해주세요.
+
+  - type: input
+    id: bug-summary
+    attributes:
+      label: 📝 버그 요약
+      description: "발생한 버그를 간단히 요약해주세요."
+      placeholder: "예: 버튼 클릭 시 페이지 오류 발생"
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: 🔄 재현 방법
+      description: "문제가 발생하는 단계를 작성해주세요."
+      placeholder: |
+        1. 특정 페이지로 이동
+        2. 버튼 클릭
+        3. 오류 메시지가 표시됨
+
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: ✔️ 예상 동작
+      description: "정상적으로 동작했을 경우의 기대 결과를 적어주세요."
+      placeholder: "예: 모달 창이 정상적으로 열림"
+
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: ❌ 실제 동작
+      description: "실제로 발생한 결과를 적어주세요."
+      placeholder: "예: 버튼을 클릭해도 아무 일도 일어나지 않음"
+
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 🐾 관련 로그
+      description: "에러 로그나 메시지가 있다면 추가해주세요."
+      placeholder: "예: 콘솔 에러: Uncaught TypeError"
+      render: shell
+
+
+  - type: input
+    id: additional-context
+    attributes:
+      label: 📌 참고 사항
+      description: "추가적으로 공유할 내용이 있다면 적어주세요."
+      placeholder: "예: 특정 사용자 계정에서만 발생"

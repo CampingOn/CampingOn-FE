@@ -1,0 +1,44 @@
+name: Screen Development 🖥️
+description: 새로운 화면을 개발하거나 기존 화면을 수정할 때 사용하세요.
+title: "[Feat] 제목을 입력하세요"
+labels: ["feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🖼️ 화면 개발 계획
+        화면 개발 또는 수정 작업에 대해 아래 항목을 작성해주세요.
+
+        ---
+
+  - type: input
+    id: screen-name
+    attributes:
+      label: 📋 화면 이름
+      description: 개발하거나 수정할 화면의 이름을 입력하세요.
+      placeholder: "예: 로그인 페이지"
+
+  - type: textarea
+    id: screen-purpose
+    attributes:
+      label: 🎯 화면 목적
+      description: 이 화면의 역할과 목적을 간단히 적어주세요.
+      placeholder: "예: 사용자가 계정에 로그인할 수 있는 화면입니다."
+
+
+  - type: textarea
+    id: screen-components
+    attributes:
+      label: 🛠️ 화면 구성 요소
+      description: 화면에 포함될 주요 컴포넌트나 UI 요소를 나열해주세요.
+      placeholder: |
+        - 로그인 폼
+        - '로그인' 버튼
+        - '비밀번호 찾기' 링크
+
+  - type: input
+    id: additional-requirements
+    attributes:
+      label: 📌 추가 요구 사항
+      description: 추가적으로 필요한 리소스나 협업 내용이 있다면 작성해주세요.
+      placeholder: "예: API 연동 필요, 디자이너로부터 이미지 요청 필요"

@@ -1,0 +1,54 @@
+name: Bug Fix 🛠️
+description: 수정한 버그에 대한 내용을 정리할 때 사용하세요.
+title: "[FIX] 제목을 입력하세요"
+labels: ["bug fix"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🛠️ 버그 수정 내역
+        수정한 버그와 관련된 정보를 아래 항목에 맞춰 작성해주세요.
+
+  - type: input
+    id: bug-summary
+    attributes:
+      label: 🐞 버그 요약
+      description: "수정한 버그를 간단히 요약해주세요."
+      placeholder: "예: 페이지 로딩 문제 해결"
+
+  - type: textarea
+    id: root-cause
+    attributes:
+      label: 🔍 원인 분석
+      description: "문제의 근본 원인을 간단히 적어주세요."
+      placeholder: "예: API 응답 데이터 형식이 예상과 다름"
+    validations:
+      required: true
+
+  - type: textarea
+    id: fix-details
+    attributes:
+      label: ✔️ 수정 내용
+      description: "문제를 어떻게 해결했는지 작성해주세요."
+      placeholder: |
+        - API 응답 데이터 형식을 맞추기 위해 파싱 로직 수정
+        - 잘못된 상태 업데이트 로직 수정
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: 🔍 영향 범위
+      description: "이번 수정이 영향을 줄 수 있는 부분을 적어주세요."
+      placeholder: "예: 특정 컴포넌트, API 호출 방식, 스타일 변경"
+    validations:
+      required: false
+
+  - type: input
+    id: additional-context
+    attributes:
+      label: 📌 참고 사항
+      description: "수정 관련 추가적으로 공유할 내용이 있다면 적어주세요."
+      placeholder: "예: 관련된 테스트 케이스를 업데이트했습니다."
