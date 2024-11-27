@@ -3,7 +3,7 @@ import Home from "../pages/home/Home";
 import NotFound from "../pages/error/NotFound";
 import Keyword from "../pages/keyword/Keyword";
 import Signup from "../pages/account/SignUp";
-import Login from "/pages/account/Login";
+import Login from "../pages/account/Login";
 
 function Router() {
     return (
