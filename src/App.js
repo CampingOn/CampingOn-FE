@@ -1,4 +1,5 @@
 import './App.css';
+import './index.css'; // Tailwind CSS 파일
 import { BrowserRouter } from "react-router-dom";
 import HiddenUtils from "./HiddenUtils";
 import Router from "./router/Router";
