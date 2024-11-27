@@ -3,6 +3,7 @@ import Home from "../pages/home/Home";
 import NotFound from "../pages/error/NotFound";
 import Keyword from "../pages/keyword/Keyword";
 import Signup from "../pages/account/SignUp";
+import Login from "/pages/account/Login";
 
 function Router() {
     return (
@@ -10,6 +11,7 @@ function Router() {
             <Route path="/" element={<Home/>}/>
             <Route path="/keyword" element={<Keyword/>}/>
             <Route path="/signup" element={<Signup/>} />
+            <Route path="/login" element={<Login/>} />
 
             <Route path="*" element={<Navigate to="/not-found" replace/>}/>
             <Route path="/not-found" element={<NotFound/>}/>
