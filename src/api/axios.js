@@ -29,7 +29,7 @@ instance.interceptors.response.use(
     },
     error => {
         console.log('응답 에러:', error.message);
-        return Promise.reject(error);
+        return errorHandler(error);
     }
 );
 
