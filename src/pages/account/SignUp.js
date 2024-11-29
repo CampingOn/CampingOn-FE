@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axiosConfig';
+import apiClient from 'axiosConfig';
 import InputField from "components/InputField";
 
-const apiUrl = process.env.REACT_APP_API_URL;
 
 function Signup() {
     const [name, setName] = useState('');
@@ -35,8 +34,8 @@ function Signup() {
             return;
         }
         try {
-            const response = await axios.get(
-                `${apiUrl}/api/users/check-duplicate`,
+            const response = await apiClient.get(
+                'api/users/check-duplicate',
                 { params: { type, value } }
             );
             if (response.data) {
@@ -79,8 +78,8 @@ function Signup() {
 
         if (name && email && password && password === confirmPassword) {
             try {
-                const response = await axios.post(
-                    `${apiUrl}/api/signup`,
+                const response = await apiClient.post(
+                    '/api/signup',
                     { name, email, password, nickname }
                 );
                 if (response.status === 201) navigate('/');
