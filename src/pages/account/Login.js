@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axiosConfig';
+import apiClient from 'axiosConfig';
 import InputField from "components/InputField";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "slices/authSlice";
 
-const apiUrl = process.env.REACT_APP_API_URL;
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -12,6 +13,7 @@ function Login() {
     const [passwordError, setPasswordError] = useState('');
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     const validatePassword = (password) =>
@@ -25,11 +27,10 @@ function Login() {
 
         if (email && password) {
             try {
-                const response = await axios.post(`${apiUrl}/api/login`, { email, password });
+                const response = await apiClient.post('/api/login', { email, password });
 
-                // AccessToken과 RefreshToken을 LocalStorage에 저장
-                localStorage.setItem("accessToken", response.data.accessToken);
-                localStorage.setItem("refreshToken", response.data.refreshToken);
+                // AccessToken을 Redux 상태에 저장
+                dispatch(setCredentials({ accessToken: response.data.accessToken }));
 
                 navigate("/"); // 홈페이지로 이동
             } catch (error) {
