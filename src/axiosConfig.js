@@ -1,44 +1,57 @@
 import axios from "axios";
 import store from "store";
 import { logout, setCredentials } from "slices/authSlice";
-import {useNavigate} from "react-router-dom";
+import { errorHandler } from "api/handlers/errorHandler";
 
 const baseUrl = process.env.REACT_APP_API_URL;
 
 const apiClient = axios.create({
     baseURL: baseUrl,
-    withCredentials: true  // 쿠키 전송을 위해 설정
+    timeout: 5000,
+    withCredentials: true, // 쿠키 전송을 위해 설정
+    headers: {
+        "Content-Type": "application/json",
+    },
 });
 
 // 요청 인터셉터
 apiClient.interceptors.request.use(
     async (config) => {
         const state = store.getState();
-        const accessToken = state.auth.accessToken;
+        const accessToken = state.auth?.accessToken;
 
         if (accessToken) {
             config.headers.Authorization = `Bearer ${accessToken}`;
         }
 
+        console.log("요청 데이터:", config.data);
         return config;
     },
-    (error) => Promise.reject(error)
+    (error) => {
+        console.error("요청 에러:", error);
+        return Promise.reject(error);
+    }
 );
 
 // 응답 인터셉터
 apiClient.interceptors.response.use(
-    (response) => response,
+    (response) => {
+        console.log("응답 데이터:", response.data);
+        return response;
+    },
     async (error) => {
+        console.error("응답 에러:", error.message);
         const originalRequest = error.config;
-        const navigate = useNavigate();
 
-        // 401 Unauthorized 에러 처리
+        // 401 Unauthorized 처리
         if (error.response && error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
             try {
                 // Refresh Token으로 Access Token 재발급
-                const response = await axios.get(`${baseUrl}/api/token/refresh`);
+                const response = await axios.get(`${baseUrl}/api/token/refresh`, {
+                    withCredentials: true, // 쿠키를 통한 인증
+                });
 
                 const newAccessToken = response.data.accessToken;
 
@@ -53,12 +66,13 @@ apiClient.interceptors.response.use(
             } catch (refreshError) {
                 // 재발급 실패 시 로그아웃 처리
                 store.dispatch(logout());
-                navigate('/login')
+                window.location.href = "/login"
                 return Promise.reject(refreshError);
             }
         }
 
-        return Promise.reject(error);
+        // 다른 에러는 중앙 에러 핸들러로 위임
+        return errorHandler ? errorHandler(error) : Promise.reject(error);
     }
 );
 
