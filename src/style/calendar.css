@@ -1,0 +1,38 @@
+/* 공통 폰트 스타일 */
+.react-datepicker__header {
+    background-color: white !important;
+}
+
+/* 날짜 선택 및 범위 관련 스타일 */
+.react-datepicker__day[aria-selected="true"],
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+    background-color: #fcd34d;
+    color: #000000;
+}
+
+.react-datepicker__day--selected:hover {
+    background-color: #fcd34d !important;
+    color: #ffffff;
+}
+
+/* 선택된 날짜 범위 */
+.react-datepicker__day--in-range,
+.react-datepicker__day--selecting-range-end,
+.react-datepicker__day--selecting-range-start,
+.react-datepicker__day--in-selecting-range {
+    background-color: #fde374 !important;
+    color: #000000;
+}
+
+
+/* 시작일 및 종료일 */
+.react-datepicker__day--selecting-range-end,
+.react-datepicker__day--selecting-range-start,
+.react-datepicker__day--range-start,
+.react-datepicker__day--range-end {
+    background-color: #fcd34d !important;
+    color: #000000;
+    font-weight: bold;
+}
+
