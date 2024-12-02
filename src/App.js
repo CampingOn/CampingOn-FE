@@ -8,12 +8,22 @@ import { setCredentials, logout } from "slices/authSlice";
 import {useDispatch} from "react-redux";
 import {useEffect} from "react";
 import axios from "axios";
+import { useRef } from "react";
+
 
 function App() {
     const dispatch = useDispatch();
+    const isRefreshing = useRef(false); // 요청 상태를 저장하는 useRef
 
     useEffect(() => {
         const initializeAuth = async () => {
+            // 요청 중복 방지: isRefreshing이 true면 요청 차단
+            if (isRefreshing.current) {
+                return;
+            }
+
+            isRefreshing.current = true; // 요청 시작 시 플래그 설정
+
             try {
                 const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/token/refresh`,
                     { withCredentials: true }
