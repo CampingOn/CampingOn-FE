@@ -13,6 +13,7 @@ function InputField({
                         onButtonClick,
                         buttonVisible = false,
                         successMessage,
+                        disabled,
                     }) {
     return (
         <div>
@@ -27,6 +28,7 @@ function InputField({
                     onChange={onChange}
                     onBlur={onBlur}
                     placeholder={placeholder}
+                    disabled={disabled} // 여기에 추가
                     className={`w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ${
                         error ? 'ring-red-500' : 'ring-gray-300'
                     } ${successMessage ? 'ring-green-500' : 'ring-gray-300'} 

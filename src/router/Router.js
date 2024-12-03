@@ -5,6 +5,7 @@ import Keyword from "pages/keyword/Keyword";
 import Signup from "pages/account/SignUp";
 import Login from "pages/account/Login";
 import ReservationList from "pages/reservation/ReservationList";
+import MyPage from "../pages/account/MyPage";
 // import SearchCampList from "/pages/camp/SearchCampList";
 
 
@@ -17,7 +18,7 @@ function Router() {
             <Route path="/login" element={<Login/>} />
             <Route path="/reservations" element={<ReservationList/>} />
             {/*<Route path="/searchCamps" element={<SearchCampList/>} />*/}
-
+            <Route path="/mypage" element={<MyPage />} />
             <Route path="*" element={<Navigate to="/not-found" replace/>}/>
             <Route path="/not-found" element={<NotFound/>}/>
         </Routes>
