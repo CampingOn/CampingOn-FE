@@ -3,6 +3,8 @@ import { BrowserRouter } from "react-router-dom";
 import HiddenUtils from "./utils/HiddenUtils";
 import Router from "./router/Router";
 import Header from "./components/Header";
+import store from 'store/index';
+import {Provider} from "react-redux";
 
 
 function App() {
@@ -35,6 +37,7 @@ function App() {
 
     return (
         <BrowserRouter>
+            <Provider store={store}>
             <div className="app">
                 <HiddenUtils whitelist={['/login', '/signup', '/keyword', '/not-found']}>
                     <div className='header'>
@@ -45,6 +48,7 @@ function App() {
                     <Router />
                 </div>
             </div>
+            </Provider>
         </BrowserRouter>
     );
 }
