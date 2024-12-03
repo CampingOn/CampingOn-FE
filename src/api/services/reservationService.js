@@ -1,4 +1,4 @@
-import apiClient from "../axiosConfig";
+import apiClient from "api/axiosConfig";
 
 
 export const reservationService = {
