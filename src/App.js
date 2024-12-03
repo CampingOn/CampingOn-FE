@@ -1,4 +1,3 @@
-import './App.css';
 import './index.css'; // Tailwind CSS 파일
 import { BrowserRouter } from "react-router-dom";
 import HiddenUtils from "./utils/HiddenUtils";
@@ -42,7 +41,7 @@ function App() {
                         <Header/>
                     </div>
                 </HiddenUtils>
-                <div className='content'>
+                <div className='content' style={{ margin: '0 15%'}}>
                     <Router />
                 </div>
             </div>

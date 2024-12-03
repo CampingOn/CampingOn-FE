@@ -40,7 +40,7 @@ const MyPage = () => {
             {/* Tabs 영역 */}
             <Box
                 sx={{
-                    width: '10%', // Tabs가 화면의 15% 차지
+                    width: '20%', // Tabs가 화면의 20% 차지
                     backgroundColor: 'white',
                     borderRight: '1px solid #ddd',
                     paddingTop: '16px', // 추가적인 상단 여백 제거
@@ -105,7 +105,7 @@ const MyPage = () => {
             {/* 콘텐츠 영역 */}
             <Box
                 sx={{
-                    width: '90%', // 콘텐츠가 화면의 나머지 85% 차지
+                    width: '80%', // 콘텐츠가 화면의 나머지 80% 차지
                     padding: '16px',
                     paddingTop: '32px', // 상단 여백 추가
                 }}
