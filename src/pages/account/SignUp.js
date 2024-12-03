@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import apiClient from 'axiosConfig';
+import apiClient from 'api/axiosConfig';
 import InputField from "components/InputField";
 
 
