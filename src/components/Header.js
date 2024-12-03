@@ -35,6 +35,11 @@ function Header() {
     return (
         <AppBar position="static" style={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
             <Toolbar style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', justifyContent: 'center', flexGrow: 1 }}>
+                        <WhiteButton>예약확인</WhiteButton>
+                        <WhiteButton s>찜한캠핑장</WhiteButton>
+                        <WhiteButton style={{ margin: '0 10px' }}>마이페이지</WhiteButton>
+                    </div>
                 <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
                     <img
                         src={logo}
@@ -46,12 +51,12 @@ function Header() {
                 </Link>
                 {isAuthenticated && (
                     <div style={{display: 'flex', justifyContent: 'center', flexGrow: 1}}>
-                        <WhiteButton to={"/my-reservation"}>예약확인</WhiteButton>
-                        <WhiteButton to={"/"}>찜한캠핑장</WhiteButton>
-                        <WhiteButton to={"/mypage"}>마이페이지</WhiteButton>
+                        <WhiteButton style={{margin: '0 10px'}}>Button 1</WhiteButton>
+                        <WhiteButton style={{margin: '0 10px'}}>Button 2</WhiteButton>
+                        <WhiteButton style={{ margin: '0 10px' }}>Button 3</WhiteButton>
                     </div>
                 )}
-                <YellowButton onClick={() => navigate("/")}>
+                <YellowButton onClick={handleAuthClick}>
                     {isAuthenticated ? 'Logout' : 'Login'}
                 </YellowButton>
             </Toolbar>
