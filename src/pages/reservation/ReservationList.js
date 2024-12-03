@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useApi } from '../../hooks/useApi';
-import { reservationService } from '../../api/services/reservationService';
+import { useApi } from 'hooks/useApi';
+import { reservationService } from 'api/services/reservationService';
 
 const ReservationList = () => {
   const { execute: getReservations, loading, error, data } = useApi(reservationService.getReservations);

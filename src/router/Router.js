@@ -1,11 +1,11 @@
 import {Navigate, Route, Routes} from "react-router-dom";
-import Home from "../pages/home/Home";
-import NotFound from "../pages/error/NotFound";
-import Keyword from "../pages/keyword/Keyword";
-import Signup from "../pages/account/SignUp";
-import Login from "../pages/account/Login";
-import ReservationList from "../pages/reservation/ReservationList";
-// import SearchCampList from "../pages/camp/SearchCampList";
+import Home from "pages/home/Home";
+import NotFound from "pages/error/NotFound";
+import Keyword from "pages/keyword/Keyword";
+import Signup from "pages/account/SignUp";
+import Login from "pages/account/Login";
+import ReservationList from "pages/reservation/ReservationList";
+// import SearchCampList from "/pages/camp/SearchCampList";
 
 
 function Router() {
