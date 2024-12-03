@@ -1,4 +1,4 @@
-import apiClient from 'axiosConfig';
+import apiClient from 'api/axiosConfig';
 import { setCredentials, logout } from 'slices/authSlice';
 import store from 'store';
 

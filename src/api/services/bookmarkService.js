@@ -1,4 +1,4 @@
-import apiClient from 'axiosConfig';
+import apiClient from '../axiosConfig';
 
 export const bookmarkService = {
     // 캠핑장 찜하기/취소하기 토글

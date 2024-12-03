@@ -1,7 +1,7 @@
 import './App.css';
 import './index.css'; // Tailwind CSS 파일
 import { BrowserRouter } from "react-router-dom";
-import HiddenUtils from "./HiddenUtils";
+import HiddenUtils from "./utils/HiddenUtils";
 import Router from "./router/Router";
 import Header from "./components/Header";
 import { setCredentials, logout } from "slices/authSlice";
