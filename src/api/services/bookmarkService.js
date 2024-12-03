@@ -1,8 +1,8 @@
-import axiosConfig from '../axiosConfig';
+import apiClient from '../axiosConfig';
 
 export const bookmarkService = {
     // 캠핑장 찜하기/취소하기 토글
     toggleBookmark: async (campId) => {
-        return axiosConfig.patch(`/api/camps/${campId}/bookmarks`);
+        return apiClient.patch(`/api/camps/${campId}/bookmarks`);
     }
 };
