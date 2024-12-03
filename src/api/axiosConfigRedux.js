@@ -1,4 +1,6 @@
 import axios from "axios";
+import store from "store";
+import { logout, setCredentials } from "slices/authSlice";
 import { errorHandler } from "api/handlers/errorHandler";
 
 const baseUrl = process.env.REACT_APP_API_URL;
@@ -15,10 +17,10 @@ const apiClient = axios.create({
 // 요청 인터셉터
 apiClient.interceptors.request.use(
     async (config) => {
-        const accessToken = localStorage.getItem("accessToken");
+        const state = store.getState();
+        const accessToken = state.auth?.accessToken;
 
         if (accessToken) {
-            console.log("access Token 헤더에 설정함");
             config.headers.Authorization = `Bearer ${accessToken}`;
         }
 
@@ -53,8 +55,8 @@ apiClient.interceptors.response.use(
 
                 const newAccessToken = response.data.accessToken;
 
-                // 로컬 스토리지에 저장
-                localStorage.setItem("accessToken", newAccessToken);
+                // Redux 상태 업데이트
+                store.dispatch(setCredentials({ accessToken: newAccessToken }));
 
                 // Authorization 헤더 업데이트
                 originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
@@ -63,7 +65,7 @@ apiClient.interceptors.response.use(
                 return apiClient(originalRequest);
             } catch (refreshError) {
                 // 재발급 실패 시 로그아웃 처리
-                localStorage.removeItem("accessToken");
+                store.dispatch(logout());
                 window.location.href = "/login"
                 return Promise.reject(refreshError);
             }
