@@ -4,15 +4,10 @@ import { BrowserRouter } from "react-router-dom";
 import HiddenUtils from "./utils/HiddenUtils";
 import Router from "./router/Router";
 import Header from "./components/Header";
-import { setCredentials, logout } from "slices/authSlice";
-import {useDispatch} from "react-redux";
-import {useEffect} from "react";
-import axios from "axios";
-import { useRef } from "react";
 
 
 function App() {
-    const dispatch = useDispatch();
+/*    const dispatch = useDispatch();
     const isRefreshing = useRef(false); // 요청 상태를 저장하는 useRef
 
     useEffect(() => {
@@ -37,7 +32,7 @@ function App() {
         };
 
         initializeAuth();
-    }, [dispatch]);
+    }, [dispatch]);*/
 
     return (
         <BrowserRouter>
