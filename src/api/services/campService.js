@@ -1,10 +1,10 @@
-import axios from '../axios';
+import axiosConfig from '../axiosConfig';
 
 export const campService = {
 
     // 사용자 키워드 맞춤 캠핑장 목록 조회
     getMatchedCamps: async (page = 0, size = 3) => {
-        return axios.get(`/api/camps/matched`, {
+        return axiosConfig.get(`/api/camps/matched`, {
             params: { page, size }
         });
     },
