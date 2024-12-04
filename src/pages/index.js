@@ -17,6 +17,9 @@ import Keyword from "./home/Keyword";
 //reservation
 import ReservationList from "./reservation/ReservationList";
 
+//search
+import Search from "./search/Search";
+
 export {
     DeleteAccount,
     Login,
@@ -28,5 +31,6 @@ export {
     NotFound,
     Home,
     Keyword,
-    ReservationList
+    ReservationList,
+    Search
 };

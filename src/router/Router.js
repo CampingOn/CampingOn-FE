@@ -1,11 +1,13 @@
 import {Navigate, Route, Routes} from "react-router-dom";
 import { DeleteAccount, Login, MyKeyword, MyPage, ProfileView, Signup, UpdateProfile } from 'pages';
-import { NotFound, Home, Keyword } from 'pages';
+import { NotFound, Home, Keyword} from 'pages';
 import { ReservationList } from 'pages';
+import { Search } from 'pages';
 import CampDetail from "pages/camp/CampDetail";
 // import CampList from "pages/camp/CampList";
 // import CreateReview from "pages/review/CreateReview";
 // import CampSiteList from 'pages/camp/CampSiteList';
+
 
 
 function Router() {
@@ -21,6 +23,7 @@ function Router() {
             <Route path="/my-page" element={<MyPage />} />
             <Route path="*" element={<Navigate to="/not-found" replace/>}/>
             <Route path="/not-found" element={<NotFound/>}/>
+            <Route path="/search" element={<Search/>} />
         </Routes>
     );
 }
