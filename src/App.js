@@ -3,6 +3,8 @@ import { BrowserRouter } from "react-router-dom";
 import HiddenUtils from "./utils/HiddenUtils";
 import Router from "./router/Router";
 import Header from "./components/Header";
+import store from 'store/index';
+import {AuthProvider} from "./context/AuthContext";
 
 
 function App() {
@@ -35,16 +37,18 @@ function App() {
 
     return (
         <BrowserRouter>
-            <div className="app">
-                <HiddenUtils whitelist={['/login', '/signup', '/keyword', '/not-found']}>
-                    <div className='header'>
-                        <Header/>
+            <AuthProvider>
+                <div className="app">
+                    <HiddenUtils whitelist={['/login', '/signup', '/keyword', '/not-found']}>
+                        <div className='header'>
+                            <Header/>
+                        </div>
+                    </HiddenUtils>
+                    <div className='content' style={{ margin: '0 15%'}}>
+                        <Router />
                     </div>
-                </HiddenUtils>
-                <div className='content' style={{ margin: '0 15%'}}>
-                    <Router />
                 </div>
-            </div>
+            </AuthProvider>
         </BrowserRouter>
     );
 }

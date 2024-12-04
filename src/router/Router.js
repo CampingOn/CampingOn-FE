@@ -1,12 +1,7 @@
 import {Navigate, Route, Routes} from "react-router-dom";
-import Home from "pages/home/Home";
-import NotFound from "pages/error/NotFound";
-import Keyword from "pages/keyword/Keyword";
-import Signup from "pages/account/SignUp";
-import Login from "pages/account/Login";
-import ReservationList from "pages/reservation/ReservationList";
-import MyPage from "pages/account/MyPage";
-import SearchPage from "pages/camp/SearchPage";
+import { DeleteAccount, Login, MyKeyword, MyPage, ProfileView, Signup, UpdateProfile } from 'pages';
+import { NotFound, Home, Keyword } from 'pages';
+import { ReservationList } from 'pages';
 
 
 function Router() {
@@ -16,9 +11,9 @@ function Router() {
             <Route path="/keyword" element={<Keyword/>}/>
             <Route path="/signup" element={<Signup/>} />
             <Route path="/login" element={<Login/>} />
-            <Route path="/reservations" element={<ReservationList/>} />
+            <Route path="/my-reservation" element={<ReservationList/>} />
             <Route path="/search" element={<SearchPage/>} />
-            <Route path="/mypage" element={<MyPage />} />
+            <Route path="/my-page" element={<MyPage />} />
             <Route path="*" element={<Navigate to="/not-found" replace/>}/>
             <Route path="/not-found" element={<NotFound/>}/>
         </Routes>
