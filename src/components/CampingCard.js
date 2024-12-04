@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 
-const CampingCard = ({ thumbImage, name, address, keywords, lineIntro, marked }) => {
+const CampingCard = ({thumbImage, name, address, keywords, lineIntro, marked}) => {
     const [liked, setLiked] = useState(marked);
 
     const toggleLike = () => {
