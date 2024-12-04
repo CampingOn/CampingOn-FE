@@ -51,14 +51,14 @@ function Home() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {matchedCamps.content.map((camp) => (
                             <CampingCard
-                                key={camp.id} // key 추가
+                                key={camp.campId} // key 추가
                                 thumbImage={camp.thumbImage}
                                 name={camp.name}
                                 address={camp.address}
                                 keywords={camp.keywords || []}
                                 lineIntro={camp.lineIntro}
                                 marked={camp.marked}
-                                onClick={() => handleCardClick(camp.id)} // 이벤트 핸들러 수정
+                                onClick={() => handleCardClick(camp.campId)} // 이벤트 핸들러 수정
                             />
                         ))}
                     </div>
@@ -76,14 +76,14 @@ function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mx-auto max-w-7xl">
                 {popularCamps?.content?.map((camp) => (
                     <CampingCard
-                        key={camp.id}
+                        key={camp.campId}
                         thumbImage={camp.thumbImage}
                         name={camp.name}
                         address={camp.streetAddr}
                         keywords={camp.keywords || []}
                         lineIntro={camp.lineIntro}
                         marked={camp.marked}
-                        onClick={() => handleCardClick(camp.id)}
+                        onClick={() => handleCardClick(camp.campId)}
                     />
                 ))}
             </div>
