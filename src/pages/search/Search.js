@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useApi } from 'hooks/useApi';
 import { Box, Container, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import SearchBar from 'components/SearchBar';
 import CampingCard from 'components/CampingCard';
 import LoadMoreButton from 'components/LoadMoreButton';
