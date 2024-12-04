@@ -23,8 +23,4 @@ export const reservationService = {
         return apiClient.patch(`/api/reservations/${reservationId}`, requestData);
     },
 
-    // 예약 가능한 캠프사이트 조회
-    getReservedCampSiteIds: (requestData) => {
-        return apiClient.get('/api/reservations/available', { data: requestData });
-    }
 };
