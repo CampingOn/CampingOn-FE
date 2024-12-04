@@ -8,7 +8,7 @@ import LoadMoreButton from 'components/LoadMoreButton';
 import ScrollToTopFab from 'components/ScrollToTopFab';
 import {searchInfoService} from "api/services/searchInfoService";
 
-function SearchPage() {
+function Search() {
     const [camps, setCamps] = useState([]);
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
@@ -127,4 +127,4 @@ function SearchPage() {
     );
 }
 
-export default SearchPage;
+export default Search;
