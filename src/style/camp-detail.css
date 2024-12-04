@@ -1,0 +1,120 @@
+/* camp-detail.css */
+.camp-detail-container {
+    padding: 16px;
+}
+
+.camp-detail-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+.camp-detail-gallery {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* 메인 이미지 2칸, 썸네일 1칸 */
+    gap: 10px; /* 이미지 간격 */
+}
+
+.main-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.thumbnail-images {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 썸네일 2개씩 배치 */
+    gap: 10px;
+}
+
+.thumbnail img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    cursor: pointer;
+    object-fit: cover;
+}
+
+/*캠핑장 이름 위에 작은 주소*/
+.camp-detail-small-address {
+    font-size: 0.9rem; /* 작은 글씨 크기 */
+    color: #000000; /* Tailwind의 gray-500 */
+    margin-bottom: 0.5rem; /* 아래 여백 */
+    text-align: left; /* 가운데 정렬 */
+}
+
+/*캠핑장 소개(장문)*/
+
+.intro-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px; /* 제목과 내용 간격 */
+}
+
+.intro-icon {
+    font-size: 1.5rem; /* 아이콘 크기 */
+    margin-right: 8px; /* 아이콘 오른쪽 여백 */
+}
+
+.intro-title {
+    font-size: 1.25rem; /* 제목 크기 */
+    font-weight: bold; /* 굵은 글씨 */
+    color: #111827; /* 짙은 색상 */
+}
+
+.camp-detail-intro-box {
+    background-color: #ffffff; /* 박스 배경색 (흰색) */
+    border: 1px solid #000000; /* 테두리 색상 (검정) */
+    border-radius: 8px; /* 모서리를 둥글게 처리 */
+    padding: 16px; /* 내용물 여백 */
+    margin-top: 20px; /* 박스 위쪽 여백 */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
+    line-height: 1.6; /* 텍스트 간격 */
+    position: relative; /* 제목을 절대 위치로 배치하기 위한 기준 */
+}
+
+.camp-detail-intro-title {
+    position: absolute; /* 제목을 박스 위쪽에 배치 */
+    top: -12px; /* 박스 경계선 위로 이동 */
+    left: 16px; /* 박스 내부 왼쪽 여백과 정렬 */
+    background-color: #ffffff; /* 배경 흰색으로 박스와 동일 */
+    padding: 0 8px; /* 텍스트 좌우 여백 */
+    font-size: 1rem; /* 텍스트 크기 */
+    font-weight: bold; /* 텍스트 굵게 */
+    color: #111827; /* 텍스트 색상 (짙은 검정색) */
+}
+
+.camp-detail-description {
+    color: #374151; /* 텍스트 색상 (짙은 회색) */
+    font-size: 1rem; /* 텍스트 크기 */
+    margin: 0; /* 기본 여백 제거 */
+}
+
+/*캠핑장 이름, 전화번호, 도로명 주소 박스*/
+.camp-detail-info-bar {
+    display: flex;
+    justify-content: space-between; /* 좌우 정렬 */
+    align-items: center; /* 세로 가운데 정렬 */
+    padding: 16px 0; /* 위아래 여백 */
+    /*border-bottom: 1px solid #ddd; !* 아래쪽 선 *!*/
+    margin-bottom: 16px; /* 사진과 간격 */
+}
+
+.info-bar-section {
+    flex: 1; /* 동일한 공간 분배 */
+    text-align: center; /* 가운데 정렬 */
+    font-size: 16px; /* 글씨 크기 */
+
+}
+
+.info-bar-section:first-child {
+    text-align: left; /* 왼쪽 정렬 */
+}
+
+.info-bar-section:last-child {
+    text-align: right; /* 오른쪽 정렬 */
+}
+
+/**/
+

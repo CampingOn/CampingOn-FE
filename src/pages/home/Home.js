@@ -1,9 +1,11 @@
 import React, {useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 import {useApi} from '../../hooks/useApi';
 import {campService} from '../../api/services/campService';
 import CampingCard from '../../components/CampingCard';
 
 function Home() {
+    const navigate = useNavigate(); // 네비게이션 함수
     //인기 캠핑장 목록
     const {
         execute: getPopularCamps,
@@ -24,6 +26,11 @@ function Home() {
         getPopularCamps(0);
         getMatchedCamps(0, 3);
     }, []);
+
+    const handleCardClick = (campId) => {
+        console.log("Clicked Camp ID:", campId);
+        navigate(`/camps/${campId}`); // campId를 포함한 경로로 이동
+    };
 
     if (loadingMatchedCamps) return <div>로딩 중...</div>;
     if (errorMatchedCamps) return <div>에러 발생: {errorGetPopularCamps}</div>;
@@ -46,8 +53,10 @@ function Home() {
                                 name={camp.name}
                                 address={camp.address}
                                 keywords={camp.keywords || []}
+                                intro={camp.intro}
                                 lineIntro={camp.lineIntro}
                                 marked={camp.marked}
+                                onClick={() => handleCardClick(camp.campId)} // 클릭 이벤트 연결
                             />
                         ))}
                     </div>
@@ -63,8 +72,10 @@ function Home() {
                         name={camp.name}
                         address={camp.address}
                         keywords={camp.keywords || []}
+                        intro={camp.intro}
                         lineIntro={camp.lineIntro}
                         marked={camp.marked}
+                        onClick={() => handleCardClick(camp.campId)} // 클릭 이벤트 연결
                     />
                 ))}
             </div>
