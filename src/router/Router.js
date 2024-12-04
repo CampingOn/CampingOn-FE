@@ -1,12 +1,7 @@
 import {Navigate, Route, Routes} from "react-router-dom";
-import Home from "pages/home/Home";
-import NotFound from "pages/error/NotFound";
-import Keyword from "pages/keyword/Keyword";
-import Signup from "pages/account/SignUp";
-import Login from "pages/account/Login";
-import ReservationList from "pages/reservation/ReservationList";
-import MyPage from "../pages/account/MyPage";
-// import SearchCampList from "/pages/camp/SearchCampList";
+import { DeleteAccount, Login, MyKeyword, MyPage, ProfileView, Signup, UpdateProfile } from 'pages';
+import { NotFound, Home, Keyword } from 'pages';
+import { ReservationList } from 'pages';
 
 
 function Router() {
