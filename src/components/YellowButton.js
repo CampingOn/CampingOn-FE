@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 
 const StyledButton = styled(Button)({
-    backgroundColor: '#FBBF24',
+    backgroundColor: '#ffc400',
     color: 'white',
     borderRadius: '0.375rem',
     '&:hover': {
