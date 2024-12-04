@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-const CampingCard = ({thumbImage, name, address, keywords, intro, lineIntro, marked, onClick}) => {
+const CampingCard = ({thumbImage, name, address, intro, keywords, lineIntro, marked, onClick}) => {
     const [liked, setLiked] = useState(marked);
 
     const toggleLike = (event) => {
