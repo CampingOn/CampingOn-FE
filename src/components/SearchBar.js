@@ -3,7 +3,7 @@ import { TextField, Autocomplete, Button, Box, IconButton } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 
-function SearchBar({ onSearch }) {
+function SearchBar({ onSearch, isLoading }) {
     const [city, setCity] = useState(null);
     const [keyword, setKeyword] = useState('');
     const [keywordSuggestions, setKeywordSuggestions] = useState([]);
@@ -21,27 +21,61 @@ function SearchBar({ onSearch }) {
         if (keyword && !keywordSuggestions.includes(keyword)) {
             setKeywordSuggestions(prev => [...prev, keyword].slice(-5)); // 최근 5개만 유지
         }
-        onSearch({
-            city: city || '',
-            keyword
+        // 검색어 앞뒤 공백 제거
+        const trimmedKeyword = keyword ? keyword.trim() : '';
+        onSearch({ 
+            city: city || '', 
+            keyword: trimmedKeyword
         });
+    };
+
+    // Enter 키 이벤트 처리 추가
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            handleSearch();
+        }
     };
 
     const commonStyles = {
         '& .MuiOutlinedInput-root': {
-            borderRadius: '15px'
+            borderRadius: '15px',
+            '& .MuiOutlinedInput-input': {
+                '&::selection': {
+                    backgroundColor: 'transparent'
+                },
+                // 파란색 포커스 효과 제거
+                '&:focus': {
+                    outline: 'none'
+                }
+            }
+        },
+        // Autocomplete의 파란색 포커스 효과 제거
+        '& .MuiAutocomplete-input': {
+            '&:focus': {
+                outline: 'none !important',
+                boxShadow: 'none !important'
+            }
+        },
+        // focused 스타일을 밖으로 이동
+        '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: '#F6AD55 !important',
+            borderWidth: 2
+        },
+        // 라벨 스타일을 별도로 지정
+        '& .MuiInputLabel-root.Mui-focused': {
+            color: '#F6AD55 !important'
         }
     };
 
     return (
-        <Box sx={{
-            display: 'flex',
-            gap: 2,
+        <Box sx={{ 
+            display: 'flex', 
+            gap: 2, 
             alignItems: 'flex-end',
             width: '100%'
         }}>
             <Autocomplete
-                sx={{
+                sx={{ 
                     width: '30%',
                     ...commonStyles
                 }}
@@ -60,7 +94,7 @@ function SearchBar({ onSearch }) {
                 autoSelect
             />
             <Autocomplete
-                sx={{
+                sx={{ 
                     width: '50%',
                     ...commonStyles
                 }}
@@ -70,6 +104,7 @@ function SearchBar({ onSearch }) {
                 onChange={(event, newValue) => setKeyword(newValue || '')}
                 onInputChange={(event, newValue) => setKeyword(newValue)}
                 disableClearable
+                onKeyDown={handleKeyPress}
                 renderInput={(params) => {
                     const modifiedParams = {
                         ...params,
@@ -104,6 +139,7 @@ function SearchBar({ onSearch }) {
             <Button
                 variant="contained"
                 onClick={handleSearch}
+                disabled={isLoading}
                 startIcon={<SearchIcon />}
                 sx={{
                     width: '20%',
