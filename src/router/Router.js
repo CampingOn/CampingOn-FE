@@ -16,7 +16,7 @@ function Router() {
             <Route path="/keyword" element={<Keyword/>}/>
             <Route path="/signup" element={<Signup/>} />
             <Route path="/login" element={<Login/>} />
-            <Route path="/reservations" element={<ReservationList/>} />
+            <Route path="/my-reservation" element={<ReservationList/>} />
             {/*<Route path="/searchCamps" element={<SearchCampList/>} />*/}
             <Route path="/mypage" element={<MyPage />} />
             <Route path="*" element={<Navigate to="/not-found" replace/>}/>
