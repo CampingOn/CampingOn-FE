@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import ProfileView from './ProfileView';
 import UpdateProfile from "./UpdateProfile";
 import DeleteAccount from "./DeleteAccount";
@@ -9,6 +10,9 @@ import MyKeywords from "./MyKeyword";
 
 const MyPage = () => {
     const [value, setValue] = useState(0);
+
+    // 화면 크기 감지
+    const isSmallScreen = useMediaQuery('(max-width: 768px)');
 
     // TabPanel 컴포넌트
     function TabPanel(props) {
@@ -29,6 +33,7 @@ const MyPage = () => {
         <Box
             sx={{
                 display: 'flex',
+                flexDirection: isSmallScreen ? 'column' : 'row', // 화면 크기에 따라 레이아웃 변경
                 minHeight: '100vh', // 화면 전체 높이
                 width: '100%', // 화면 전체 너비
                 backgroundColor: '#ffffff',
@@ -40,20 +45,21 @@ const MyPage = () => {
             {/* Tabs 영역 */}
             <Box
                 sx={{
-                    width: '20%', // Tabs가 화면의 20% 차지
+                    width: isSmallScreen ? '100%' : '20%', // 작은 화면에서는 전체 너비 사용
                     backgroundColor: 'white',
-                    borderRight: '1px solid #ddd',
+                    borderRight: isSmallScreen ? 'none' : '1px solid #ddd', // 작은 화면에서는 경계선 제거
+                    borderBottom: isSmallScreen ? '1px solid #ddd' : 'none', // 작은 화면에서는 아래 경계선 추가
                     paddingTop: '16px', // 추가적인 상단 여백 제거
                 }}
             >
                 <Tabs
-                    orientation="vertical"
+                    orientation={isSmallScreen ? "horizontal" : "vertical"} // 화면 크기에 따라 orientation 변경
                     variant="scrollable"
                     value={value}
                     onChange={handleChange}
-                    aria-label="Vertical tabs example"
+                    aria-label="Responsive tabs example"
                     sx={{
-                        height: '100%',
+                        height: isSmallScreen ? 'auto' : '100%', // 작은 화면에서는 자동 높이
                         '& .MuiTabs-indicator': {
                             backgroundColor: '#ffc400', // 선택된 탭 아래의 인디케이터 색상 변경
                         },
@@ -62,7 +68,7 @@ const MyPage = () => {
                     <Tab
                         label="내 정보"
                         sx={{
-                            height: '6vh',
+                            height: isSmallScreen ? 'auto' : '6vh',
                             '&.Mui-selected': {
                                 color: '#ffc400', // 선택된 탭의 글자 색상 변경
                                 fontWeight: 'bold', // 선택된 탭 글자를 굵게
@@ -72,7 +78,7 @@ const MyPage = () => {
                     <Tab
                         label="회원 정보 수정"
                         sx={{
-                            height: '6vh',
+                            height: isSmallScreen ? 'auto' : '6vh',
                             '&.Mui-selected': {
                                 color: '#ffc400',
                                 fontWeight: 'bold',
@@ -82,7 +88,7 @@ const MyPage = () => {
                     <Tab
                         label="나만의 키워드"
                         sx={{
-                            height: '6vh',
+                            height: isSmallScreen ? 'auto' : '6vh',
                             '&.Mui-selected': {
                                 color: '#ffc400',
                                 fontWeight: 'bold',
@@ -92,7 +98,7 @@ const MyPage = () => {
                     <Tab
                         label="회원 탈퇴"
                         sx={{
-                            height: '6vh',
+                            height: isSmallScreen ? 'auto' : '6vh',
                             '&.Mui-selected': {
                                 color: '#ffc400',
                                 fontWeight: 'bold',
@@ -105,7 +111,7 @@ const MyPage = () => {
             {/* 콘텐츠 영역 */}
             <Box
                 sx={{
-                    width: '80%', // 콘텐츠가 화면의 나머지 80% 차지
+                    width: isSmallScreen ? '100%' : '80%', // 작은 화면에서는 전체 너비 사용
                     padding: '16px',
                     paddingTop: '32px', // 상단 여백 추가
                 }}
@@ -125,7 +131,6 @@ const MyPage = () => {
             </Box>
         </Box>
     );
-
 };
 
 export default MyPage;

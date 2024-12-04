@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
-import ReservationCard from "components/ReservationCard";
 import ProfileCard from "components/ProfileCard";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import {userService} from "api/services/userService";
 import {useApi} from "hooks/useApi";
 import {reservationService} from "../../api/services/reservationService";
+import CampReservationCard from "../../components/CampReservationCard";
 
 
 const imageUrl = 'profile.png';
@@ -22,7 +22,6 @@ const ProfileView = () => {
         getUserInfo();
         getReservations(0);
     }, []);
-
     // api를 따로 만드는게 좋을지?
     useEffect(() => {
         if (reservations && reservations.length > 0) {
@@ -36,6 +35,7 @@ const ProfileView = () => {
             setUpcomingReservation(closestReservation);
         }
     }, [reservations]);
+
 
 
 
@@ -56,10 +56,10 @@ const ProfileView = () => {
                 <div className="mt-8">
                     <h2 className="text-xl font-bold mb-4">다가오는 예약</h2>
                     {upcomingReservation ? (
-                        <ReservationCard reservation={upcomingReservation} />
+                        <CampReservationCard data={upcomingReservation} />
                     ) : (
                         <div className="flex flex-col items-center justify-center text-center p-6">
-                            <CalendarTodayIcon
+                                <CalendarTodayIcon
                                 style={{ fontSize: 60, color: "#b0b0b0" }} // 연한 회색, 아이콘 크기 조정
                             />
                             <p className="text-gray-600 mt-4 text-sm">
