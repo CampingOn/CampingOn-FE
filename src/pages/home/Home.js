@@ -6,6 +6,8 @@ import { campService } from '../../api/services/campService';
 import CampingCard from '../../components/CampingCard';
 import LoadMoreButton from "../../components/LoadMoreButton";
 import ScrollToTopFab from "../../components/ScrollToTopFab";
+import MainCarousel from "../../components/MainCarousel";
+import SearchBar from "../../components/SearchBar";
 
 function Home() {
     const navigate = useNavigate();
@@ -54,10 +56,29 @@ function Home() {
         navigate(`/camps/${campId}`);
     };
 
+    const handleSearch = ({ city, keyword }) => {
+        // Query parameters 생성
+        const params = new URLSearchParams();
+        if (city) params.append('city', city);
+        if (keyword) params.append('keyword', keyword);
+
+        // /search로 네비게이트
+        navigate(`/search?${params.toString()}`);
+    };
+
     const hasMore = popularCampsData?.content?.length % 9 === 0;
 
     return (
         <Container maxWidth="lg" sx={{ py: 4 }}>
+            {/* 캐러셀 영역 */}
+            <Box mb={4}>
+                <MainCarousel />
+            </Box>
+            {/* 검색창 영역 */}
+            <Box mb={4}>
+                <SearchBar onSearch={handleSearch} isLoading={false}/>
+            </Box>
+            {/* 추천 캠핑장 목록 */}
             {isAuthenticated && matchedCampsData?.content?.length > 0 && (
                 <>
                     <Typography variant="h5" fontWeight="bold" sx={{ mb: 4 }}>
