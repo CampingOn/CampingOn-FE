@@ -1,9 +1,10 @@
 import {Navigate, Route, Routes} from "react-router-dom";
-import { DeleteAccount, Login, MyKeyword, MyPage, ProfileView, Signup, UpdateProfile } from 'pages';
+import { Login, MyPage, Signup } from 'pages';
 import { NotFound, Home, Keyword} from 'pages';
 import { ReservationList } from 'pages';
 import { Search } from 'pages';
 import CampDetail from "pages/camp/CampDetail";
+import OAuthSuccess from "../pages/account/OAuthSuccess";
 // import CampList from "pages/camp/CampList";
 // import CreateReview from "pages/review/CreateReview";
 // import CampSiteList from 'pages/camp/CampSiteList';
@@ -24,6 +25,7 @@ function Router() {
             <Route path="*" element={<Navigate to="/not-found" replace/>}/>
             <Route path="/not-found" element={<NotFound/>}/>
             <Route path="/search" element={<Search/>} />
+            <Route path="/oauth/success" element={<OAuthSuccess/> }/>
         </Routes>
     );
 }
