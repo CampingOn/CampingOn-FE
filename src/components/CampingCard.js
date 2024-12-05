@@ -1,19 +1,36 @@
 import React, {useState} from "react";
 import {bookmarkService} from "../api/services/bookmarkService";
+import {Snackbar} from "@mui/material";
 
 const CampingCard = ({thumbImage, name, address, intro, keywords, lineIntro, marked, onClick, campId}) => {
+    const isAuthenticated = localStorage.getItem("accessToken");
     const [liked, setLiked] = useState(marked);
+    const [snackbarNone, setSnackbarNone] = useState(false);
+    const [snackbarBookmark, setSnackbarBookmark] = useState(false);
 
     const toggleLike = async (event) => {
         event.stopPropagation(); // 부모의 onClick 이벤트가 실행되지 않도록 중단
 
-        try {
-            console.log("campId: " + campId);
-            await bookmarkService.toggleBookmark(campId);
-            setLiked(!liked);
-        } catch (error){
-            console.error("찜 클릭 에러 : ", error);
+        if (!isAuthenticated) {
+            setSnackbarNone(true); // Snackbar 열기
+        } else {
+            try {
+                console.log("campId: " + campId);
+                await bookmarkService.toggleBookmark(campId);
+                setLiked(!liked);
+                setSnackbarBookmark(true);
+            } catch (error) {
+                console.error("찜 클릭 에러 : ", error);
+            }
         }
+    };
+
+    const handleCloseNone = () => {
+        setSnackbarNone(false);
+    };
+
+    const handleCloseBookmark = () => {
+        setSnackbarBookmark(false);
     };
 
     return (
@@ -49,6 +66,18 @@ const CampingCard = ({thumbImage, name, address, intro, keywords, lineIntro, mar
                 </div>
                 <p className="text-sm text-gray-600 truncate">{lineIntro}</p> {/* 소개 */}
             </div>
+            <Snackbar
+                open={snackbarNone}
+                autoHideDuration={1500}
+                onClose={handleCloseNone}
+                message="회원만 이용할 수 있는 기능입니다."
+            />
+            <Snackbar
+                open={snackbarBookmark}
+                autoHideDuration={1500}
+                onClose={handleCloseBookmark}
+                message="찜 상태를 변경하였습니다"
+            />
         </div>
     );
 };
