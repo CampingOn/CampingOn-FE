@@ -4,15 +4,27 @@ import {userService} from "../api/services/userService";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("accessToken"));
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const token = localStorage.getItem('accessToken');
-        console.log('Access Token:', token);
-        setIsAuthenticated(!!token);
+        const checkAuthentication = async () => {
+
+            setIsLoading(true);
+            const token = localStorage.getItem("accessToken");
+
+            if (token) {
+                console.log("Access Token 확인됨:", token);
+                setIsAuthenticated(true);
+            } else {
+                setIsAuthenticated(false);
+            }
+
+            setIsLoading(false);
+        };
+        checkAuthentication();
     }, []);
 
-    // TODO : 무언갈 더 추가해야할 것 같음. 동작이 어색함
     const login = () => {
         setIsAuthenticated(true);
     };
@@ -28,7 +40,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{isAuthenticated, login, logout}}>
+        <AuthContext.Provider value={{isAuthenticated, login, logout, isLoading}}>
             {children}
         </AuthContext.Provider>
     );
