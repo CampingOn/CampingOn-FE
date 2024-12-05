@@ -58,6 +58,7 @@ apiClient.interceptors.response.use(
         if (error.response && error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
+            // Refresh 토큰 갱신중인 경우 대기
             if (!isRefreshing) {
                 isRefreshing = true;
 
@@ -76,6 +77,10 @@ apiClient.interceptors.response.use(
                     onTokenRefreshed(newAccessToken);
 
                     isRefreshing = false;
+                    // Authorization Header 업데이트
+                    originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                    return apiClient(originalRequest);
+
                 } catch (refreshError) {
                     // 재발급 실패 시 로그아웃 처리
                     localStorage.removeItem("accessToken");
