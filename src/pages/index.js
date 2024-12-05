@@ -15,7 +15,8 @@ import Home from "./home/Home";
 import Keyword from "./home/Keyword";
 
 //reservation
-import ReservationList from "./reservation/ReservationList";
+import MyReservation from "./reservation/MyReservation";
+import Reservation from "./reservation/Reservation";
 
 //search
 import Search from "./search/Search";
@@ -31,6 +32,7 @@ export {
     NotFound,
     Home,
     Keyword,
-    ReservationList,
-    Search
+    MyReservation,
+    Reservation,
+    Search,
 };
