@@ -7,9 +7,10 @@ import CampingCard from 'components/CampingCard';
 import LoadMoreButton from 'components/LoadMoreButton';
 import ScrollToTopFab from 'components/ScrollToTopFab';
 import {searchInfoService} from "api/services/searchInfoService";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 function Search() {
+    const location = useLocation();
     const navigate = useNavigate(); // 네비게이션 함수
     const [camps, setCamps] = useState([]);
     const [page, setPage] = useState(0);
@@ -30,6 +31,16 @@ function Search() {
     useEffect(() => {
         loadCamps(true);  // 컴포넌트 마운트 시 초기 데이터 로드
     }, []);
+
+
+    /*
+    // URL 파라미터에서 검색값 초기화 - 주석 해제 시 메인 페이지에서도 검색됨
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const city = params.get('city') || '';
+        const keyword = params.get('keyword') || '';
+        setSearchParams({ city, keyword });
+    }, [location.search]);*/
 
     // 검색 파라미터 변경 시에만 새로운 검색 수행
     useEffect(() => {
