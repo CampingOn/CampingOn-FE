@@ -1,11 +1,19 @@
 import React, {useState} from "react";
+import {bookmarkService} from "../api/services/bookmarkService";
 
-const CampingCard = ({thumbImage, name, address, intro, keywords, lineIntro, marked, onClick}) => {
+const CampingCard = ({thumbImage, name, address, intro, keywords, lineIntro, marked, onClick, campId}) => {
     const [liked, setLiked] = useState(marked);
 
-    const toggleLike = (event) => {
+    const toggleLike = async (event) => {
         event.stopPropagation(); // 부모의 onClick 이벤트가 실행되지 않도록 중단
-        setLiked(!liked);
+
+        try {
+            console.log("campId: " + campId);
+            await bookmarkService.toggleBookmark(campId);
+            setLiked(!liked);
+        } catch (error){
+            console.error("찜 클릭 에러 : ", error);
+        }
     };
 
     return (

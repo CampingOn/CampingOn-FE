@@ -52,6 +52,7 @@ function Home() {
                         {matchedCamps.content.map((camp) => (
                             <CampingCard
                                 key={camp.campId} // key 추가
+                                campId={camp.campId}
                                 thumbImage={camp.thumbImage}
                                 name={camp.name}
                                 address={camp.address}
@@ -77,6 +78,7 @@ function Home() {
                 {popularCamps?.content?.map((camp) => (
                     <CampingCard
                         key={camp.campId}
+                        campId={camp.campId}
                         thumbImage={camp.thumbImage}
                         name={camp.name}
                         address={camp.streetAddr}
