@@ -1,3 +1,6 @@
+# Netlify 배포 상태
+[![Netlify Status](https://api.netlify.com/api/v1/badges/169cac93-39c4-473b-aecf-3113627195c9/deploy-status)](https://app.netlify.com/sites/celadon-arithmetic-f4288c/deploys)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
