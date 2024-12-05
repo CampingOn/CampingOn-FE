@@ -1,5 +1,7 @@
 import axios from "axios";
+/*
 import { errorHandler } from "api/handlers/errorHandler";
+*/
 
 const baseUrl = process.env.REACT_APP_API_URL;
 
@@ -12,13 +14,27 @@ const apiClient = axios.create({
     },
 });
 
+let isRefreshing = false; // Refresh Token 갱신 중 여부
+let refreshSubscribers = []; // 갱신 후 재요청 대기열
+
+// Refresh Token 갱신 시 대기 중인 요청 처리
+function onTokenRefreshed(newAccessToken) {
+    refreshSubscribers.forEach((callback) => callback(newAccessToken));
+    refreshSubscribers = [];
+}
+
+// 갱신 대기열에 요청 추가
+function addRefreshSubscriber(callback) {
+    refreshSubscribers.push(callback);
+}
+
 // 요청 인터셉터
 apiClient.interceptors.request.use(
     async (config) => {
         const accessToken = localStorage.getItem("accessToken");
 
         if (accessToken) {
-            console.log("access Token 헤더에 설정함");
+            console.log("Access Token 헤더에 설정함");
             config.headers.Authorization = `Bearer ${accessToken}`;
         }
 
@@ -27,7 +43,10 @@ apiClient.interceptors.request.use(
     },
     (error) => {
         console.error("요청 에러:", error);
-        return Promise.reject(error);
+        // 중앙 에러 핸들러로 요청 에러 전달
+/*
+        return errorHandler ? errorHandler(error) : Promise.reject(error);
+*/
     }
 );
 
@@ -45,32 +64,50 @@ apiClient.interceptors.response.use(
         if (error.response && error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
-            try {
-                // Refresh Token으로 Access Token 재발급
-                const response = await axios.get(`${baseUrl}/api/token/refresh`, {
-                    withCredentials: true, // 쿠키를 통한 인증
-                });
+            // Refresh Token 갱신 중인 경우 대기
+            if (!isRefreshing) {
+                isRefreshing = true;
 
-                const newAccessToken = response.data.accessToken;
+                try {
+                    // Refresh Token으로 Access Token 재발급 요청
+                    const response = await axios.get(`${baseUrl}/api/token/refresh`, {
+                        withCredentials: true, // 쿠키를 통한 인증
+                    });
 
-                // 로컬 스토리지에 저장
-                localStorage.setItem("accessToken", newAccessToken);
+                    const newAccessToken = response.data.accessToken;
 
-                // Authorization 헤더 업데이트
-                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                    // 로컬 스토리지에 새 Access Token 저장
+                    localStorage.setItem("accessToken", newAccessToken);
 
-                // 원래의 요청을 다시 실행
-                return apiClient(originalRequest);
-            } catch (refreshError) {
-                // 재발급 실패 시 로그아웃 처리
-                localStorage.removeItem("accessToken");
-                window.location.href = "/login"
-                return Promise.reject(refreshError);
+                    // 모든 대기 중인 요청에 새 Access Token 전달
+                    onTokenRefreshed(newAccessToken);
+
+                    // 갱신 상태 초기화
+                    isRefreshing = false;
+
+                    // Authorization 헤더 업데이트
+                    originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                    return apiClient(originalRequest);
+                } catch (refreshError) {
+                    // Refresh Token 갱신 실패 시 로그아웃 처리
+                    isRefreshing = false;
+                    localStorage.removeItem("accessToken");
+                    window.location.href = "/login";
+                    return Promise.reject(refreshError); // errorHandler 제거 후 직접 에러 전달
+                }
             }
+
+            // 다른 요청 대기 중이라면 새 토큰 적용 후 재요청
+            return new Promise((resolve) => {
+                addRefreshSubscriber((newAccessToken) => {
+                    originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                    resolve(apiClient(originalRequest));
+                });
+            });
         }
 
-        // 다른 에러는 중앙 에러 핸들러로 위임
-        return errorHandler ? errorHandler(error) : Promise.reject(error);
+        // 다른 에러는 직접 Promise로 반환
+        return Promise.reject(error); // errorHandler 제거 후 직접 에러 전달
     }
 );
 
