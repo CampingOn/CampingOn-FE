@@ -2,11 +2,15 @@ import React, {useEffect, useState} from 'react';
 import apiClient from 'api/axiosConfig';
 import InputField from "components/InputField";
 import {userService} from "../../api/services/userService";
-import {useApi} from "../../hooks/useApi";
+import { useApi } from "../../hooks/useApi";
+import { validatePassword, validateNickname } from 'utils/Validation';
+import {useNavigate} from "react-router-dom";
+
 
 const UpdateProfile = () => {
     const { execute: getUserInfo, data: userInfo, loading: userLoading } = useApi(userService.getUserInfo);
     const { execute: updateUserInfo, loading: updateLoading } = useApi(userService.updateUserInfo);
+    const { execute: logout, loading: logoutLoading } = useApi(userService.logout);
 
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
@@ -20,6 +24,7 @@ const UpdateProfile = () => {
     const [nicknameSuccessMessage, setNicknameSuccessMessage] = useState('');
     const [passwordError, setPasswordError] = useState('');
 
+    const navigate = useNavigate();
 
     useEffect(() => {
         // 사용자 정보를 로드
@@ -33,8 +38,6 @@ const UpdateProfile = () => {
             setName(userInfo.name);
         }
     }, [userInfo]);
-
-    const validateNickname = (nickname) => nickname.length <= 8;
 
     const handleNicknameCheck = async () => {
         if (!validateNickname(nickname)) {
@@ -77,9 +80,11 @@ const UpdateProfile = () => {
 
         try {
             const response = await updateUserInfo(requestData);
-            alert('회원 정보가 성공적으로 업데이트되었습니다.');
+
+            await logout();
+            alert('회원 정보가 성공적으로 업데이트되었습니다. 로그아웃 합니다.');
+            navigate("/login");
             // 필요한 경우 사용자 정보를 다시 로드
-            getUserInfo();
         } catch (error) {
             // 백엔드에서 반환된 오류 메시지 표시
             const errorMessage = error.response?.data?.message || '회원 정보 수정 중 오류가 발생했습니다.';
@@ -130,9 +135,9 @@ const UpdateProfile = () => {
                         onChange={(e) => setNewPassword(e.target.value)}
                         onBlur={() =>
                             setPasswordError(
-                                newPassword.length >= 8
+                                validatePassword(newPassword)
                                     ? ''
-                                    : '비밀번호는 최소 8자 이상이어야 합니다.'
+                                    : '비밀번호는 최소 8자 이상의 숫자, 문자, 특수문자이어야 합니다.'
                             )
                         }
                         error={passwordError}
