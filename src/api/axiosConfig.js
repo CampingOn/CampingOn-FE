@@ -11,6 +11,7 @@ const apiClient = axios.create({
     },
 });
 
+const excludedUrls = ['/api/login', '/api/signup'];
 let isRefreshing = false; // Refresh Token 갱신 중 여부
 let refreshSubscribers = []; // 갱신 후 재요청 대기열
 
@@ -28,6 +29,11 @@ function addRefreshSubscriber(callback) {
 // 요청 인터셉터
 apiClient.interceptors.request.use(
     async (config) => {
+        // 특정 URL에 대해 인터셉터 제외
+        if (excludedUrls.some((url) => config.url.includes(url))) {
+            return config;
+        }
+
         const accessToken = localStorage.getItem("accessToken");
 
         if (accessToken) {
@@ -54,10 +60,16 @@ apiClient.interceptors.response.use(
         console.error("응답 에러:", error.message);
         const originalRequest = error.config;
 
+        // 특정 URL에 대해 인터셉터 제외
+        if (excludedUrls.some((url) => originalRequest.url.includes(url))) {
+            return Promise.reject(error);
+        }
+
         // 401 Unauthorized 처리
         if (error.response && error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
+            // Refresh 토큰 갱신중인 경우 대기
             if (!isRefreshing) {
                 isRefreshing = true;
 
@@ -76,6 +88,10 @@ apiClient.interceptors.response.use(
                     onTokenRefreshed(newAccessToken);
 
                     isRefreshing = false;
+                    // Authorization Header 업데이트
+                    originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                    return apiClient(originalRequest);
+
                 } catch (refreshError) {
                     // 재발급 실패 시 로그아웃 처리
                     localStorage.removeItem("accessToken");

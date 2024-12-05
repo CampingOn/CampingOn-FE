@@ -1,93 +1,122 @@
-import React, {useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
+import { useApi } from 'hooks/useApi';
 import { useNavigate } from 'react-router-dom';
-import {useApi} from '../../hooks/useApi';
-import {campService} from '../../api/services/campService';
+import { Box, Container, Typography } from "@mui/material";
+import { campService } from '../../api/services/campService';
 import CampingCard from '../../components/CampingCard';
+import LoadMoreButton from "../../components/LoadMoreButton";
+import ScrollToTopFab from "../../components/ScrollToTopFab";
 
 function Home() {
-    const navigate = useNavigate(); // 네비게이션 함수
+    const navigate = useNavigate();
     const isAuthenticated = localStorage.getItem("accessToken");
+    const [camps, setCamps] = useState([]);
+    const [page, setPage] = useState(0);
 
-    //인기 캠핑장 목록
     const {
-        execute: getPopularCamps,
-        loading: loadingGetPopularCamps,
-        error: errorGetPopularCamps,
-        data: popularCamps,
+        data: popularCampsData,
+        loading: loadingPopularCamps,
+        error: errorPopularCamps,
+        execute: executePopularCamps
     } = useApi(campService.getPopularCamps);
 
-    //추천 캠핑장 목록
     const {
-        execute: getMatchedCamps,
+        data: matchedCampsData,
         loading: loadingMatchedCamps,
         error: errorMatchedCamps,
-        data: matchedCamps,
+        execute: executeMatchedCamps
     } = useApi(campService.getMatchedCamps);
 
     useEffect(() => {
-        getPopularCamps(0, 9);
-
+        executePopularCamps(0, 9);
         if (isAuthenticated) {
-            getMatchedCamps(0, 3);
+            executeMatchedCamps(0, 3);
         }
     }, [isAuthenticated]);
 
-    const handleCardClick = (campId) => {
-        console.log("Clicked Camp ID:", campId);
-        navigate(`/camps/${campId}`); // campId를 포함한 경로로 이동
+    useEffect(() => {
+        if (popularCampsData?.content) {
+            if (page === 0) {
+                setCamps(popularCampsData.content);
+            } else {
+                setCamps(prev => [...prev, ...popularCampsData.content]);
+            }
+        }
+    }, [popularCampsData]);
+
+    const handleLoadMore = () => {
+        const nextPage = page + 1;
+        executePopularCamps(nextPage, 9);
+        setPage(nextPage);
     };
 
-    if (loadingMatchedCamps) return <div>로딩 중...</div>;
-    if (errorMatchedCamps) return <div>에러 발생: {errorGetPopularCamps}</div>;
+    const handleCardClick = (campId) => {
+        navigate(`/camps/${campId}`);
+    };
 
-    if (loadingGetPopularCamps) return <div>로딩 중...</div>;
-    if (errorGetPopularCamps) return <div>에러 발생: {errorGetPopularCamps}</div>;
+    const hasMore = popularCampsData?.content?.length % 9 === 0;
 
     return (
-        <div className="p-4">
-            {isAuthenticated && matchedCamps?.content?.length > 0 && (
+        <Container maxWidth="lg" sx={{ py: 4 }}>
+            {isAuthenticated && matchedCampsData?.content?.length > 0 && (
                 <>
-                    <h1 className="text-xl font-bold mb-4">{matchedCamps.content.username}님을 위한 추천 캠핑장</h1>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {matchedCamps.content.map((camp) => (
+                    <Typography variant="h5" fontWeight="bold" sx={{ mb: 4 }}>
+                        {matchedCampsData.content[0]?.username}님을 위한 추천 캠핑장
+                    </Typography>
+                    <Box sx={{
+                        display: 'grid',
+                        gridTemplateColumns: {
+                            xs: '1fr',
+                            sm: 'repeat(2, 1fr)',
+                            lg: 'repeat(3, 1fr)'
+                        },
+                        gap: 3,
+                        mb: 4
+                    }}>
+                        {matchedCampsData.content.map((camp) => (
                             <CampingCard
-                                key={camp.campId} // key 추가
-                                thumbImage={camp.thumbImage}
-                                name={camp.name}
-                                address={camp.address}
-                                keywords={camp.keywords || []}
-                                lineIntro={camp.lineIntro}
-                                marked={camp.marked}
-                                onClick={() => handleCardClick(camp.campId)} // 이벤트 핸들러 수정
+                                key={camp.campId}
+                                {...camp}
+                                onClick={() => handleCardClick(camp.campId)}
                             />
                         ))}
-                    </div>
+                    </Box>
                 </>
             )}
 
-            {isAuthenticated && !matchedCamps?.content?.length && (
-                <div className="text-gray-500 text-center">
-                    추천 캠핑 데이터를 불러올 수 없습니다.
-                </div>
-            )}
-
-            <br/>
-            <h1 className="text-xl font-bold mb-4">인기 캠핑장</h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mx-auto max-w-7xl">
-                {popularCamps?.content?.map((camp) => (
+            <Typography variant="h5" fontWeight="bold" sx={{ mb: 4 }}>
+                인기 캠핑장
+            </Typography>
+            <Box sx={{
+                display: 'grid',
+                gridTemplateColumns: {
+                    xs: '1fr',
+                    sm: 'repeat(2, 1fr)',
+                    lg: 'repeat(3, 1fr)'
+                },
+                gap: 3,
+                mb: 4
+            }}>
+                {camps.map((camp) => (
                     <CampingCard
                         key={camp.campId}
-                        thumbImage={camp.thumbImage}
-                        name={camp.name}
-                        address={camp.streetAddr}
-                        keywords={camp.keywords || []}
-                        lineIntro={camp.lineIntro}
-                        marked={camp.marked}
+                        {...camp}
                         onClick={() => handleCardClick(camp.campId)}
                     />
                 ))}
-            </div>
-        </div>
+            </Box>
+
+            {camps.length > 0 && (
+                <LoadMoreButton
+                    onClick={handleLoadMore}
+                    isLoading={loadingPopularCamps}
+                    hasMore={hasMore}
+                    disabled={!hasMore || loadingPopularCamps}
+                />
+            )}
+
+            <ScrollToTopFab />
+        </Container>
     );
 }
 

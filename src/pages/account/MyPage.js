@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import ProfileView from './ProfileView';
-import UpdateProfile from "./UpdateProfile";
-import DeleteAccount from "./DeleteAccount";
-import MyKeywords from "./MyKeyword";
+import UpdateProfile from './UpdateProfile';
+import DeleteAccount from './DeleteAccount';
+import MyKeywords from './MyKeyword';
 
 const MyPage = () => {
     const [value, setValue] = useState(0);
+
+    // 화면 크기에 따라 반응형 적용
+    const isSmallScreen = useMediaQuery('(max-width: 768px)');
 
     // TabPanel 컴포넌트
     function TabPanel(props) {
@@ -29,31 +33,31 @@ const MyPage = () => {
         <Box
             sx={{
                 display: 'flex',
-                minHeight: '100vh', // 화면 전체 높이
-                width: '100%', // 화면 전체 너비
+                flexDirection: isSmallScreen ? 'column' : 'row', // 화면 크기에 따라 방향 변경
+                width: '100%',
                 backgroundColor: '#ffffff',
-                margin: 0, // 상하 좌우 여백 제거
-                padding: 0, // 상하 좌우 패딩 제거
+                margin: 0,
+                padding: 0,
                 boxSizing: 'border-box',
             }}
         >
             {/* Tabs 영역 */}
             <Box
                 sx={{
-                    width: '20%', // Tabs가 화면의 20% 차지
+                    width: isSmallScreen ? '100%' : '20%', // 좁은 화면에서는 전체 폭 차지
                     backgroundColor: 'white',
-                    borderRight: '1px solid #ddd',
-                    paddingTop: '16px', // 추가적인 상단 여백 제거
+                    borderRight: isSmallScreen ? 'none' : '1px solid #ddd',
+                    borderBottom: isSmallScreen ? '1px solid #ddd' : 'none', // 좁은 화면에서는 아래쪽에 경계선 추가
+                    paddingTop: '16px',
                 }}
             >
                 <Tabs
-                    orientation="vertical"
+                    orientation={isSmallScreen ? 'horizontal' : 'vertical'} // 좁은 화면에서는 수평 방향
                     variant="scrollable"
                     value={value}
                     onChange={handleChange}
-                    aria-label="Vertical tabs example"
+                    aria-label="Responsive tabs example"
                     sx={{
-                        height: '100%',
                         '& .MuiTabs-indicator': {
                             backgroundColor: '#ffc400', // 선택된 탭 아래의 인디케이터 색상 변경
                         },
@@ -64,8 +68,8 @@ const MyPage = () => {
                         sx={{
                             height: '6vh',
                             '&.Mui-selected': {
-                                color: '#ffc400', // 선택된 탭의 글자 색상 변경
-                                fontWeight: 'bold', // 선택된 탭 글자를 굵게
+                                color: '#ffc400',
+                                fontWeight: 'bold',
                             },
                         }}
                     />
@@ -105,9 +109,9 @@ const MyPage = () => {
             {/* 콘텐츠 영역 */}
             <Box
                 sx={{
-                    width: '80%', // 콘텐츠가 화면의 나머지 80% 차지
+                    width: isSmallScreen ? '100%' : '80%', // 좁은 화면에서는 전체 폭 차지
                     padding: '16px',
-                    paddingTop: '32px', // 상단 여백 추가
+                    paddingTop: '32px',
                 }}
             >
                 <TabPanel value={value} index={0}>
@@ -120,12 +124,11 @@ const MyPage = () => {
                     <MyKeywords />
                 </TabPanel>
                 <TabPanel value={value} index={3}>
-                    <DeleteAccount/>
+                    <DeleteAccount />
                 </TabPanel>
             </Box>
         </Box>
     );
-
 };
 
 export default MyPage;
