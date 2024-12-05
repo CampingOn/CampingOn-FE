@@ -185,6 +185,7 @@ function CampDetail() {
                         latitude={campDetails.campAddr.latitude}
                         longitude={campDetails.campAddr.longitude}
                         locationName={campDetails.name}
+                        state={campDetails.campAddr.state}
                     />
                 </div>
             </div>
