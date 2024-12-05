@@ -93,9 +93,7 @@ apiClient.interceptors.response.use(
                     isRefreshing = false;
                     localStorage.removeItem("accessToken");
                     window.location.href = "/login";
-                    return errorHandler
-                        ? errorHandler(refreshError)
-                        : Promise.reject(refreshError);
+                    return Promise.reject(refreshError); // errorHandler 제거 후 직접 에러 전달
                 }
             }
 
@@ -108,10 +106,8 @@ apiClient.interceptors.response.use(
             });
         }
 
-        // 다른 에러는 중앙 에러 핸들러로 위임
-/*
-        return errorHandler ? errorHandler(error) : Promise.reject(error);
-*/
+        // 다른 에러는 직접 Promise로 반환
+        return Promise.reject(error); // errorHandler 제거 후 직접 에러 전달
     }
 );
 
