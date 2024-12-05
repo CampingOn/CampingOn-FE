@@ -1,7 +1,4 @@
 import axios from "axios";
-/*
-import { errorHandler } from "api/handlers/errorHandler";
-*/
 
 const baseUrl = process.env.REACT_APP_API_URL;
 
@@ -34,7 +31,7 @@ apiClient.interceptors.request.use(
         const accessToken = localStorage.getItem("accessToken");
 
         if (accessToken) {
-            console.log("Access Token 헤더에 설정함");
+            console.log("access Token 헤더에 설정함");
             config.headers.Authorization = `Bearer ${accessToken}`;
         }
 
@@ -43,10 +40,7 @@ apiClient.interceptors.request.use(
     },
     (error) => {
         console.error("요청 에러:", error);
-        // 중앙 에러 핸들러로 요청 에러 전달
-/*
-        return errorHandler ? errorHandler(error) : Promise.reject(error);
-*/
+        return Promise.reject(error);
     }
 );
 
@@ -64,40 +58,34 @@ apiClient.interceptors.response.use(
         if (error.response && error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
-            // Refresh Token 갱신 중인 경우 대기
             if (!isRefreshing) {
                 isRefreshing = true;
 
                 try {
-                    // Refresh Token으로 Access Token 재발급 요청
+                    // Refresh Token으로 Access Token 재발급
                     const response = await axios.get(`${baseUrl}/api/token/refresh`, {
                         withCredentials: true, // 쿠키를 통한 인증
                     });
 
                     const newAccessToken = response.data.accessToken;
 
-                    // 로컬 스토리지에 새 Access Token 저장
+                    // 로컬 스토리지에 저장
                     localStorage.setItem("accessToken", newAccessToken);
 
-                    // 모든 대기 중인 요청에 새 Access Token 전달
+                    // 갱신 대기 중인 요청 처리
                     onTokenRefreshed(newAccessToken);
 
-                    // 갱신 상태 초기화
                     isRefreshing = false;
-
-                    // Authorization 헤더 업데이트
-                    originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-                    return apiClient(originalRequest);
                 } catch (refreshError) {
-                    // Refresh Token 갱신 실패 시 로그아웃 처리
-                    isRefreshing = false;
+                    // 재발급 실패 시 로그아웃 처리
                     localStorage.removeItem("accessToken");
                     window.location.href = "/login";
-                    return Promise.reject(refreshError); // errorHandler 제거 후 직접 에러 전달
+                    isRefreshing = false;
+                    return Promise.reject(refreshError);
                 }
             }
 
-            // 다른 요청 대기 중이라면 새 토큰 적용 후 재요청
+            // 토큰 갱신 대기
             return new Promise((resolve) => {
                 addRefreshSubscriber((newAccessToken) => {
                     originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
@@ -106,8 +94,8 @@ apiClient.interceptors.response.use(
             });
         }
 
-        // 다른 에러는 직접 Promise로 반환
-        return Promise.reject(error); // errorHandler 제거 후 직접 에러 전달
+        // 다른 에러는 그대로 반환
+        return Promise.reject(error);
     }
 );
 
