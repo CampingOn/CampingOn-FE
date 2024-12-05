@@ -63,7 +63,7 @@ function Home() {
                     <Typography variant="h5" fontWeight="bold" sx={{ mb: 4 }}>
                         {matchedCampsData.content[0]?.username}님을 위한 추천 캠핑장
                     </Typography>
-                    <Box sx={{ 
+                    <Box sx={{
                         display: 'grid',
                         gridTemplateColumns: {
                             xs: '1fr',
@@ -87,7 +87,7 @@ function Home() {
             <Typography variant="h5" fontWeight="bold" sx={{ mb: 4 }}>
                 인기 캠핑장
             </Typography>
-            <Box sx={{ 
+            <Box sx={{
                 display: 'grid',
                 gridTemplateColumns: {
                     xs: '1fr',
