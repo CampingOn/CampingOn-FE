@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 
-const KakaoMap = ({ latitude, longitude, locationName }) => {
+const KakaoMap = ({ latitude, longitude, locationName, state }) => {
     useEffect(() => {
         const kakaoApiKey = process.env.REACT_APP_KAKAO_API_KEY;
         const script = document.createElement('script');
-        script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_API_KEY}&autoload=false`;
+        script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoApiKey}&autoload=false`;
         script.async = true;
 
         document.head.appendChild(script);
@@ -44,14 +44,14 @@ const KakaoMap = ({ latitude, longitude, locationName }) => {
                     customOverlay.setMap(null);
                 });
 
-                // 마커 클릭 시 카카오맵 웹 페이지로 이동
+                // 마커 클릭 시 카카오맵 웹 페이지로 이동 (검색된 상태)
+                const kakaoMapLink = `https://map.kakao.com/link/search/${state} ${locationName}`;
                 window.kakao.maps.event.addListener(marker, 'click', () => {
-                    const kakaoMapLink = `https://map.kakao.com/link/map/${locationName},${latitude},${longitude}`;
                     window.open(kakaoMapLink, '_blank');
                 });
             });
         };
-    }, [latitude, longitude, locationName]);
+    }, [latitude, longitude, locationName, state]);
 
     return <div id="map" style={{ width: '100%', height: '400px' }}></div>;
 };
