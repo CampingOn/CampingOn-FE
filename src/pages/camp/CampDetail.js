@@ -6,7 +6,7 @@ import CallIcon from '@mui/icons-material/Call';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Calendar from '../../components/Calendar';
 import OperationPolicy from '../../components/OperationPolicy';
-import KakaoMap from "../../components/KakoMap";
+import KakaoMap from "../../components/KakaoMap";
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 
