@@ -19,8 +19,16 @@ const ProfileView = () => {
 
 
     useEffect(() => {
-        getUserInfo();
-        getReservations(0);
+        const fetchData = async () => {
+            try {
+                await getUserInfo(); // 먼저 유저 정보를 가져옴
+                await getReservations(0); // 그 후에 예약 정보를 가져옴
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchData();
     }, []);
 
     // api를 따로 만드는게 좋을지?
@@ -44,7 +52,7 @@ const ProfileView = () => {
     if (!userInfo) return <div>No user information found</div>;
 
     return (
-        <div className="justify-center items-center min-h-screen">
+        <div className="justify-center items-center">
             {/* 중앙 정렬 및 폭 설정 */}
             <div className="w-full bg-white p-8 shadow-lg rounded-lg">
                 <h2 className="text-xl font-bold mb-4">프로필</h2>
