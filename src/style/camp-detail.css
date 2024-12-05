@@ -91,21 +91,25 @@
     margin: 0; /* 기본 여백 제거 */
 }
 
-/*캠핑장 이름, 전화번호, 도로명 주소 박스*/
+/*캠핑장 주소, 전화번호, 홈페이지*/
 .camp-detail-info-bar {
     display: flex;
     justify-content: space-between; /* 좌우 정렬 */
     align-items: center; /* 세로 가운데 정렬 */
-    padding: 16px 0; /* 위아래 여백 */
-    /*border-bottom: 1px solid #ddd; !* 아래쪽 선 *!*/
+    padding: 16px; /* 박스 내부 여백 추가 */
     margin-bottom: 16px; /* 사진과 간격 */
+    font-weight: bold; /* 전체 텍스트를 볼드체로 설정 */
+    border: 1px solid #000000; /* 박스 테두리 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 */
+    background-color: #ffffff; /* 박스 배경색 흰색 */
 }
 
 .info-bar-section {
     flex: 1; /* 동일한 공간 분배 */
     text-align: center; /* 가운데 정렬 */
     font-size: 16px; /* 글씨 크기 */
-
+    font-weight: bold; /* 각 섹션의 텍스트를 볼드체로 설정 */
 }
 
 .info-bar-section:first-child {
@@ -116,5 +120,129 @@
     text-align: right; /* 오른쪽 정렬 */
 }
 
-/**/
 
+/* 이미지 */
+.camp-detail-gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 왼쪽과 오른쪽을 동일한 비율로 나눔 */
+    gap: 7px; /* 이미지 간의 간격 */
+    margin: 20px 0;
+    height: 600px; /* 전체 높이를 고정하여 1:1 비율 유지 */
+}
+
+.main-image {
+    width: 100%;
+    height: 600px;
+    overflow: hidden; /* 넘치는 부분을 숨김 */
+}
+
+.main-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 이미지를 영역에 꽉 채우고 비율 유지 */
+    border-radius: 8px;
+}
+
+.thumbnail-images-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2x2 형태로 썸네일 배치 */
+    grid-template-rows: 1fr 1fr;
+    gap: 7px; /* 썸네일 간의 간격 */
+    height: 600px; /* 부모 높이에 맞추기 */
+    position: relative; /* 내부 요소 위치 설정을 위해 상대 위치 사용 */
+}
+
+.thumbnail {
+    position: relative; /* 더보기 버튼을 절대 위치로 지정하기 위해 필요 */
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* 넘치는 부분을 숨김 */
+}
+
+.thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 이미지가 썸네일 크기에 맞춰짐 */
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* 모달 버튼 스타일 */
+.view-more-button {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+    border: none;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.view-more-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+/* 이미지 */
+
+/* 홈페이지 링크 스타일 */
+.homepage-link {
+    color: #000000;                /* 기본 색상은 회색 */
+    text-decoration: none;      /* 밑줄 제거 */
+    transition: color 0.3s ease; /* 색상 변경을 부드럽게 전환 */
+}
+
+/* 마우스를 올렸을 때 노란색으로 변경 */
+.homepage-link:hover {
+    color: #fcd34d;
+}
+/* 홈페이지 링크 스타일 */
+
+/* 운영정책, 카카오맵 지도*/
+
+.location-info-container {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* 두 섹션 간의 간격 */
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.location-info,
+.map-container {
+    flex: 1; /* 동일한 비율로 공간을 차지 */
+}
+
+
+
+/*.location-info {*/
+/*    padding: 5px;*/
+/*    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);*/
+/*    border-radius: 8px;*/
+/*    border: 1px solid #ccc;*/
+/*    background-color: #ffffff;*/
+/*}*/
+
+.location-info-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #111827;
+}
+
+.map-container {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+#map {
+    width: 100%;
+    height: 100%; /* 지도의 고정 높이 */
+    border-radius: 8px;
+}
+
+/* 운영정책, 카카오맵 지도*/
