@@ -7,8 +7,10 @@ import CampingCard from 'components/CampingCard';
 import LoadMoreButton from 'components/LoadMoreButton';
 import ScrollToTopFab from 'components/ScrollToTopFab';
 import {searchInfoService} from "api/services/searchInfoService";
+import {useNavigate} from "react-router-dom";
 
 function Search() {
+    const navigate = useNavigate(); // 네비게이션 함수
     const [camps, setCamps] = useState([]);
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
@@ -69,6 +71,11 @@ function Search() {
         }
     };
 
+    const handleCardClick = (campId) => {
+        console.log("Clicked Camp ID:", campId);
+        navigate(`/camps/${campId}`); // campId를 포함한 경로로 이동
+    };
+
 
     const handleSearch = (searchValues) => {
         setCamps([]);
@@ -100,12 +107,15 @@ function Search() {
                 {camps.map((camp) => (
                     <Grid item xs={12} sm={6} md={4} key={camp.campId}>
                         <CampingCard
+                            key={camp.campId}
+                            campId={camp.campId}
                             thumbImage={camp.thumbImage}
                             name={camp.name}
-                            address={camp.streetAddr}  // address.streetAddr -> streetAddr로 수정
-                            keywords={camp.keywords}
+                            address={camp.streetAddr}
+                            keywords={camp.keywords || []}
                             lineIntro={camp.lineIntro}
-                            marked={camp.isMarked}
+                            marked={camp.marked}
+                            onClick={() => handleCardClick(camp.campId)}
                         />
                     </Grid>
                 ))}

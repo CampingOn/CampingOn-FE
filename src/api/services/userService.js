@@ -16,6 +16,7 @@ export const userService = {
     },
 
     logout: () => {
+        localStorage.removeItem("accessToken");
         return apiClient.post("/api/logout");
     }
 

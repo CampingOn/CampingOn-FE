@@ -9,7 +9,7 @@ import Tab from '@mui/material/Tab';
 
 const Header = () => {
     const [logo, setLogo] = useState(`${process.env.PUBLIC_URL}/logoWide.svg`);
-    const {isAuthenticated, logout} = useAuth();
+    const {isAuthenticated, logout, isLoading} = useAuth();
     const [value, setValue] = useState(0);
     const navigate = useNavigate();
 
@@ -21,7 +21,13 @@ const Header = () => {
         setLogo(`${process.env.PUBLIC_URL}/logoWide.svg`);
     };
 
+    // 초기 로딩 중일 때는 콘솔 출력 방지 또는 로딩 표시
+    if (isLoading) {
+        return null;
+    }
+
     console.log('유저로그인상태', isAuthenticated);
+
     const handleAuthClick = () => {
         if (isAuthenticated) {
             logout();
@@ -51,7 +57,12 @@ const Header = () => {
     return (
         <>
             <AppBar position="static" style={{backgroundColor: 'transparent', boxShadow: 'none', marginTop: '20px'}}>
-                <Toolbar style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '-10px'}}>
+                <Toolbar style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    marginBottom: '-10px'
+                }}>
                     <Link to="/" style={{display: 'flex', alignItems: 'center'}}>
                         <img
                             src={logo}
@@ -61,47 +72,54 @@ const Header = () => {
                             onMouseLeave={handleMouseLeave}
                         />
                     </Link>
-                    <div style={{ display: 'flex', justifyContent: 'center', width: 'calc(100% - 500px)', marginLeft: '-145px'}}>
-                        <Tabs
-                            value={value}
-                            onChange={handleChange}
-                            aria-label="header tabs"
-                            sx={{
-                                '& .MuiTabs-indicator': {
-                                    backgroundColor: '#ffc400',
-                                },
-                                marginBottom: '0',
-                            }}
-                        >
-                            <Tab
-                                label="예약확인" style={{paddingBottom: '25px' }}
+                    {isAuthenticated && (
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            width: 'calc(100% - 500px)',
+                            marginLeft: '-145px'
+                        }}>
+                            <Tabs
+                                value={value}
+                                onChange={handleChange}
+                                aria-label="header tabs"
                                 sx={{
-                                    '&.Mui-selected': {
-                                        color: '#ffc400',
-                                        fontWeight: 'bold',
+                                    '& .MuiTabs-indicator': {
+                                        backgroundColor: '#ffc400',
                                     },
+                                    marginBottom: '0',
                                 }}
-                            />
-                            <Tab
-                                label="찜한캠핑장" style={{paddingBottom: '25px' }}
-                                sx={{
-                                    '&.Mui-selected': {
-                                        color: '#ffc400',
-                                        fontWeight: 'bold',
-                                    },
-                                }}
-                            />
-                            <Tab
-                                label="마이페이지" style={{paddingBottom: '25px' }}
-                                sx={{
-                                    '&.Mui-selected': {
-                                        color: '#ffc400',
-                                        fontWeight: 'bold',
-                                    },
-                                }}
-                            />
-                        </Tabs>
-                    </div>
+                            >
+                                <Tab
+                                    label="예약확인" style={{paddingBottom: '25px'}}
+                                    sx={{
+                                        '&.Mui-selected': {
+                                            color: '#ffc400',
+                                            fontWeight: 'bold',
+                                        },
+                                    }}
+                                />
+                                <Tab
+                                    label="찜한캠핑장" style={{paddingBottom: '25px'}}
+                                    sx={{
+                                        '&.Mui-selected': {
+                                            color: '#ffc400',
+                                            fontWeight: 'bold',
+                                        },
+                                    }}
+                                />
+                                <Tab
+                                    label="마이페이지" style={{paddingBottom: '25px'}}
+                                    sx={{
+                                        '&.Mui-selected': {
+                                            color: '#ffc400',
+                                            fontWeight: 'bold',
+                                        },
+                                    }}
+                                />
+                            </Tabs>
+                        </div>
+                    )}
 
                     <YellowButton onClick={handleAuthClick}>
                         {isAuthenticated ? 'Logout' : 'Login'}
