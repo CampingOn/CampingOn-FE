@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import apiClient from 'axiosConfig';
+import apiClient from 'api/axiosConfig';
 import InputField from "components/InputField";
 
 
@@ -90,8 +90,8 @@ function Signup() {
     };
 
     return (
-        <div className="flex min-h-full flex-1 flex-col justify-center px-6 lg:px-8">
-            <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="flex min-h-full flex-1 flex-col justify-center px-6 lg:px-8" style={{ marginTop: "10rem", marginBottom: "10rem" }}>
+            <div className="sm:mx-auto sm:w-full sm:max-w-sm space-y-8">
                 <img
                     alt="캠핑온"
                     src={`${process.env.PUBLIC_URL}/logo.svg`}
