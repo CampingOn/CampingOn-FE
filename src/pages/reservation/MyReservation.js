@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useApi } from 'hooks/useApi';
 import { reservationService } from 'api/services/reservationService';
 
-const ReservationList = () => {
+const MyReservation = () => {
   const { execute: getReservations, loading, error, data } = useApi(reservationService.getReservations);
 
   useEffect(() => {
@@ -29,4 +29,4 @@ const ReservationList = () => {
   );
 };
 
-export default ReservationList;
+export default MyReservation;
