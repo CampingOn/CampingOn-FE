@@ -67,6 +67,9 @@ function SearchBar({ onSearch, isLoading }) {
         }
     };
 
+    // 검색 버튼 비활성화 조건 추가
+    const isSearchDisabled = (!city && !keyword.trim()) || isLoading;
+
     return (
         <Box sx={{ 
             display: 'flex', 
@@ -139,7 +142,7 @@ function SearchBar({ onSearch, isLoading }) {
             <Button
                 variant="contained"
                 onClick={handleSearch}
-                disabled={isLoading}
+                disabled={isSearchDisabled}
                 startIcon={<SearchIcon />}
                 sx={{
                     width: '20%',

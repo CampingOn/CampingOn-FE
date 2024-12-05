@@ -31,13 +31,6 @@ function Search() {
         loadCamps(true);  // 컴포넌트 마운트 시 초기 데이터 로드
     }, []);
 
-    // 검색 파라미터 변경 시에만 새로운 검색 수행
-    useEffect(() => {
-        if (searchParams.city || searchParams.keyword) {
-            loadCamps(true);
-        }
-    }, [searchParams]);
-
     const loadCamps = async (newSearch = false) => {
         try {
             const currentPage = newSearch ? 0 : page;
