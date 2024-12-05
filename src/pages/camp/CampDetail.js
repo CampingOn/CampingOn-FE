@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { campService } from '../../api/services/campService';
-import HomeIcon from '@mui/icons-material/Home';
+import WebIcon from '@mui/icons-material/Web';
 import CallIcon from '@mui/icons-material/Call';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import '../../style/camp-detail.css'; // CSS 파일 경로 수정
+import Calendar from '../../components/Calendar';
+import OperationPolicy from '../../components/OperationPolicy';
+import KakaoMap from "../../components/KakoMap";
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+
+import '../../style/camp-detail.css';
 
 function CampDetail() {
     const { campId } = useParams();
     const [campDetails, setCampDetails] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [open, setOpen] = useState(false); // 모달 상태 관리
 
     useEffect(() => {
         const fetchCampDetails = async () => {
@@ -29,13 +36,15 @@ function CampDetail() {
         fetchCampDetails();
     }, [campId]);
 
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
     if (loading) return <div>로딩 중...</div>;
     if (error) return <div>에러 발생: {error.message}</div>;
     if (!campDetails) return <div>캠핑장 정보를 찾을 수 없습니다.</div>;
 
     return (
         <div className="camp-detail-container">
-
             {/* 캠핑장 주소 */}
             {campDetails.campAddr && (
                 <p className="camp-detail-small-address">
@@ -48,45 +57,80 @@ function CampDetail() {
                 {campDetails.name || "캠핑장 이름 없음"}
             </h1>
 
+            {/* 이미지 갤러리 */}
             <div className="camp-detail-gallery">
-                {/* 메인 이미지 */}
+                {/* 왼쪽 대표 이미지 */}
                 {campDetails.images && campDetails.images.length > 1 && (
                     <div className="main-image">
                         <img
-                            src={campDetails.images[1]} // 두 번째 사진
-                            alt="메인 이미지"
+                            src={campDetails.images[1]} // 두 번째 사진을 대표 이미지로 사용
+                            alt="대표 이미지"
                             onClick={() => window.open(campDetails.images[1], '_blank')}
                         />
                     </div>
                 )}
 
-                {/* 썸네일 이미지들 */}
-                <div className="thumbnail-images">
+                {/* 오른쪽 썸네일 이미지들 (1, 3, 4, 5번째 사진) */}
+                <div className="thumbnail-images-grid">
                     {campDetails.images &&
-                        campDetails.images.map((image, index) => {
-                            // 2번째 이미지는 이미 메인 이미지로 사용했으므로 제외
-                            if (index === 1) return null;
-                            return (
+                        [0, 2, 3, 4].map((index) => (
+                            campDetails.images[index] && (
                                 <div key={index} className="thumbnail">
                                     <img
-                                        src={image}
+                                        src={campDetails.images[index]}
                                         alt={`캠핑장 이미지 ${index + 1}`}
-                                        onClick={() => window.open(image, '_blank')}
+                                        onClick={() => window.open(campDetails.images[index], '_blank')}
                                     />
+                                    {/* "더보기" 버튼을 5번째 이미지의 구석에 표시 */}
+                                    {index === 4 && campDetails.images.length > 5 && (
+                                        <button onClick={handleOpen} className="view-more-button">
+                                            더보기
+                                        </button>
+                                    )}
                                 </div>
-                            );
-                        })}
+                            )
+                        ))}
                 </div>
             </div>
 
-            {/* 캠핑장 이름, 전화번호, 도로명 주소*/}
+            {/* 모달을 통한 전체 이미지 보기 */}
+            <Modal open={open} onClose={handleClose}>
+                <Box
+                    sx={{
+                        p: 4,
+                        backgroundColor: 'white',
+                        maxHeight: '83vh',
+                        overflow: 'auto',
+                        width: '87%',              // 모달의 너비 조정
+                        position: 'absolute',      // 절대 위치 지정
+                        top: '50%',                // 수직 중앙으로 설정
+                        left: '50%',               // 수평 중앙으로 설정
+                        transform: 'translate(-50%, -50%)', // 정가운데로 이동
+                        boxShadow: 24,             // 그림자 효과 추가
+                        borderRadius: 2            // 모달 테두리 둥글게
+                    }}
+                >
+                    <div className="modal-content">
+                        {campDetails.images &&
+                            campDetails.images.map((image, index) => (
+                                <div key={index} className="modal-thumbnail">
+                                    <img
+                                        src={image}
+                                        alt={`캠핑장 이미지 ${index + 1}`}
+                                        className="modal-image"
+                                    />
+                                </div>
+                            ))}
+                    </div>
+                </Box>
+            </Modal>
+
+            {/* 홈페이지, 전화번호, 도로명 주소*/}
             <div className="camp-detail-info-bar">
-                {/* 왼쪽: 캠핑장 이름 */}
+                {/* 왼쪽: 홈페이지 */}
                 <div className="info-bar-section">
-                    <HomeIcon style={{verticalAlign: 'middle', marginRight: '8px'}}/>
-                    <h2 style={{display: 'inline-block', margin: '0'}}>
-                        {campDetails.name || "캠핑장 이름 없음"}
-                    </h2>
+                    <LocationOnIcon style={{verticalAlign: 'middle', marginRight: '8px'}}/>
+                    <span>{campDetails.campAddr?.streetAddr || "도로명 주소 정보 없음"}</span>
                 </div>
 
                 {/* 가운데: 전화번호 */}
@@ -95,10 +139,21 @@ function CampDetail() {
                     <span>{campDetails.tel || "연락처 정보 없음"}</span>
                 </div>
 
-                {/* 오른쪽: 도로명 주소 */}
+                {/* 오른쪽: 홈페이지 */}
                 <div className="info-bar-section">
-                    <LocationOnIcon style={{verticalAlign: 'middle', marginRight: '8px'}}/>
-                    <span>{campDetails.campAddr?.streetAddr || "도로명 주소 정보 없음"}</span>
+                    <WebIcon style={{verticalAlign: 'middle', marginRight: '8px'}}/>
+                    {campDetails.homepage ? (
+                        <a
+                            href={campDetails.homepage}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="homepage-link"  // 'homepage-link' 클래스 사용
+                        >
+                            {campDetails.homepage}
+                        </a>
+                    ) : (
+                        "홈페이지 정보 없음"
+                    )}
                 </div>
             </div>
 
@@ -110,73 +165,35 @@ function CampDetail() {
                 </p>
             </div>
 
+            {/* 운영정책 */}
+            <div>
+                {/* 다른 캠프 세부사항들 */}
+                <OperationPolicy
+                    industries={campDetails.indutys || []}
+                    outdoorFacility={campDetails.outdoorFacility || "부대시설 정보 없음"}
+                />
+            </div>
 
-            {/* 짧은 소개 */}
-            <p className="camp-detail-description">
-                {campDetails.lineIntro || "소개 정보 없음"}
-            </p>
-
-            {/* 연락처 */}
-            <p className="camp-detail-info">
-                <CallIcon style={{verticalAlign: 'middle', marginRight: '8px'}}/>
-                {campDetails.tel || "연락처 정보 없음"}
-            </p>
-
-            {/* 홈페이지 */}
-            <p className="camp-detail-info">
-                홈페이지:{" "}
-                {campDetails.homepage ? (
-                    <a
-                        href={campDetails.homepage}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 underline"
-                    >
-                        {campDetails.homepage}
-                    </a>
-                ) : (
-                    "홈페이지 정보 없음"
-                )}
-            </p>
-
-            {/* 부대시설 */}
-            <p className="camp-detail-info">
-                부대시설: {campDetails.outdoorFacility || "부대시설 정보 없음"}
-            </p>
-
-            {/* 업종 */}
-            <p className="camp-detail-info">
-                업종:{" "}
-                {campDetails.indutys && campDetails.indutys.length > 0
-                    ? campDetails.indutys.join(", ")
-                    : "업종 정보 없음"}
-            </p>
-
-            {/* 주소 */}
-            {campDetails.campAddr ? (
-                <div className="camp-detail-info">
-                    <p className="camp-detail-info">
-                        <LocationOnIcon style={{verticalAlign: 'middle', marginRight: '8px'}}/>
-                        도로명 주소: {campDetails.campAddr.streetAddr || "정보 없음"}
-                    </p>
-                    <p>상세 주소: {campDetails.campAddr.detailedAddr || "정보 없음"}</p>
-                    <p>도/광역시: {campDetails.campAddr.city || "정보 없음"}</p>
-                    <p>시/군/구: {campDetails.campAddr.state || "정보 없음"}</p>
-                    <p>우편번호: {campDetails.campAddr.zipcode || "정보 없음"}</p>
-                    <p>
-                        좌표:{" "}
-                        {campDetails.campAddr.latitude && campDetails.campAddr.longitude ? (
-                            <>
-                                경도: {campDetails.campAddr.longitude}, 위도: {campDetails.campAddr.latitude}
-                            </>
-                        ) : (
-                            "위치 정보 없음"
-                        )}
-                    </p>
+            {/* 위치 정보 및 카카오맵 섹션 */}
+            <div className="map-wrapper">
+                <h2 className="location-info-title">
+                    <LocationOnIcon style={{verticalAlign: 'middle', marginRight: '8px'}}/>
+                    위치 정보
+                </h2>
+                <div className="map-container">
+                    <KakaoMap
+                        latitude={campDetails.campAddr.latitude}
+                        longitude={campDetails.campAddr.longitude}
+                        locationName={campDetails.name}
+                    />
                 </div>
-            ) : (
-                <p className="camp-detail-info">주소 정보 없음</p>
-            )}
+            </div>
+
+            {/* Calendar 컴포넌트 추가 */}
+            <div className="camp-detail-calendar">
+                <h2>예약 가능한 날짜 선택</h2>
+                <Calendar/>
+            </div>
 
 
             {/* 추천/찜 수 */}
