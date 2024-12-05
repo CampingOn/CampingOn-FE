@@ -1,5 +1,7 @@
 import axios from "axios";
+/*
 import { errorHandler } from "api/handlers/errorHandler";
+*/
 
 const baseUrl = process.env.REACT_APP_API_URL;
 
@@ -42,7 +44,9 @@ apiClient.interceptors.request.use(
     (error) => {
         console.error("요청 에러:", error);
         // 중앙 에러 핸들러로 요청 에러 전달
+/*
         return errorHandler ? errorHandler(error) : Promise.reject(error);
+*/
     }
 );
 
@@ -105,7 +109,9 @@ apiClient.interceptors.response.use(
         }
 
         // 다른 에러는 중앙 에러 핸들러로 위임
+/*
         return errorHandler ? errorHandler(error) : Promise.reject(error);
+*/
     }
 );
 
