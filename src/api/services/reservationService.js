@@ -4,8 +4,8 @@ import apiClient from "api/axiosConfig";
 export const reservationService = {
 
     // 유저의 예약 목록 조회
-    getReservations: () => {
-        return apiClient.get(`/api/reservations`);
+    getReservations: (reservationId, page = 0) => {
+        return apiClient.get(`/api/reservations/${reservationId}?page=${page}`);
     },
 
     // 단일 예약 조회

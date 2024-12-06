@@ -13,6 +13,10 @@ const Header = () => {
     const {isAuthenticated, logout, isLoading} = useAuth();
     const navigate = useNavigate();
 
+    useEffect(() => {
+        setValue(getTabValue(location.pathname));
+    }, [location.pathname]);
+
     // URL 경로에 따라 탭 값 설정
     const getTabValue = (pathname) => {
         switch (pathname) {
@@ -22,12 +26,12 @@ const Header = () => {
                 return 1;
             case '/my-page':
                 return 2;
+            case '/':
             default:
-                return 0;
+                return -1;
         }
     };
 
-    // 현재 URL에 따라 탭 값 설정
     const [value, setValue] = useState(getTabValue(location.pathname));
 
     // URL 변경 시 탭 값 업데이트
@@ -43,7 +47,6 @@ const Header = () => {
         setLogo(`${process.env.PUBLIC_URL}/logoWide.svg`);
     };
 
-    // 초기 로딩 중일 때는 콘솔 출력 방지 또는 로딩 표시
     if (isLoading) {
         return null;
     }
@@ -72,9 +75,18 @@ const Header = () => {
                 navigate('/my-page');
                 break;
             default:
+                navigate('/');
+                setValue(-1);
                 break;
         }
     };
+
+    // 기본값이 -1인 경우, 메인 페이지로 이동
+    // useEffect(() => {
+    //     if (value === -1) {
+    //         setValue(0);
+    //     }
+    // }, [value]);
 
     return (
         <>
@@ -99,7 +111,7 @@ const Header = () => {
                             display: 'flex',
                             justifyContent: 'center',
                             width: 'calc(100% - 500px)',
-                            marginLeft: '-145px'
+                            marginLeft: '-130px'
                         }}>
                             <Tabs
                                 value={value}
@@ -113,7 +125,7 @@ const Header = () => {
                                 }}
                             >
                                 <Tab
-                                    label="예약확인" style={{paddingBottom: '30px'}}
+                                    label="나의예약" style={{paddingBottom: '30px'}}
                                     sx={{
                                         '&.Mui-selected': {
                                             color: '#ffc400',
@@ -122,7 +134,7 @@ const Header = () => {
                                     }}
                                 />
                                 <Tab
-                                    label="찜한캠핑장" style={{paddingBottom: '25px'}}
+                                    label="찜한캠핑장" style={{paddingBottom: '30px'}}
                                     sx={{
                                         '&.Mui-selected': {
                                             color: '#ffc400',
@@ -131,7 +143,7 @@ const Header = () => {
                                     }}
                                 />
                                 <Tab
-                                    label="마이페이지" style={{paddingBottom: '25px'}}
+                                    label="마이페이지" style={{paddingBottom: '30px'}}
                                     sx={{
                                         '&.Mui-selected': {
                                             color: '#ffc400',
