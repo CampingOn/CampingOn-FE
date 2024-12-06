@@ -5,16 +5,27 @@ import InputField from "components/InputField";
 import { validateEmail, validatePassword } from 'utils/Validation';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import {useAuth} from "context/AuthContext";
 
 function Login() {
+    const [logo, setLogo] = useState(`${process.env.PUBLIC_URL}/logo.svg`);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
+    const { login } = useAuth();
 
     const navigate = useNavigate();
+
+    const handleMouseEnter = () => {
+        setLogo(`${process.env.PUBLIC_URL}/logoClicked.svg`);
+    };
+
+    const handleMouseLeave = () => {
+        setLogo(`${process.env.PUBLIC_URL}/logo.svg`);
+    };
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -36,6 +47,7 @@ function Login() {
 
                 // AccessToken을 저장
                 localStorage.setItem('accessToken', response.data.accessToken);
+                login();
 
                 navigate("/"); // 홈페이지로 이동
             } catch (error) {
@@ -68,8 +80,10 @@ function Login() {
                 <Link to="/">
                     <img
                         alt="캠핑온"
-                        src={`${process.env.PUBLIC_URL}/logo.svg`}
+                        src={logo}
                         className="mx-auto h-32 w-auto"
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
                     />
                 </Link>
                 <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">

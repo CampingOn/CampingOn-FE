@@ -8,8 +8,10 @@ import ScrollToTopFab from "./ScrollToTopFab";
 import WhiteButton from "./WhiteButton";
 import YellowButton from "./YellowButton";
 import CampSiteCard from "./CampSiteCard";
-import CampReservationCard from "../components/CampReservationCard";
+import CampReservationCard from "./CampReservationCard";
 import ReservationConfirmCard from "./ReservationConfirmCard";
+import MainCarousel from "./MainCarousel";
+import SearchBar from "./SearchBar";
 
 export {
     Calendar,
@@ -23,5 +25,7 @@ export {
     YellowButton,
     CampSiteCard,
     CampReservationCard,
-    ReservationConfirmCard
+    ReservationConfirmCard,
+    MainCarousel,
+    SearchBar
 };

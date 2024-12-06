@@ -7,6 +7,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
 function Signup() {
+    const [logo, setLogo] = useState(`${process.env.PUBLIC_URL}/logo.svg`);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -23,6 +24,14 @@ function Signup() {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
 
     const navigate = useNavigate();
+
+    const handleMouseEnter = () => {
+        setLogo(`${process.env.PUBLIC_URL}/logoClicked.svg`);
+    };
+
+    const handleMouseLeave = () => {
+        setLogo(`${process.env.PUBLIC_URL}/logo.svg`);
+    };
 
     const handleSignup = async (e) => {
         e.preventDefault();
@@ -55,8 +64,10 @@ function Signup() {
                 <Link to="/">
                     <img
                         alt="캠핑온"
-                        src={`${process.env.PUBLIC_URL}/logo.svg`}
+                        src={logo}
                         className="mx-auto h-32 w-auto"
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
                     />
                 </Link>
                 <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">

@@ -4,43 +4,41 @@ import {userService} from "../api/services/userService";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("accessToken"));
-    const [isLoading, setIsLoading] = useState(true);
+    const [auth, setAuth] = useState({
+        isAuthenticated: !!localStorage.getItem("accessToken"),
+        isLoading: true
+    });
 
     useEffect(() => {
-        const checkAuthentication = async () => {
-
-            setIsLoading(true);
-            const token = localStorage.getItem("accessToken");
-
-            if (token) {
-                console.log("Access Token 확인됨:", token);
-                setIsAuthenticated(true);
-            } else {
-                setIsAuthenticated(false);
-            }
-
-            setIsLoading(false);
-        };
-        checkAuthentication();
+        const token = localStorage.getItem("accessToken");
+        setAuth({
+            isAuthenticated: !!token,
+            isLoading: false
+        });
     }, []);
 
     const login = () => {
-        setIsAuthenticated(true);
+        setAuth({
+            ...auth,
+            isAuthenticated: true
+        });
     };
 
     const logout = async () => {
         try {
             await userService.logout();
             localStorage.removeItem('accessToken');
-            setIsAuthenticated(false);
+            setAuth({
+                ...auth,
+                isAuthenticated: false
+            });
         } catch (error) {
             console.error('Logout failed:', error);
         }
     };
 
     return (
-        <AuthContext.Provider value={{isAuthenticated, login, logout, isLoading}}>
+        <AuthContext.Provider value={{...auth, login, logout}}>
             {children}
         </AuthContext.Provider>
     );
