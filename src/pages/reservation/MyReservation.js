@@ -31,7 +31,7 @@ const MyReservation = () => {
     useEffect(() => {
         if (reservationData?.content) {
             setReservations((prev) => (page === 0 ? reservationData.content : [...prev, ...reservationData.content]));
-            setHasMore(reservationData.content.length === 5); // 5개씩 로드되었는지 확인
+            setHasMore(reservationData.content.length >= 5); // 데이터 5개 이하로 로드 되면 더이상 데이터 없다고 판단
         }
     }, [reservationData]);
 

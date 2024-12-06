@@ -164,13 +164,13 @@ const CampReservationCard = ({ data }) => {
                         </Typography>
                     </Box>
                     <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
-                        <Start sx={{ fontSize: 20, marginRight: 1, color: "#ffc107" }} />
+                        <Start sx={{ fontSize: 20, marginRight: 1, color: "#2c387e" }} />
                         <Typography variant="body2">
                             체크인 : {checkinDate} {checkinTime}
                         </Typography>
                     </Box>
                     <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
-                        <KeyboardTab sx={{ fontSize: 20, marginRight: 1, color: "#2c387e" }} />
+                        <KeyboardTab sx={{ fontSize: 20, marginRight: 1, color: "#ffc107" }} />
                         <Typography variant="body2">
                             체크아웃: {checkoutDate} {checkoutTime}
                         </Typography>
