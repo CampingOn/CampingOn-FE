@@ -7,6 +7,7 @@ import ProfileView from "./account/ProfileView";
 import Signup from './account/SignUp';
 import UpdateProfile from "./account/UpdateProfile";
 import OAuthSuccess from "pages/account/OAuthSuccess";
+import MyBookmark from "./account/MyBookmark";
 
 //home
 import Home from "./home/Home";
@@ -35,5 +36,6 @@ export {
     Reservation,
     Search,
     CampDetail,
-    OAuthSuccess
+    OAuthSuccess,
+    MyBookmark
 };
