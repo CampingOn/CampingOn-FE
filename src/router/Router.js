@@ -5,6 +5,7 @@ import { MyReservation, Reservation } from 'pages';
 import { Search } from 'pages';
 import CampDetail from "pages/camp/CampDetail";
 import OAuthSuccess from "../pages/account/OAuthSuccess";
+import MyBookmark from "../pages/account/MyBookmark";
 // import CampList from "pages/camp/CampList";
 // import CreateReview from "pages/review/CreateReview";
 // import CampSiteList from 'pages/camp/CampSiteList';
@@ -19,6 +20,7 @@ function Router() {
             <Route path="/signup" element={<Signup/>} />
             <Route path="/login" element={<Login/>} />
             <Route path="/my-reservation" element={<MyReservation/>} />
+            <Route path="/my-bookmark" element={<MyBookmark/>} />
             <Route path="/camps/:campId" element={<CampDetail />} /> {/* 상세 페이지 경로 */}
             {/*<Route path="/searchCamps" element={<SearchCampList/>} />*/}
             <Route path="/my-page" element={<MyPage />} />

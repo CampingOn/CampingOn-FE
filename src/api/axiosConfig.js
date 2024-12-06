@@ -4,7 +4,7 @@ const baseUrl = process.env.REACT_APP_API_URL;
 
 const apiClient = axios.create({
     baseURL: baseUrl,
-    timeout: 5000,
+    timeout: 5000000000,
     withCredentials: true, // 쿠키 전송을 위해 설정
     headers: {
         "Content-Type": "application/json",
