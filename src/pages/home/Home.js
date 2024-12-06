@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useApi } from 'hooks/useApi';
 import { useNavigate } from 'react-router-dom';
 import { Box, Container, Typography } from "@mui/material";
 import { campService } from '../../api/services/campService';
 import CampingCard from '../../components/CampingCard';
-import LoadMoreButton from "../../components/LoadMoreButton";
 import ScrollToTopFab from "../../components/ScrollToTopFab";
 import MainCarousel from "../../components/MainCarousel";
 import SearchBar from "../../components/SearchBar";
-import {useAuth} from "../../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import Grid from "@mui/material/Grid";
 
 function Home() {
     const navigate = useNavigate();
-    const {isAuthenticated} = useAuth();
+    const { isAuthenticated } = useAuth();
     const [camps, setCamps] = useState([]);
     const [page, setPage] = useState(0);
+    const [hasMore, setHasMore] = useState(true); // 로드 가능한지 여부
 
     const {
         data: popularCampsData,
@@ -31,6 +31,8 @@ function Home() {
         execute: executeMatchedCamps
     } = useApi(campService.getMatchedCamps);
 
+    const observerRef = useRef(null); // Intersection Observer 참조
+
     useEffect(() => {
         executePopularCamps(0, 9);
         if (isAuthenticated) {
@@ -40,35 +42,43 @@ function Home() {
 
     useEffect(() => {
         if (popularCampsData?.content) {
-            if (page === 0) {
-                setCamps(popularCampsData.content);
-            } else {
-                setCamps(prev => [...prev, ...popularCampsData.content]);
-            }
+            setCamps((prev) => (page === 0 ? popularCampsData.content : [...prev, ...popularCampsData.content]));
+            setHasMore(popularCampsData.content.length === 9); // 9개씩 로드되었는지 확인
         }
     }, [popularCampsData]);
-
-    const handleLoadMore = () => {
-        const nextPage = page + 1;
-        executePopularCamps(nextPage, 9);
-        setPage(nextPage);
-    };
 
     const handleCardClick = (campId) => {
         navigate(`/camps/${campId}`);
     };
 
     const handleSearch = ({ city, keyword }) => {
-        // Query parameters 생성
         const params = new URLSearchParams();
         if (city) params.append('city', city);
         if (keyword) params.append('keyword', keyword);
-
-        // /search로 네비게이트
         navigate(`/search?${params.toString()}`);
     };
 
-    const hasMore = popularCampsData?.content?.length % 9 === 0;
+    // Intersection Observer의 콜백
+    const loadMore = useCallback(
+        (entries) => {
+            const [entry] = entries;
+            if (entry.isIntersecting && hasMore && !loadingPopularCamps) {
+                const nextPage = page + 1;
+                executePopularCamps(nextPage, 9);
+                setPage(nextPage);
+            }
+        },
+        [page, hasMore, loadingPopularCamps, executePopularCamps]
+    );
+
+    // Intersection Observer 설정
+    useEffect(() => {
+        const observer = new IntersectionObserver(loadMore, { threshold: 1.0 });
+        if (observerRef.current) observer.observe(observerRef.current);
+        return () => {
+            if (observerRef.current) observer.unobserve(observerRef.current);
+        };
+    }, [loadMore]);
 
     return (
         <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -113,6 +123,7 @@ function Home() {
                 </>
             )}
 
+            {/* 인기 캠핑장 목록 */}
             <Typography variant="h5" fontWeight="bold" sx={{ mb: 4 }}>
                 인기 캠핑장
             </Typography>
@@ -134,14 +145,8 @@ function Home() {
                 ))}
             </Grid>
 
-            {camps.length > 0 && (
-                <LoadMoreButton
-                    onClick={handleLoadMore}
-                    isLoading={loadingPopularCamps}
-                    hasMore={hasMore}
-                    disabled={!hasMore || loadingPopularCamps}
-                />
-            )}
+            {/* 무한 스크롤을 위한 Intersection Observer 트리거 */}
+            <div ref={observerRef} style={{ height: '1px' }} />
 
             <ScrollToTopFab />
         </Container>
