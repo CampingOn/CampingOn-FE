@@ -18,7 +18,7 @@ const Header = () => {
         switch (pathname) {
             case '/my-reservation':
                 return 0;
-            case '/':
+            case '/my-bookmark':
                 return 1;
             case '/my-page':
                 return 2;
@@ -66,7 +66,7 @@ const Header = () => {
                 navigate('/my-reservation');
                 break;
             case 1:
-                navigate('/');
+                navigate('/my-bookmark');
                 break;
             case 2:
                 navigate('/my-page');
