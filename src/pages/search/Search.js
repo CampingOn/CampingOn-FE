@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useApi } from 'hooks/useApi';
 import { Box, Container, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import SearchBar from 'components/SearchBar';
 import CampingCard from 'components/CampingCard';
-import LoadMoreButton from 'components/LoadMoreButton';
 import ScrollToTopFab from 'components/ScrollToTopFab';
-import {searchInfoService} from "api/services/searchInfoService";
-import {useLocation, useNavigate} from "react-router-dom";
+import { searchInfoService } from 'api/services/searchInfoService';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function Search() {
     const location = useLocation();
@@ -19,11 +18,11 @@ function Search() {
         city: '',
         keyword: ''
     });
+    const observerRef = useRef(null); // Intersection Observer ref
 
     const {
         execute: searchCamps,
         loading: isLoading,
-        error,
         data: searchResults
     } = useApi(searchInfoService.searchCamps);
 
@@ -34,7 +33,6 @@ function Search() {
         const keyword = params.get('keyword') || '';
         setSearchParams({ city, keyword });
 
-        // city나 keyword가 있는 경우에만 검색 실행
         if (city || keyword) {
             const initialSearchParams = {
                 page: 0,
@@ -42,57 +40,59 @@ function Search() {
                 city: city,
                 keyword: keyword
             };
+            setCamps([]);
+            setPage(0);
             searchCamps(initialSearchParams);
         }
     }, [location.search]);
 
-    // searchResults 데이터 처리
-    useEffect(() => {
-        if (searchResults?.content) {
-            setCamps(searchResults.content);
-            setHasMore(searchResults.totalElements > 12);
-            setPage(1);
-        }
-    }, [searchResults]);
+    // 무한 스크롤 데이터 로드
+    const loadCamps = useCallback(async () => {
+        if (isLoading || !hasMore) return;
 
-    const loadCamps = async (newSearch = false) => {
         try {
-            const currentPage = newSearch ? 0 : page;
             const params = {
-                page: currentPage,
+                page,
                 size: 12,
                 city: searchParams.city,
                 keyword: searchParams.keyword
             };
-
             const data = await searchCamps(params);
             const newCamps = data?.content || [];
 
-            if (newSearch) {
-                setCamps(newCamps);
-                setPage(1);
-            } else {
-                setCamps(prev => [...prev, ...newCamps]);
-                setPage(prev => prev + 1);
-            }
-
-            setHasMore(data.totalElements > (currentPage + 1) * 12);
+            setCamps((prev) => [...prev, ...newCamps]);
+            setPage((prev) => prev + 1);
+            setHasMore(data.totalElements > (page + 1) * 12);
         } catch (error) {
             console.error('캠핑장 검색 중 오류 발생:', error);
-            if (newSearch) {
-                setCamps([]);
-                setPage(0);
-            }
         }
-    };
+    }, [page, hasMore, isLoading, searchParams, searchCamps]);
+
+    // Intersection Observer 설정
+    useEffect(() => {
+        if (observerRef.current) observerRef.current.disconnect();
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && hasMore && !isLoading) {
+                    loadCamps();
+                }
+            },
+            { threshold: 1.0 }
+        );
+
+        const target = document.querySelector('#load-more-trigger');
+        if (target) observer.observe(target);
+        observerRef.current = observer;
+
+        return () => observer.disconnect();
+    }, [loadCamps, hasMore, isLoading]);
 
     const handleCardClick = (campId) => {
-        console.log("Clicked Camp ID:", campId);
         navigate(`/camps/${campId}`);
     };
 
     const handleSearch = (searchValues) => {
-        // URL 업데이트
         const params = new URLSearchParams();
         if (searchValues.city) params.append('city', searchValues.city);
         if (searchValues.keyword) params.append('keyword', searchValues.keyword);
@@ -101,11 +101,6 @@ function Search() {
         setCamps([]);
         setPage(0);
         setSearchParams(searchValues);
-        loadCamps(true);
-    };
-
-    const handleLoadMore = () => {
-        loadCamps();
     };
 
     return (
@@ -143,14 +138,7 @@ function Search() {
                 ))}
             </Grid>
 
-            {camps.length > 0 && (
-                <LoadMoreButton
-                    onClick={handleLoadMore}
-                    isLoading={isLoading}
-                    hasMore={hasMore}
-                    disabled={!hasMore || isLoading}
-                />
-            )}
+            <div id="load-more-trigger" style={{ height: '1px' }} />
 
             <ScrollToTopFab />
         </Container>
