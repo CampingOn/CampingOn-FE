@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useApi } from 'hooks/useApi';
 import { useNavigate } from 'react-router-dom';
 import { Box, Container, Typography } from "@mui/material";
-import { campService } from '../../api/services/campService';
+import { searchInfoService } from '../../api/services/searchInfoService';
 import CampingCard from '../../components/CampingCard';
 import LoadMoreButton from "../../components/LoadMoreButton";
 import ScrollToTopFab from "../../components/ScrollToTopFab";
@@ -27,7 +27,7 @@ function Home() {
         loading: loadingMatchedCamps,
         error: errorMatchedCamps,
         execute: executeMatchedCamps
-    } = useApi(campService.getMatchedCamps);
+    } = useApi(searchInfoService.getMatchedCamps);
 
     useEffect(() => {
         executePopularCamps(0, 9);
