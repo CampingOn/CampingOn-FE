@@ -11,12 +11,12 @@ import {useLocation, useNavigate} from "react-router-dom";
 
 function Search() {
     const location = useLocation();
-    const navigate = useNavigate(); // 네비게이션 함수
+    const navigate = useNavigate();
     const [camps, setCamps] = useState([]);
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const [searchParams, setSearchParams] = useState({
-        city: '', // URL 파라미터나 상태에서 초기값 가져오기
+        city: '',
         keyword: ''
     });
 
@@ -27,52 +27,56 @@ function Search() {
         data: searchResults
     } = useApi(searchInfoService.searchCamps);
 
-    // 첫 로딩 시 전체 데이터를 가져오는 효과
-    useEffect(() => {
-        loadCamps(true);  // 컴포넌트 마운트 시 초기 데이터 로드
-    }, []);
-
-
-    /*
-    // URL 파라미터에서 검색값 초기화 - 주석 해제 시 메인 페이지에서도 검색됨
+    // URL 파라미터에서 검색값 초기화 및 검색 실행
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const city = params.get('city') || '';
         const keyword = params.get('keyword') || '';
         setSearchParams({ city, keyword });
-    }, [location.search]);*/
 
-    // 검색 파라미터 변경 시에만 새로운 검색 수행
-    useEffect(() => {
-        if (searchParams.city || searchParams.keyword) {
-            loadCamps(true);
+        // city나 keyword가 있는 경우에만 검색 실행
+        if (city || keyword) {
+            const initialSearchParams = {
+                page: 0,
+                size: 12,
+                city: city,
+                keyword: keyword
+            };
+            searchCamps(initialSearchParams);
         }
-    }, [searchParams]);
+    }, [location.search]);
+
+    // searchResults 데이터 처리
+    useEffect(() => {
+        if (searchResults?.content) {
+            setCamps(searchResults.content);
+            setHasMore(searchResults.totalElements > 12);
+            setPage(1);
+        }
+    }, [searchResults]);
 
     const loadCamps = async (newSearch = false) => {
         try {
             const currentPage = newSearch ? 0 : page;
             const params = {
+                page: currentPage,
+                size: 12,
                 city: searchParams.city,
-                name: searchParams.keyword,
-                page: currentPage,  // 페이지 파라미터 추가
-                size: 12           // 사이즈도 명시적으로 전달
+                keyword: searchParams.keyword
             };
 
             const data = await searchCamps(params);
             const newCamps = data?.content || [];
 
             if (newSearch) {
-                setCamps(newCamps);  // 새로운 검색시 데이터 초기화
-                setPage(1);         // 다음 페이지를 위해 1로 설정
+                setCamps(newCamps);
+                setPage(1);
             } else {
-                setCamps(prev => [...prev, ...newCamps]);  // 기존 데이터에 추가
+                setCamps(prev => [...prev, ...newCamps]);
                 setPage(prev => prev + 1);
             }
 
-            // totalElements를 사용하여 더 정확한 hasMore 계산
             setHasMore(data.totalElements > (currentPage + 1) * 12);
-
         } catch (error) {
             console.error('캠핑장 검색 중 오류 발생:', error);
             if (newSearch) {
@@ -84,11 +88,16 @@ function Search() {
 
     const handleCardClick = (campId) => {
         console.log("Clicked Camp ID:", campId);
-        navigate(`/camps/${campId}`); // campId를 포함한 경로로 이동
+        navigate(`/camps/${campId}`);
     };
 
-
     const handleSearch = (searchValues) => {
+        // URL 업데이트
+        const params = new URLSearchParams();
+        if (searchValues.city) params.append('city', searchValues.city);
+        if (searchValues.keyword) params.append('keyword', searchValues.keyword);
+        navigate(`/search?${params.toString()}`);
+
         setCamps([]);
         setPage(0);
         setSearchParams(searchValues);
@@ -96,24 +105,26 @@ function Search() {
     };
 
     const handleLoadMore = () => {
-        loadCamps();  // 추가 데이터 로드
+        loadCamps();
     };
 
     return (
         <Container maxWidth="lg" sx={{ py: 4 }}>
-            {/* 검색바 */}
             <Box sx={{ mb: 4 }}>
-                <SearchBar onSearch={handleSearch} isLoading={isLoading} />
+                <SearchBar
+                    onSearch={handleSearch}
+                    isLoading={isLoading}
+                    initialCity={searchParams.city}
+                    initialKeyword={searchParams.keyword}
+                />
             </Box>
 
-            {/* 검색 결과가 없을 때 메시지 */}
             {camps.length === 0 && !isLoading && (
                 <Typography variant="h6" textAlign="center" sx={{ my: 4 }}>
                     검색 결과가 없습니다.
                 </Typography>
             )}
 
-            {/* 캠핑장 카드 그리드 */}
             <Grid container spacing={4} sx={{ mb: 4, justifyContent: 'center', px: 4 }}>
                 {camps.map((camp) => (
                     <Grid item xs={12} sm={6} md={4} key={camp.campId}>
@@ -132,7 +143,6 @@ function Search() {
                 ))}
             </Grid>
 
-            {/* 더보기 버튼 */}
             {camps.length > 0 && (
                 <LoadMoreButton
                     onClick={handleLoadMore}
@@ -142,7 +152,6 @@ function Search() {
                 />
             )}
 
-            {/* 위로가기 버튼 */}
             <ScrollToTopFab />
         </Container>
     );

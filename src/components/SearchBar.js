@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Autocomplete, Button, Box, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 
-function SearchBar({ onSearch, isLoading }) {
-    const [city, setCity] = useState(null);
-    const [keyword, setKeyword] = useState('');
+function SearchBar({ onSearch, isLoading, initialCity = '', initialKeyword = '' }) {
+    const [city, setCity] = useState(initialCity);
+    const [keyword, setKeyword] = useState(initialKeyword);
     const [keywordSuggestions, setKeywordSuggestions] = useState([]);
+
+    useEffect(() => {
+        setCity(initialCity);
+        setKeyword(initialKeyword);
+    }, [initialCity, initialKeyword]);
 
     const cityOptions = [
         '서울특별시', '부산광역시', '대구광역시', '인천광역시',
