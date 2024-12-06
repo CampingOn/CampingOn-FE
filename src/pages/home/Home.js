@@ -8,10 +8,12 @@ import LoadMoreButton from "../../components/LoadMoreButton";
 import ScrollToTopFab from "../../components/ScrollToTopFab";
 import MainCarousel from "../../components/MainCarousel";
 import SearchBar from "../../components/SearchBar";
+import {useAuth} from "../../context/AuthContext";
+import Grid from "@mui/material/Grid";
 
 function Home() {
     const navigate = useNavigate();
-    const isAuthenticated = localStorage.getItem("accessToken");
+    const {isAuthenticated} = useAuth();
     const [camps, setCamps] = useState([]);
     const [page, setPage] = useState(0);
 
@@ -97,7 +99,13 @@ function Home() {
                         {matchedCampsData.content.map((camp) => (
                             <CampingCard
                                 key={camp.campId}
-                                {...camp}
+                                campId={camp.campId}
+                                thumbImage={camp.thumbImage}
+                                name={camp.name}
+                                address={camp.streetAddr}
+                                keywords={camp.keywords || []}
+                                lineIntro={camp.lineIntro}
+                                marked={camp.marked}
                                 onClick={() => handleCardClick(camp.campId)}
                             />
                         ))}
@@ -108,24 +116,23 @@ function Home() {
             <Typography variant="h5" fontWeight="bold" sx={{ mb: 4 }}>
                 인기 캠핑장
             </Typography>
-            <Box sx={{
-                display: 'grid',
-                gridTemplateColumns: {
-                    xs: '1fr',
-                    sm: 'repeat(2, 1fr)',
-                    lg: 'repeat(3, 1fr)'
-                },
-                gap: 3,
-                mb: 4
-            }}>
+            <Grid container spacing={4} sx={{ mb: 4, justifyContent: 'center', px: 4 }}>
                 {camps.map((camp) => (
-                    <CampingCard
-                        key={camp.campId}
-                        {...camp}
-                        onClick={() => handleCardClick(camp.campId)}
-                    />
+                    <Grid item xs={12} sm={6} md={4} key={camp.campId}>
+                        <CampingCard
+                            key={camp.campId}
+                            campId={camp.campId}
+                            thumbImage={camp.thumbImage}
+                            name={camp.name}
+                            address={camp.streetAddr}
+                            keywords={camp.keywords || []}
+                            lineIntro={camp.lineIntro}
+                            marked={camp.marked}
+                            onClick={() => handleCardClick(camp.campId)}
+                        />
+                    </Grid>
                 ))}
-            </Box>
+            </Grid>
 
             {camps.length > 0 && (
                 <LoadMoreButton
