@@ -29,23 +29,18 @@ function addRefreshSubscriber(callback) {
 // 요청 인터셉터
 apiClient.interceptors.request.use(
     async (config) => {
-        // 특정 URL에 대해 인터셉터 제외
-        if (excludedUrls.some((url) => config.url.includes(url))) {
-            return config;
-        }
-
         const accessToken = localStorage.getItem("accessToken");
 
         if (accessToken) {
-            console.log("access Token 헤더에 설정함");
+            console.log("🔑 access Token 헤더에 설정함");
             config.headers.Authorization = `Bearer ${accessToken}`;
         }
 
-        console.log("요청 데이터:", config.data);
+        console.log(`🚀 요청: ${config.url}`);
         return config;
     },
     (error) => {
-        console.error("요청 에러:", error);
+        console.error("❌ 요청 에러:", error);
         return Promise.reject(error);
     }
 );
@@ -53,11 +48,11 @@ apiClient.interceptors.request.use(
 // 응답 인터셉터
 apiClient.interceptors.response.use(
     (response) => {
-        console.log("응답 데이터:", response.data);
+        console.log(`✅ 응답: ${response.config.url}`);
         return response;
     },
     async (error) => {
-        console.error("응답 에러:", error.message);
+        console.error("⚠️ 응답 에러:", error.message);
         const originalRequest = error.config;
 
         // 특정 URL에 대해 인터셉터 제외
