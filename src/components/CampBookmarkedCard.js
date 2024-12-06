@@ -1,10 +1,11 @@
 import React from "react";
-import {Card, CardContent, Typography, Box, IconButton, Chip} from "@mui/material";
+import { Card, CardContent, Typography, Box, IconButton, Chip } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
-import {useNavigate} from "react-router-dom";
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import { useNavigate } from "react-router-dom";
 
 const CampBookmarkedCard = ({ data, onToggleFavorite }) => {
     const { campId, name, lineIntro, thumbImage, streetAddr, keywords, isMarked } = data;
@@ -15,8 +16,6 @@ const CampBookmarkedCard = ({ data, onToggleFavorite }) => {
     const handleNameClick = () => {
         navigate(`/details/${campId}`);
     };
-
-
 
     return (
         <Card
@@ -47,7 +46,7 @@ const CampBookmarkedCard = ({ data, onToggleFavorite }) => {
                 <CardContent>
                     <Typography
                         variant="h5"
-                        sx={{marginBottom: 2, fontWeight: 'bold'}}
+                        sx={{ marginBottom: 2, fontWeight: 'bold' }}
                         onClick={handleNameClick}
                     >
                         {name}
@@ -60,8 +59,15 @@ const CampBookmarkedCard = ({ data, onToggleFavorite }) => {
                         <InfoOutlinedIcon sx={{ fontSize: 20, marginRight: 1, color: "gray" }} />
                         <Typography variant="body2">{summary}</Typography>
                     </Box>
+
+                    {/* 입실 퇴실 시간 섹션 */}
+                    <Box sx={{ display: "flex", alignItems: "center", marginBottom: 3 }}>
+                        <AccessTimeIcon sx={{ fontSize: 20, marginRight: 1, color: "gray" }} />
+                        <Typography variant="body2">입실: 15:00 | 퇴실: 11:00</Typography>
+                    </Box>
+
                     {/* 해시태그 섹션 */}
-                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, marginTop: 1, }}>
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, marginTop: 1 }}>
                         {keywords.map((tag, index) => (
                             <Chip
                                 key={index}
