@@ -11,7 +11,15 @@ const apiClient = axios.create({
     },
 });
 
-const excludedUrls = ['/api/login', '/api/signup'];
+const excludedUrls = [
+    '/api/login',
+    '/api/signup',
+    "/api/users/check-duplicate",
+    "/api/mongo/camps/search",
+    "/api/camps/*/available",
+    "/api/camps/*",
+    "/api/keywords"];
+
 let isRefreshing = false; // Refresh Token 갱신 중 여부
 let refreshSubscribers = []; // 갱신 후 재요청 대기열
 
@@ -52,7 +60,7 @@ apiClient.interceptors.response.use(
         return response;
     },
     async (error) => {
-        console.error("⚠️ 응답 에러:", error.message);
+        console.error("🚫️ 응답 에러:", error.message);
         const originalRequest = error.config;
 
         // 특정 URL에 대해 인터셉터 제외

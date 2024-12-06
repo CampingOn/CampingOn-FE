@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress"; // Material-UI 스피너 import
 import Box from "@mui/material/Box";
+import {useAuth} from "context/AuthContext";
 
 const OAuthSuccess = () => {
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     useEffect(() => {
         const fetchTokens = async () => {
@@ -17,6 +19,7 @@ const OAuthSuccess = () => {
 
                 // 토큰 저장 (예: Local Storage)
                 localStorage.setItem("accessToken", response.data.accessToken);
+                login();
 
                 // 페이지 이동
                 navigate("/");
