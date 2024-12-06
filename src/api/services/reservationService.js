@@ -23,4 +23,10 @@ export const reservationService = {
         return apiClient.patch(`/api/reservations/${reservationId}`, requestData);
     },
 
+    // 다가오는 예약 조회
+    getUpcomingReservation: (reservationId) => {
+        return apiClient.get(`/api/reservations//upcoming`);
+    },
+
+
 };

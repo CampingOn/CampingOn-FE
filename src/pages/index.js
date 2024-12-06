@@ -6,20 +6,19 @@ import Login from "./account/Login";
 import ProfileView from "./account/ProfileView";
 import Signup from './account/SignUp';
 import UpdateProfile from "./account/UpdateProfile";
-
-//error
-import NotFound from "./error/NotFound";
+import OAuthSuccess from "pages/account/OAuthSuccess";
 
 //home
 import Home from "./home/Home";
 import Keyword from "./home/Keyword";
 
-//reservation
+//etc
+import CampDetail from "pages/camp/CampDetail";
 import MyReservation from "./reservation/MyReservation";
 import Reservation from "./reservation/Reservation";
-
-//search
 import Search from "./search/Search";
+import NotFound from "./error/NotFound";
+
 
 export {
     DeleteAccount,
@@ -35,4 +34,6 @@ export {
     MyReservation,
     Reservation,
     Search,
+    CampDetail,
+    OAuthSuccess
 };
