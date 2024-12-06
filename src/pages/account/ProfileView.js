@@ -1,28 +1,35 @@
-import React, {useEffect, useState} from "react";
-import ReservationCard from "components/ReservationCard";
+import React, { useEffect } from "react";
 import ProfileCard from "components/ProfileCard";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import {userService} from "api/services/userService";
-import {useApi} from "hooks/useApi";
-import {reservationService} from "../../api/services/reservationService";
+import { userService } from "api/services/userService";
+import { useApi } from "hooks/useApi";
+import { reservationService } from "api/services/reservationService";
+import { CampReservationCard } from "components";
 
 
 const imageUrl = 'profile.png';
 
 const ProfileView = () => {
 
-    const { execute: getUserInfo, loading: userLoading, error: userError, data: userInfo } = useApi(userService.getUserInfo);
-    const { execute: getReservations, loading: reservationsLoading, error: reservationsError, data: reservations } = useApi(reservationService.getReservations);
-
-    const [upcomingReservation, setUpcomingReservation] = useState(null);
-
+    const {
+        execute: getUserInfo,
+        loading: userLoading,
+        error: userError,
+        data: userInfo
+    } = useApi(userService.getUserInfo);
+    const {
+        execute: getUpcomingReservation,
+        loading: reservationsLoading,
+        error: reservationsError,
+        data: upcomingReservation
+    } = useApi(reservationService.getUpcomingReservation);
 
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 await getUserInfo(); // 먼저 유저 정보를 가져옴
-                await getReservations(0); // 그 후에 예약 정보를 가져옴
+                await getUpcomingReservation();
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -31,24 +38,10 @@ const ProfileView = () => {
         fetchData();
     }, []);
 
-    // api를 따로 만드는게 좋을지?
-    useEffect(() => {
-        if (reservations && reservations.length > 0) {
-            // 체크인 날짜 기준 가장 가까운 예약 찾기
-            const closestReservation = reservations.reduce((closest, current) => {
-                const currentDate = new Date(current.checkIn);
-                const closestDate = new Date(closest.checkIn);
-
-                return currentDate < closestDate ? current : closest;
-            });
-            setUpcomingReservation(closestReservation);
-        }
-    }, [reservations]);
-
-
 
     if (userLoading || reservationsLoading) return <div>Loading...</div>;
-    if (userError || reservationsError) return <div>Error occurred: {userError?.message || reservationsError?.message}</div>;
+    if (userError || reservationsError) return <div>Error
+        occurred: {userError?.message || reservationsError?.message}</div>;
     if (!userInfo) return <div>No user information found</div>;
 
     return (
@@ -64,15 +57,15 @@ const ProfileView = () => {
                 <div className="mt-8">
                     <h2 className="text-xl font-bold mb-4">다가오는 예약</h2>
                     {upcomingReservation ? (
-                        <ReservationCard reservation={upcomingReservation} />
+                        <CampReservationCard data={upcomingReservation}/>
                     ) : (
                         <div className="flex flex-col items-center justify-center text-center p-6">
                             <CalendarTodayIcon
-                                style={{ fontSize: 60, color: "#b0b0b0" }} // 연한 회색, 아이콘 크기 조정
+                                style={{fontSize: 60, color: "#b0b0b0"}} // 연한 회색, 아이콘 크기 조정
                             />
                             <p className="text-gray-600 mt-4 text-sm">
                                 예약된 캠핑장이 없습니다.
-                                <br />
+                                <br/>
                                 마음에 드는 캠핑장에 예약을 진행해보세요!
                             </p>
                         </div>

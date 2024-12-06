@@ -24,8 +24,8 @@ export const reservationService = {
     },
 
     // 다가오는 예약 조회
-    getUpcomingReservation: (reservationId) => {
-        return apiClient.get(`/api/reservations//upcoming`);
+    getUpcomingReservation: () => {
+        return apiClient.get(`/api/reservations/upcoming`);
     },
 
 

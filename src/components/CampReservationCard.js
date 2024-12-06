@@ -127,7 +127,7 @@ const CampReservationCard = ({ data }) => {
         <Card
             sx={{
                 display: "flex",
-                flexDirection: { xs: "column", sm: "row" },
+                flexDirection: { xs: "column", sm: "column", md: "column", lg: "row" }, // md 이하 column, lg 이상 row
                 margin: 2,
                 boxShadow: 3,
                 transition: "transform 0.3s",
