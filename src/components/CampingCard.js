@@ -1,6 +1,8 @@
 import React, {useState} from "react";
 import {bookmarkService} from "../api/services/bookmarkService";
-import {Snackbar} from "@mui/material";
+import {Box, IconButton, Snackbar} from "@mui/material";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 const CampingCard = ({thumbImage, name, address, intro, keywords, lineIntro, marked, onClick, campId}) => {
     const isAuthenticated = localStorage.getItem("accessToken");
@@ -15,7 +17,6 @@ const CampingCard = ({thumbImage, name, address, intro, keywords, lineIntro, mar
             setSnackbarNone(true); // Snackbar 열기
         } else {
             try {
-                console.log("campId: " + campId);
                 await bookmarkService.toggleBookmark(campId);
                 setLiked(!liked);
                 setSnackbarBookmark(true);
@@ -44,12 +45,13 @@ const CampingCard = ({thumbImage, name, address, intro, keywords, lineIntro, mar
                     alt={`${name} 사진`}
                     className="w-full h-full object-cover"
                 />
-                <button
-                    onClick={toggleLike} // 좋아요 버튼 클릭 이벤트
-                    className="absolute top-2 right-2 text-red-500 text-2xl focus:outline-none"
-                >
-                    {liked ? "❤️" : "🤍"}
-                </button>
+                <div className="absolute top-2 right-2 text-red-500 text-2xl focus:outline-none">
+                    <Box sx={{ marginTop: "auto", textAlign: "right" }}>
+                        <IconButton color="error" onClick={toggleLike}>
+                            {liked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                        </IconButton>
+                    </Box>
+                </div>
             </div>
             <div className="p-3"> {/* 텍스트 영역 */}
                 <h3 className="text-lg font-bold mb-1 truncate">{name}</h3> {/* 제목 */}
