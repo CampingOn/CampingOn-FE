@@ -1,82 +1,209 @@
-import { useEffect, useState } from 'react';
-import { useApi } from 'hooks/useApi';
-import { campSiteService } from 'api/services/campSiteService';
-import { ReservationConfirmCard } from "components";
-import { FormControl, InputLabel, Select, MenuItem, Box, Typography } from '@mui/material';
-import YellowButton from 'components/YellowButton';
+import React, {useEffect, useState} from 'react';
+import {FormControl, InputLabel, Select, MenuItem, Box, Snackbar, Alert, Grow} from '@mui/material';
+import {campSiteService} from 'api/services/campSiteService';
+import {reservationService } from "api/services/reservationService";
+import {ReservationConfirmCard, YellowButton, OperationPolicy} from 'components';
+import {useApi} from "hooks/useApi";
+import CustomSnackbar from 'components/CustomSnackbar';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Reservation = () => {
-    const { execute: getCampSite, loading, error, data } = useApi(campSiteService.getCampSite);
-    
+    const navigate = useNavigate();
+
+    const {
+        execute: getCampSite, 
+        loading: campSiteLoading, 
+        error: campSiteError, 
+        data: campSiteData
+    } = useApi(campSiteService.getCampSite);
+
+    const {
+        execute: createReservation, 
+        error: reservationError,
+    } = useApi(reservationService.createReservation);
+
+    const [additionalPolicies, setAdditionalPolicies] = useState([]);
+    const [guestCount, setGuestCount] = useState(1);
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        message: '',
+        severity: 'success'
+    });
+
+    // TODO: 하드코딩. 캠프상세페이지와 연결되면 받아올 데이터
     const [campId] = useState(10);
     const [siteId] = useState(5);
-    const [guestCount, setGuestCount] = useState(1);
-
-    // 체크인 및 체크아웃 날짜 상태 추가
     const [checkinDate, setCheckinDate] = useState("2023-10-01");
     const [checkoutDate, setCheckoutDate] = useState("2023-10-05");
 
-    useEffect(() => {
-        if (campId && siteId) {
-            getCampSite(campId, siteId);
-        }
-    }, [campId, siteId]);
+    // 날짜와 금액 데이터 가공 함수
+    const calculateReservationInfo = (count = guestCount) => {
+        if (!campSiteData) return null;
 
-    console.log('Loading:', loading);
-    console.log('Error:', error);
-    console.log('Data:', data);
+        const checkin = new Date(checkinDate);
+        const checkout = new Date(checkoutDate);
+        const nightCount = Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24));
+        const totalPrice = campSiteData.price * nightCount;
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error occurred</div>;
-    if (!data) return <div>No data</div>;
-
-    const campSiteData = data;
-
-    console.log('Camp Site Data:', campSiteData);
-
-    const handleReserve = () => {
-        console.log('예약이 완료되었습니다.');
-        // 예약 관련 API 호출 또는 다른 로직을 여기에 추가
+        return {
+            reservationDate: `${checkinDate} ~ ${checkoutDate}`,
+            nightCount,
+            totalPrice,
+            policies: [
+                { label: '예약 날짜', value: `${checkinDate} ~ ${checkoutDate}` },
+                { label: '결제 금액', value: totalPrice.toLocaleString() + '원' },
+                { label: '인원', value: count },
+            ]
+        };
     };
 
-    // 체크인 및 체크아웃 날짜 차이 계산
-    const checkin = new Date(checkinDate);
-    const checkout = new Date(checkoutDate);
-    const nightCount = Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24));
-    const totalPrice = campSiteData.price * nightCount;
+    useEffect(() => {
+        console.log('Request params:', {
+            campId,
+            siteId,
+            checkinDate,
+            checkoutDate
+        });
+        
+        getCampSite(campId, siteId, checkinDate, checkoutDate).then(response => {
+            if (response) {
+                console.log('캠핑지 정보:', response);
+                const reservationDate = `${checkinDate} ~ ${checkoutDate}`;
+                const checkin = new Date(checkinDate);
+                const checkout = new Date(checkoutDate);
+                const nightCount = Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24));
+                const totalPrice = response.price * nightCount;
+
+                setAdditionalPolicies([
+                    { label: '예약 날짜', value: reservationDate },
+                    { label: '결제 금액', value: totalPrice.toLocaleString() + '원' },
+                    { label: '인원', value: guestCount },
+                ]);
+            }
+        });
+    }, [campId, siteId, checkinDate, checkoutDate]);
+
+    if (campSiteLoading) return <div>Loading...</div>;
+    if (campSiteError) return <div>Error occurred</div>;
+    if (!campSiteData) return <div>No data</div>;
+
+    const handleCloseSnackbar = () => {
+        setSnackbar(prev => ({ ...prev, open: false }));
+    };
+
+    const handleReserve = async () => {
+        const info = calculateReservationInfo();
+        if (!info) return;
+
+        const requestData = {
+            campId,
+            campSiteId: siteId,
+            checkin: checkinDate,
+            checkout: checkoutDate,
+            guestCnt: guestCount,
+            totalPrice: info.totalPrice
+        };
+
+        await createReservation(requestData);
+        
+        if (reservationError) {
+            setSnackbar({
+                open: true,
+                message: reservationError.message || '예약 중 오류가 발생했습니다.',
+                severity: 'error'
+            });
+            return;
+        }
+
+        setSnackbar({
+            open: true,
+            message: '예약이 완료되었습니다.',
+            severity: 'success'
+        });
+        setTimeout(() => {
+            navigate('/my-reservation');
+        }, 1800);
+    };
+
+    const handleGuestCountChange = (e) => {
+        const newGuestCount = Number(e.target.value);
+        setGuestCount(newGuestCount);
+
+        const info = calculateReservationInfo(newGuestCount);
+        if (info) {
+            setAdditionalPolicies(info.policies);
+        }
+    };
 
     return (
-        <Box sx={{ padding: '0 16px' }}>
-            <div>
-                <div style={{ fontSize: '0.9rem', textAlign: 'left', margin: '50px 0 0 0' }}>
-                    강원도 춘천시
-                </div>
-                <div style={{ fontSize: '1.8rem', textAlign: 'left', margin: '5px 0 20px 0', fontWeight: 'bold' }}>
-                    OOO캠핑장
-                </div>
-                
+        <>
+            <Box sx={{
+                padding: '0 16px',
+                minHeight: '100vh',
+                paddingBottom: '100px'
+            }}>
                 {campSiteData ? (
-                    <>
+                    <div>
+                        <div style={{fontSize: '0.9rem', textAlign: 'left', margin: '30px 0 0 0'}}>
+                            {campSiteData.campSimpleDto.city} {campSiteData.campSimpleDto.state}
+                        </div>
+                        <div style={{fontSize: '1.8rem', textAlign: 'left', margin: '5px 0 20px 0', fontWeight: 'bold'}}>
+                            <Link 
+                                to={`/camps/${campSiteData.campSimpleDto.campId}`}
+                                style={{ 
+                                    textDecoration: 'none', 
+                                    color: 'inherit',
+                                    '&:hover': {
+                                        textDecoration: 'underline'
+                                    }
+                                }}
+                            >
+                                {campSiteData.campSimpleDto.campName}
+                            </Link>
+                        </div>
                         <ReservationConfirmCard
                             data={campSiteData}
                         />
 
+                        <div className="camp-detail-intro-box" style={{ marginTop: '50px'}}>
+                            <span className="camp-detail-intro-title">예약 안내</span>
+                            <div className="camp-detail-description" style={{
+                                padding: '10px 5px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'space-between',
+                                height: '100%',
+                            }}>
+                                <p style={{marginBottom: '5px'}}>
+                                    ▪︎ 저희 캠핑장은 현장 결제 시스템을 운영하고 있으며, 예약 시에는 결제가 이루어지지 않습니다. 캠핑장 도착 후 현장에서 결제를 완료해 주세요.
+                                </p>
+                                <p>
+                                    ▪︎ 예약 취소는 당일 전 날 자정(24:00)까지 가능합니다. 이 시간 이후에는 예약 취소가 불가능하오니, 이 점 유의하시기 바랍니다.
+                                </p>
+                            </div>
+                        </div>
 
-                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center',
-                            marginTop: '60px', width: '100%' }}>
+                        <OperationPolicy
+                            additionalPolicies={additionalPolicies}
+                            title="예약 정보"
+                            showDefaultPolicies={false}
+                        />
 
-                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' , justifyContent: 'space-between', height: '100%'}}>
-                                <Typography variant="body1">{checkinDate} - {checkoutDate}</Typography>
-                                <Typography variant={"h6"}>총 결제 금액: {totalPrice.toLocaleString()}원</Typography>
-                            </Box>
-
-                            <FormControl variant="outlined" style={{ width: '200px', marginLeft: '40px' }}>
+                        <Box sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginTop: '30px',
+                            marginBottom: '60px',
+                            width: '100%'
+                        }}>
+                            <FormControl variant="outlined" style={{width: '150px'}}>
                                 <InputLabel id="guestCount-label">게스트 수 선택</InputLabel>
                                 <Select
                                     labelId="guestCount-label"
                                     id="guestCount"
                                     value={guestCount}
-                                    onChange={(e) => setGuestCount(Number(e.target.value))}
+                                    onChange={handleGuestCountChange}
                                     label="게스트 수 선택"
                                     variant="outlined"
                                     sx={{
@@ -101,23 +228,27 @@ const Reservation = () => {
                                 </Select>
                             </FormControl>
 
-                        </Box>
-
-                        <Box sx={{ textAlign: 'right', marginTop: '120px'}}>
                             <YellowButton
                                 onClick={handleReserve}
-                                size="large"
+                                size="large" 
+                                style={{padding: '10px 50px'}}
                             >
-                                &nbsp;&nbsp;예약하기&nbsp;&nbsp;
+                                예약하기
                             </YellowButton>
                         </Box>
-                    </>
-                ) : (
-                    <div></div>
-                )}
-            </div>
-        </Box>
+                    </div>
+                ) : null}
+            </Box>
+
+            <CustomSnackbar 
+                open={snackbar.open}
+                message={snackbar.message}
+                severity={snackbar.severity}
+                onClose={handleCloseSnackbar}
+            />
+        </>
     );
 };
 
 export default Reservation;
+

@@ -1,9 +1,9 @@
 .operation-policy {
-    width: 100%; /* 전체 너비로 확장 */
-    max-width: 100%; /* 최대 너비 제한 해제 */
-    padding: 20px; /* 내부 여백을 추가 */
+    width: 100%;
+    max-width: 100%;
+    padding: 20px;
     margin-top: 20px;
-    margin-bottom: 20px; /* 아래쪽 여백 추가 */
+    margin-bottom: 20px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     border: 1px solid #000000;
@@ -39,5 +39,19 @@
 }
 
 .operation-policy-item:last-child {
-    border-bottom: none; /* 마지막 항목의 경계선 제거 */
+    border-bottom: none;
+}
+
+@keyframes zoomInOut {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.zoom-effect {
+    animation: zoomInOut 0.3s ease-in-out;
+}
+
+.policy-item {
+    transition: all 0.3s ease;
 }
