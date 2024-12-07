@@ -1,15 +1,15 @@
-import React, {useEffect, useState, useRef, useCallback} from 'react';
-import {useApi} from 'hooks/useApi';
-import {useNavigate} from 'react-router-dom';
+import React, {useEffect, useState, useRef, useCallback} from "react";
+import {useApi} from "hooks/useApi";
+import {useNavigate} from "react-router-dom";
 import {Box, Container, Typography} from "@mui/material";
-import {campService} from '../../api/services/campService';
-import {searchInfoService} from '../../api/services/searchInfoService';
-import CampingCard from '../../components/CampingCard';
+import {campService} from "../../api/services/campService";
+import {searchInfoService} from "../../api/services/searchInfoService";
+import CampingCard from "../../components/CampingCard";
 import ScrollToTopFab from "../../components/ScrollToTopFab";
 import MainCarousel from "../../components/MainCarousel";
 import SearchBar from "../../components/SearchBar";
 import {useAuth} from "../../context/AuthContext";
-import Grid from "@mui/material/Grid";
+import Snackbar from "@mui/material/Snackbar";
 
 function Home() {
     const navigate = useNavigate();
@@ -17,6 +17,27 @@ function Home() {
     const [camps, setCamps] = useState([]);
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true); // 로드 가능한지 여부
+    const [snackbarNone, setSnackbarNone] = useState(false);
+    const [snackbarBookmark, setSnackbarBookmark] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+
+    const handleCloseNone = () => {
+        setSnackbarNone(false);
+    };
+
+    const handleCloseBookmark = () => {
+        setSnackbarBookmark(false);
+    };
+
+    const showSnackbarNone = () => {
+        setSnackbarMessage("회원만 이용할 수 있는 기능입니다.");
+        setSnackbarNone(true);
+    };
+
+    const showSnackbarBookmark = () => {
+        setSnackbarMessage("찜 상태를 변경하였습니다.");
+        setSnackbarBookmark(true);
+    };
 
     const {
         data: popularCampsData,
@@ -125,6 +146,8 @@ function Home() {
                                 lineIntro={camp.lineIntro}
                                 marked={camp.marked}
                                 onClick={() => handleCardClick(camp.campId)}
+                                onShowSnackbarNone={showSnackbarNone}
+                                onShowSnackbarBookmark={showSnackbarBookmark}
                             />
                         ))}
                     </Box>
@@ -156,13 +179,27 @@ function Home() {
                         lineIntro={camp.lineIntro}
                         marked={camp.marked}
                         onClick={() => handleCardClick(camp.campId)}
+                        onShowSnackbarNone={showSnackbarNone}
+                        onShowSnackbarBookmark={showSnackbarBookmark}
                     />
                 ))}
             </Box>
 
-
             {/* 무한 스크롤을 위한 Intersection Observer 트리거 */}
             <div ref={observerRef} style={{height: '1px'}}/>
+
+            <Snackbar
+                open={snackbarNone}
+                autoHideDuration={1500}
+                onClose={handleCloseNone}
+                message={snackbarMessage}
+            />
+            <Snackbar
+                open={snackbarBookmark}
+                autoHideDuration={1500}
+                onClose={handleCloseBookmark}
+                message={snackbarMessage}
+            />
 
             <ScrollToTopFab/>
         </Container>

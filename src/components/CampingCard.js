@@ -1,40 +1,31 @@
 import React, { useState } from "react";
 import { bookmarkService } from "../api/services/bookmarkService";
-import { Box, IconButton, Snackbar } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
-const CampingCard = ({ thumbImage, name, address, keywords, lineIntro, marked, onClick, campId }) => {
+const CampingCard = ({ thumbImage, name, address, keywords, lineIntro, marked, onClick, campId, onShowSnackbarNone, onShowSnackbarBookmark }) => {
     const isAuthenticated = localStorage.getItem("accessToken");
     const [liked, setLiked] = useState(marked);
-    const [snackbarNone, setSnackbarNone] = useState(false);
-    const [snackbarBookmark, setSnackbarBookmark] = useState(false);
 
     const toggleLike = async (event) => {
         event.stopPropagation(); // 부모의 onClick 이벤트가 실행되지 않도록 중단
 
         if (!isAuthenticated) {
-            setSnackbarNone(true); // Snackbar 열기
+            onShowSnackbarNone(); // 회원만 이용할 수 있는 기능 메시지 띄우기
         } else {
             try {
                 await bookmarkService.toggleBookmark(campId);
                 setLiked(!liked);
-                setSnackbarBookmark(true);
+                onShowSnackbarBookmark(); // 찜 상태 변경 메시지 띄우기
             } catch (error) {
                 console.error("찜 클릭 에러 : ", error);
             }
         }
     };
 
-    const handleCloseNone = () => {
-        setSnackbarNone(false);
-    };
-
-    const handleCloseBookmark = () => {
-        setSnackbarBookmark(false);
-    };
-
     const imageUrl = thumbImage === "" ? `${process.env.PUBLIC_URL}/default/NoThumb.jpg` : thumbImage;
+
     return (
         <div
             onClick={onClick} // 부모 컴포넌트에서 전달받은 onClick 이벤트 연결
@@ -75,18 +66,6 @@ const CampingCard = ({ thumbImage, name, address, keywords, lineIntro, marked, o
                 </div>
                 <p className="text-sm text-gray-600 truncate mt-4">{lineIntro}</p> {/* 소개 */}
             </div>
-            <Snackbar
-                open={snackbarNone}
-                autoHideDuration={1500}
-                onClose={handleCloseNone}
-                message="회원만 이용할 수 있는 기능입니다."
-            />
-            <Snackbar
-                open={snackbarBookmark}
-                autoHideDuration={1500}
-                onClose={handleCloseBookmark}
-                message="찜 상태를 변경하였습니다"
-            />
         </div>
     );
 };
