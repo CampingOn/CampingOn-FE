@@ -165,6 +165,12 @@ const CampReservationCard = ({ data }) => {
                         </Typography>
                     </Box>
                     <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
+                        <FestivalOutlined sx={{ fontSize: 20, marginRight: 1, color: "#ff7961" }} />
+                        <Typography variant="body2">
+                            내부시설: {campSiteResponseDto.indoorFacility}
+                        </Typography>
+                    </Box>
+                    <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
                         <Start sx={{ fontSize: 20, marginRight: 1, color: "#2c387e" }} />
                         <Typography variant="body2">
                             체크인 : {checkinDate} {checkinTime}
@@ -182,12 +188,7 @@ const CampReservationCard = ({ data }) => {
                             {guestCnt}명
                         </Typography>
                     </Box>
-                    <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
-                        <FestivalOutlined sx={{ fontSize: 20, marginRight: 1, color: "#ff7961" }} />
-                        <Typography variant="body2">
-                            내부시설: {campSiteResponseDto.indoorFacility}
-                        </Typography>
-                    </Box>
+
                     <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
                         <ReceiptLongOutlinedIcon sx={{ fontSize: 20, marginRight: 1, color: "#ff9800" }} />
                         <Typography variant="body2">
