@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useApi } from 'hooks/useApi';
 import { useNavigate } from 'react-router-dom';
 import { Box, Container, Typography } from "@mui/material";
+import { campService } from '../../api/services/campService';
 import { searchInfoService } from '../../api/services/searchInfoService';
 import CampingCard from '../../components/CampingCard';
 import ScrollToTopFab from "../../components/ScrollToTopFab";

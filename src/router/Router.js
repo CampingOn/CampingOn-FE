@@ -20,7 +20,6 @@ function Router() {
             <Route path="/my-reservation" element={<MyReservation/>} />
             <Route path="/my-bookmark" element={<MyBookmark/>} />
             <Route path="/camps/:campId" element={<CampDetail />} /> {/* 상세 페이지 경로 */}
-            {/*<Route path="/searchCamps" element={<SearchCampList/>} />*/}
             <Route path="/my-page" element={<MyPage />} />
             <Route path="*" element={<Navigate to="/not-found" replace/>}/>
             <Route path="/not-found" element={<NotFound/>}/>
