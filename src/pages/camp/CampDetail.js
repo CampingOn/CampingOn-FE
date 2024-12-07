@@ -1,170 +1,76 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { campService } from '../../api/services/campService';
-import WebIcon from '@mui/icons-material/Web';
-import CallIcon from '@mui/icons-material/Call';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import Calendar from '../../components/Calendar';
-import OperationPolicy from '../../components/OperationPolicy';
-import KakaoMap from "../../components/KakaoMap";
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
+import React, {useState} from "react";
+import {useParams} from "react-router-dom";
+import {useCampDetail} from "../../hooks/useCampDetail";
+import useAvailableCampSites from "../../hooks/useAvailableCampSites";
+import ImageGallery from "../../components/camp/ImageGallery";
+import AddressInfo from "../../components/camp/AddressInfo";
+import CampDetailIntro from "../../components/camp/CampDetailIntro";
+import OperationPolicy from "../../components/OperationPolicy";
+import MapSection from "../../components/camp/MapSection";
+import ModalGallery from "../../components/camp/ModalGallery";
+import CampSiteCard from "../../components/camp/CampSiteCard";
+import CampDatePicker from "../../components/camp/CampDatePicker";
+import ModalComponent from "../../components/camp/ModalComponent";
 
-import '../../style/camp-detail.css';
+import { ko } from "date-fns/locale";
+import "react-datepicker/dist/react-datepicker.css";
+
+
+import "../../style/camp-detail.css";
+import "../../style/available-list.css";
 
 function CampDetail() {
-    const { campId } = useParams();
-    const [campDetails, setCampDetails] = useState({});
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [open, setOpen] = useState(false); // 모달 상태 관리
+    const {campId} = useParams();
+    const [checkin, setCheckin] = useState(null); // 체크인 날짜
+    const [checkout, setCheckout] = useState(null); // 체크아웃 날짜
+    const [modalOpen, setModalOpen] = useState(false);
 
-    useEffect(() => {
-        const fetchCampDetails = async () => {
-            try {
-                const response = await campService.getCampDetail(campId);
-                console.log(response.data);
-                setCampDetails(response.data);
-            } catch (err) {
-                console.error(err);
-                setError(err);
-            } finally {
-                setLoading(false);
-            }
-        };
 
-        fetchCampDetails();
-    }, [campId]);
+    const { data: availableSites, loading, error } = useAvailableCampSites(
+        campId,
+        checkin ? checkin.toISOString().split("T")[0] : null,
+        checkout ? checkout.toISOString().split("T")[0] : null
+    );
 
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleDateChange = (dates) => {
+        const [start, end] = dates;
+        setCheckin(start);
+        setCheckout(end);
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // 날짜만 비교하도록 시간 제거
+
+        if (start && start.toDateString() === today.toDateString()) {
+            setModalOpen(true); // 당일 예약인 경우 모달 열기
+        }
+    };
+
+    const {campDetails, loading: detailLoading, error: detailError} = useCampDetail(campId);
+    const [openModal, setOpenModal] = useState(false);
+
+    const handleModalOpen = () => setOpenModal(true);
+    const handleModalClose = () => setOpenModal(false);
+
 
     if (loading) return <div>로딩 중...</div>;
-    if (error) return <div>에러 발생: {error.message}</div>;
+    if (error) return <div>에러 발생: {error}</div>;
+    if (detailError) return <div>에러 발생: {detailError}</div>;
     if (!campDetails) return <div>캠핑장 정보를 찾을 수 없습니다.</div>;
+    if (detailLoading) return <div>로딩 중...</div>;
 
+    const {campAddr, images, intro, name, tel, homepage} = campDetails;
     return (
         <div className="camp-detail-container">
-            {/* 캠핑장 주소 */}
-            {campDetails.campAddr && (
-                <p className="camp-detail-small-address">
-                    {campDetails.campAddr.city || "도/광역시 정보 없음"} {campDetails.campAddr.state || "시/군/구 정보 없음"}
-                </p>
-            )}
-
             {/* 캠핑장 이름 */}
-            <h1 className="camp-detail-title">
-                {campDetails.name || "캠핑장 이름 없음"}
-            </h1>
-
-            {/* 이미지 갤러리 */}
-            <div className="camp-detail-gallery">
-                {/* 왼쪽 대표 이미지 */}
-                {campDetails.images && campDetails.images.length > 1 && (
-                    <div className="main-image">
-                        <img
-                            src={campDetails.images[1]} // 두 번째 사진을 대표 이미지로 사용
-                            alt="대표 이미지"
-                            onClick={() => window.open(campDetails.images[1], '_blank')}
-                        />
-                    </div>
-                )}
-
-                {/* 오른쪽 썸네일 이미지들 (1, 3, 4, 5번째 사진) */}
-                <div className="thumbnail-images-grid">
-                    {campDetails.images &&
-                        [0, 2, 3, 4].map((index) => (
-                            campDetails.images[index] && (
-                                <div key={index} className="thumbnail">
-                                    <img
-                                        src={campDetails.images[index]}
-                                        alt={`캠핑장 이미지 ${index + 1}`}
-                                        onClick={() => window.open(campDetails.images[index], '_blank')}
-                                    />
-                                    {/* "더보기" 버튼을 5번째 이미지의 구석에 표시 */}
-                                    {index === 4 && campDetails.images.length > 5 && (
-                                        <button onClick={handleOpen} className="view-more-button">
-                                            더보기
-                                        </button>
-                                    )}
-                                </div>
-                            )
-                        ))}
-                </div>
-            </div>
-
-            {/* 모달을 통한 전체 이미지 보기 */}
-            <Modal open={open} onClose={handleClose}>
-                <Box
-                    sx={{
-                        p: 4,
-                        backgroundColor: 'white',
-                        maxHeight: '83vh',
-                        overflow: 'auto',
-                        width: '87%',              // 모달의 너비 조정
-                        position: 'absolute',      // 절대 위치 지정
-                        top: '50%',                // 수직 중앙으로 설정
-                        left: '50%',               // 수평 중앙으로 설정
-                        transform: 'translate(-50%, -50%)', // 정가운데로 이동
-                        boxShadow: 24,             // 그림자 효과 추가
-                        borderRadius: 2            // 모달 테두리 둥글게
-                    }}
-                >
-                    <div className="modal-content">
-                        {campDetails.images &&
-                            campDetails.images.map((image, index) => (
-                                <div key={index} className="modal-thumbnail">
-                                    <img
-                                        src={image}
-                                        alt={`캠핑장 이미지 ${index + 1}`}
-                                        className="modal-image"
-                                    />
-                                </div>
-                            ))}
-                    </div>
-                </Box>
-            </Modal>
-
-            {/* 홈페이지, 전화번호, 도로명 주소*/}
-            <div className="camp-detail-info-bar">
-                {/* 왼쪽: 홈페이지 */}
-                <div className="info-bar-section">
-                    <LocationOnIcon style={{verticalAlign: 'middle', marginRight: '8px'}}/>
-                    <span>{campDetails.campAddr?.streetAddr || "도로명 주소 정보 없음"}</span>
-                </div>
-
-                {/* 가운데: 전화번호 */}
-                <div className="info-bar-section">
-                    <CallIcon style={{verticalAlign: 'middle', marginRight: '8px'}}/>
-                    <span>{campDetails.tel || "연락처 정보 없음"}</span>
-                </div>
-
-                {/* 오른쪽: 홈페이지 */}
-                <div className="info-bar-section">
-                    <WebIcon style={{verticalAlign: 'middle', marginRight: '8px'}}/>
-                    {campDetails.homepage ? (
-                        <a
-                            href={campDetails.homepage}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="homepage-link"  // 'homepage-link' 클래스 사용
-                        >
-                            {campDetails.homepage}
-                        </a>
-                    ) : (
-                        "홈페이지 정보 없음"
-                    )}
-                </div>
-            </div>
-
-            {/* 캠핑장 소개 */}
-            <div className="camp-detail-intro-box">
-                <span className="camp-detail-intro-title">캠핑장 소개</span>
-                <p className="camp-detail-description">
-                    {campDetails.intro || "장문 소개 정보 없음"}
-                </p>
-            </div>
-
+            <h1 className="camp-detail-title">{name || "캠핑장 이름 없음"}</h1>
+            {/* 캠핑장 이미지 */}
+            <ImageGallery images={images || []} onMoreClick={handleModalOpen}/>
+            {/* 캠핑장 이미지 모달창 */}
+            <ModalGallery open={openModal} onClose={handleModalClose} images={images || []}/>
+            {/* 주소 정보 */}
+            <AddressInfo address={campAddr?.streetAddr} tel={tel} homepage={homepage}/>
+            {/* 캠핑장 장문 소개 */}
+            <CampDetailIntro intro={intro}/>
             {/* 운영정책 */}
             <div>
                 {/* 다른 캠프 세부사항들 */}
@@ -173,41 +79,68 @@ function CampDetail() {
                     outdoorFacility={campDetails.outdoorFacility || "부대시설 정보 없음"}
                 />
             </div>
+            {/* 카카오 인터랙티브 맵 */}
+            <MapSection
+                latitude={campAddr?.latitude}
+                longitude={campAddr?.longitude}
+                name={name}
+                state={campAddr?.state}
+            />
 
-            {/* 위치 정보 및 카카오맵 섹션 */}
-            <div className="map-wrapper">
-                <h2 className="location-info-title">
-                    <LocationOnIcon style={{verticalAlign: 'middle', marginRight: '8px'}}/>
-                    위치 정보
-                </h2>
-                <div className="map-container">
-                    <KakaoMap
-                        latitude={campDetails.campAddr.latitude}
-                        longitude={campDetails.campAddr.longitude}
-                        locationName={campDetails.name}
-                        state={campDetails.campAddr.state}
-                    />
-                </div>
-            </div>
-
-            {/* Calendar 컴포넌트 추가 */}
-            <div className="camp-detail-calendar">
+            {/* 날짜 선택 */}
+            <div className="camp-date-picker-container">
                 <h2>예약 가능한 날짜 선택</h2>
-                <Calendar/>
+                {/* 달력 */}
+                <CampDatePicker
+                    checkin={checkin}
+                    checkout={checkout}
+                    handleDateChange={handleDateChange}
+                />
+                {/* 체크인/체크아웃 날짜 표시 */}
+                <div className="date-info">
+                    <div className="date-box">
+                        <span className="label">입실</span>
+                        <span className="date">{checkin ? checkin.toLocaleDateString("ko-KR") : "날짜를 선택하세요"}</span>
+                    </div>
+                    <div className="date-box">
+                        <span className="label">퇴실</span>
+                        <span className="date">{checkout ? checkout.toLocaleDateString("ko-KR") : "날짜를 선택하세요"}</span>
+                    </div>
+                </div>
             </div>
 
+            {/* 예약 가능한 캠핑지 목록 */}
+            <div className="camp-site-list-available">
+                <h2>예약 가능한 캠핑지 목록</h2>
+                {availableSites && availableSites.length > 0 ? (
+                    availableSites
+                        .filter((site) => {
+                            const today = new Date(); // 오늘 날짜
+                            const checkinValid = !checkin || checkin >= today; // 체크인 날짜가 오늘 이후인지 확인
+                            const checkoutValid = !checkout || checkout >= checkin; // 체크아웃 날짜가 체크인 이후인지 확인
+                            return checkinValid && checkoutValid;
+                        })
+                        .map((site, index) => (
+                            <CampSiteCard
+                                locale={ko}
+                                key={index}
+                                data={site}
+                                count={1}
+                                onReserve={() => console.log(`${site.name} 예약하기`)}
+                            />
+                        ))
+                ) : (
+                    <p>예약 가능한 캠핑지가 없습니다.</p>
+                )}
 
-            {/* 추천/찜 수 */}
-            {campDetails.campInfo ? (
-                <div className="camp-detail-info">
-                    <p>추천 수: {campDetails.campInfo.recommendCnt || 0}</p>
-                    <p>찜 수: {campDetails.campInfo.bookmarkCnt || 0}</p>
-                </div>
-            ) : (
-                <p className="camp-detail-info">추천 및 찜 정보 없음</p>
-            )}
-
-
+                {/* 당일 예약 모달 */}
+                <ModalComponent
+                    open={modalOpen}
+                    onClose={() => setModalOpen(false)}
+                    title="당일 예약 안내"
+                    message="※ 당일 예약은 전화로만 가능합니다."
+                />
+            </div>
         </div>
     );
 }
