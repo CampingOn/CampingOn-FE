@@ -9,7 +9,7 @@ import Tab from '@mui/material/Tab';
 
 const Header = () => {
     const location = useLocation();
-    const [logo, setLogo] = useState(`${process.env.PUBLIC_URL}/logoWide.svg`);
+    const [logo, setLogo] = useState(`/logo/logoWide.svg`);
     const {isAuthenticated, logout, isLoading} = useAuth();
     const navigate = useNavigate();
 
@@ -40,11 +40,11 @@ const Header = () => {
     }, [location.pathname]);
 
     const handleMouseEnter = () => {
-        setLogo(`${process.env.PUBLIC_URL}/logoWideClicked.svg`);
+        setLogo(`/logo/logoWideClicked.svg`);
     };
 
     const handleMouseLeave = () => {
-        setLogo(`${process.env.PUBLIC_URL}/logoWide.svg`);
+        setLogo(`/logo/logoWide.svg`);
     };
 
     if (isLoading) {
