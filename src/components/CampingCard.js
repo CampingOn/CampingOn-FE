@@ -34,6 +34,7 @@ const CampingCard = ({thumbImage, name, address, intro, keywords, lineIntro, mar
         setSnackbarBookmark(false);
     };
 
+    const imageUrl = thumbImage === "" ? `${process.env.PUBLIC_URL}/default/NoThumb.jpg` : thumbImage;
     return (
         <div
             onClick={onClick} // 부모 컴포넌트에서 전달받은 onClick 이벤트 연결
@@ -41,7 +42,7 @@ const CampingCard = ({thumbImage, name, address, intro, keywords, lineIntro, mar
         >
             <div className="relative w-full h-36"> {/* 이미지 영역 */}
                 <img
-                    src={thumbImage}
+                    src={imageUrl}
                     alt={`${name} 사진`}
                     className="w-full h-full object-cover"
                 />

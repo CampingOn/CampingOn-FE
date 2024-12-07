@@ -37,6 +37,7 @@ const CampBookmarkedCard = ({ data }) => {
         }
     };
 
+    const imageUrl = thumbImage === "" ? `${process.env.PUBLIC_URL}/default/NoThumb.jpg` : thumbImage;
     return (
         <Card
             sx={{
@@ -52,7 +53,7 @@ const CampBookmarkedCard = ({ data }) => {
             <Box
                 sx={{
                     flex: { sm: "2" },
-                    backgroundImage: `url(${thumbImage})`,
+                    backgroundImage: `url(${imageUrl})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     height: { xs: 200, sm: "auto" },

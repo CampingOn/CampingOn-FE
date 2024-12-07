@@ -49,7 +49,6 @@ const CampReservationCard = ({ data }) => {
     const {
         execute: cancelReservation,
         loading: cancelLoading,
-        error: cancelError,
     } = useApi(reservationService.cancelReservation);
 
     const handleNameClick = () => {
@@ -123,6 +122,8 @@ const CampReservationCard = ({ data }) => {
 
     const buttonProps = getButtonProps();
 
+    const imageUrl = campResponseDto.thumbImage === ""? `${process.env.PUBLIC_URL}/default/NoThumb.jpg` : campResponseDto.thumbImage ;
+
     return (
         <Card
             sx={{
@@ -138,7 +139,7 @@ const CampReservationCard = ({ data }) => {
             <Box
                 sx={{
                     flex: { sm: "2" },
-                    backgroundImage: `url(${campResponseDto.thumbImage})`,
+                    backgroundImage: `url(${imageUrl})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     height: { xs: 200, sm: "auto" },
