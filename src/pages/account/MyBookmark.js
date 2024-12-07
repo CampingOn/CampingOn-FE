@@ -3,6 +3,17 @@ import { campService } from "../../api/services/campService";
 import { Box, Typography } from "@mui/material";
 import CampBookmarkedCard from "../../components/CampBookmarkedCard";
 import ScrollToTopFab from "../../components/ScrollToTopFab";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import * as PropTypes from "prop-types";
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+
+BookmarkBorderIcon.propTypes = {
+    sx: PropTypes.shape({
+        color: PropTypes.string,
+        fontSize: PropTypes.number,
+        marginBottom: PropTypes.number
+    })
+};
 
 function MyBookmark() {
     const token = localStorage.getItem("accessToken");
@@ -55,6 +66,7 @@ function MyBookmark() {
 
     return (
         <Box sx={{ padding: 2 }}>
+            <br/>
             <Typography
                 variant="h4"
                 sx={{
@@ -63,10 +75,16 @@ function MyBookmark() {
                     fontSize: "1.5rem",
                     fontFamily: "'Roboto', sans-serif",
                     color: "#333",
-                    textAlign: "center",
+                    textAlign: "left",
                 }}
             >
-                ♥️내가 찜한 캠핑장♥️
+                내가 찜한 캠핑장   <FavoriteIcon
+                sx={{
+                    fontSize: 40, // 아이콘 크기
+                    marginBottom: 1,
+                    color: '#ff0000',
+                }}
+            />
             </Typography>
 
             {loading && <Typography>로딩 중...</Typography>}
@@ -87,7 +105,37 @@ function MyBookmark() {
                     />
                 ))
             ) : (
-                <Typography>북마크된 캠핑장이 없습니다.</Typography>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        height: '70vh', // 화면 전체 높이
+                        textAlign: 'center',
+                        color: '#555',
+                    }}
+                >
+                    {/* 북마크 아이콘 */}
+                    <BookmarkBorderIcon
+                        sx={{
+                            fontSize: 80, // 아이콘 크기
+                            marginBottom: 2,
+                            color: '#f28b82',
+                        }}
+                    />
+
+                    {/* 텍스트 */}
+                    <Typography
+                        variant="h6"
+                        sx={{
+                            fontWeight: 'bold',
+                            fontSize: '1.2rem',
+                        }}
+                    >
+                        찜한 캠핑장이 없습니다.
+                    </Typography>
+                </Box>
             )}
 
             {/* 무한 스크롤을 위한 Intersection Observer 트리거 */}

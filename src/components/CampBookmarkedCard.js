@@ -1,20 +1,40 @@
-import React from "react";
-import { Card, CardContent, Typography, Box, IconButton, Chip } from "@mui/material";
+import React, {useState} from "react";
+import {Card, CardContent, Typography, Box, IconButton, Chip, Snackbar} from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { useNavigate } from "react-router-dom";
+import {bookmarkService} from "../api/services/bookmarkService";
 
-const CampBookmarkedCard = ({ data, onToggleFavorite }) => {
+const CampBookmarkedCard = ({ data }) => {
     const { campId, name, lineIntro, thumbImage, streetAddr, keywords, isMarked } = data;
     const summary = lineIntro.length > 100 ? `${lineIntro.slice(0, 100)} ...` : lineIntro;
     const navigate = useNavigate();
+    const [liked, setLiked] = useState(isMarked);
+    const [snackbarBookmark, setSnackbarBookmark] = useState(false);
 
-    // 캠핑장 이름 클릭시 상세페이지로 이동 -> 링크 구현 필요
     const handleNameClick = () => {
-        navigate(`/details/${campId}`);
+        navigate(`/camps/${campId}`);
+    };
+
+    const handleCloseBookmark = () => {
+        setSnackbarBookmark(false);
+    };
+
+
+    const toggleLike = async (event) => {
+        event.stopPropagation(); // 부모의 onClick 이벤트가 실행되지 않도록 중단
+
+        try {
+            console.log("campId: " + campId);
+            await bookmarkService.toggleBookmark(campId);
+            setLiked(!liked);
+            setSnackbarBookmark(true);
+        } catch (error) {
+            console.error("찜 클릭 에러 : ", error);
+        }
     };
 
     return (
@@ -84,11 +104,18 @@ const CampBookmarkedCard = ({ data, onToggleFavorite }) => {
 
                 {/* 하트 버튼 */}
                 <Box sx={{ marginTop: "auto", textAlign: "right" }}>
-                    <IconButton color="error" onClick={onToggleFavorite}>
-                        {isMarked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                    <IconButton color="error" onClick={toggleLike}>
+                        {liked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
                     </IconButton>
                 </Box>
             </Box>
+            <Snackbar
+                open={snackbarBookmark}
+                autoHideDuration={1500}
+                onClose={handleCloseBookmark}
+                message="찜 상태를 변경하였습니다"
+                anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+            />
         </Card>
     );
 };
