@@ -3,6 +3,7 @@ import { useApi } from 'hooks/useApi';
 import { useNavigate } from 'react-router-dom';
 import { Box, Container, Typography } from "@mui/material";
 import { campService } from '../../api/services/campService';
+import { searchInfoService } from '../../api/services/searchInfoService';
 import CampingCard from '../../components/CampingCard';
 import ScrollToTopFab from "../../components/ScrollToTopFab";
 import MainCarousel from "../../components/MainCarousel";
@@ -29,7 +30,7 @@ function Home() {
         loading: loadingMatchedCamps,
         error: errorMatchedCamps,
         execute: executeMatchedCamps
-    } = useApi(campService.getMatchedCamps);
+    } = useApi(searchInfoService.getMatchedCamps);
 
     const observerRef = useRef(null); // Intersection Observer 참조
 
