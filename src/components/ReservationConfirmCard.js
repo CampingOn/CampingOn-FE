@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardContent, Typography, Box } from "@mui/material";
-import {FestivalOutlined, TableBarOutlined} from "@mui/icons-material";
+import {FestivalOutlined} from "@mui/icons-material";
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
 import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
@@ -11,9 +11,9 @@ const getImageBySiteType = (siteType) => {
     const imageMap = {
         "카라반": "/default/카라반.png",
         "일반야영장": "/default/일반.png",
-        "오토": "/default/오토.png",
+        "자동차야영장": "/default/자동차야영장.png",
         "글램핑": "/default/글램핑.png",
-        "자동차야영장": "/default/개인자동차.png",
+        "카라반(개인)": "/default/캠핑카.png"
     };
     return imageMap[siteType] || "profile.png"; // 기본 이미지
 };
@@ -24,7 +24,7 @@ const ReservationConfirmCard = ({ data }) => {
     const image = getImageBySiteType(siteType);
 
     return (
-        <Link 
+        <Link
             to={`/camps/${data.campSimpleDto.campId}`}
             style={{ textDecoration: 'none', color: 'inherit' }}
         >
@@ -85,4 +85,4 @@ const ReservationConfirmCard = ({ data }) => {
     );
 };
 
-export default ReservationConfirmCard; 
+export default ReservationConfirmCard;

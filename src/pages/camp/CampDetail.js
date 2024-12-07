@@ -1,6 +1,6 @@
-import React, {useState} from "react";
-import {useParams} from "react-router-dom";
-import {useCampDetail} from "../../hooks/useCampDetail";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+import { useCampDetail } from "../../hooks/useCampDetail";
 import useAvailableCampSites from "../../hooks/useAvailableCampSites";
 import ImageGallery from "../../components/camp/ImageGallery";
 import AddressInfo from "../../components/camp/AddressInfo";
@@ -15,16 +15,24 @@ import ModalComponent from "../../components/camp/ModalComponent";
 import { ko } from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
 
-
 import "../../style/camp-detail.css";
 import "../../style/available-list.css";
 
+function calculateNights(checkin, checkout) {
+    if (!checkin || !checkout) return 1; // 체크인 또는 체크아웃이 없으면 기본 1박
+    const checkinDate = new Date(checkin);
+    const checkoutDate = new Date(checkout);
+    const checkinOnlyDate = new Date(checkinDate.getFullYear(), checkinDate.getMonth(), checkinDate.getDate());
+    const checkoutOnlyDate = new Date(checkoutDate.getFullYear(), checkoutDate.getMonth(), checkoutDate.getDate());
+    const differenceInDays = (checkoutOnlyDate - checkinOnlyDate) / (1000 * 3600 * 24);
+    return differenceInDays > 0 ? differenceInDays : 1; // 최소 1박 보장
+}
+
 function CampDetail() {
-    const {campId} = useParams();
+    const { campId } = useParams();
     const [checkin, setCheckin] = useState(null); // 체크인 날짜
     const [checkout, setCheckout] = useState(null); // 체크아웃 날짜
     const [modalOpen, setModalOpen] = useState(false);
-
 
     const { data: availableSites, loading, error } = useAvailableCampSites(
         campId,
@@ -45,12 +53,11 @@ function CampDetail() {
         }
     };
 
-    const {campDetails, loading: detailLoading, error: detailError} = useCampDetail(campId);
+    const { campDetails, loading: detailLoading, error: detailError } = useCampDetail(campId);
     const [openModal, setOpenModal] = useState(false);
 
     const handleModalOpen = () => setOpenModal(true);
     const handleModalClose = () => setOpenModal(false);
-
 
     if (loading) return <div>로딩 중...</div>;
     if (error) return <div>에러 발생: {error}</div>;
@@ -58,28 +65,23 @@ function CampDetail() {
     if (!campDetails) return <div>캠핑장 정보를 찾을 수 없습니다.</div>;
     if (detailLoading) return <div>로딩 중...</div>;
 
-    const {campAddr, images, intro, name, tel, homepage} = campDetails;
+    const { campAddr, images, intro, name, tel, homepage } = campDetails;
+
+    // 박 수 계산
+    const nights = calculateNights(checkin, checkout);
+    console.log('🔍 checkin:', checkin, 'checkout:', checkout, '박 수 (nights):', nights); // 디버깅 로그
+
     return (
         <div className="camp-detail-container">
-            {/* 캠핑장 이름 */}
             <h1 className="camp-detail-title">{name || "캠핑장 이름 없음"}</h1>
-            {/* 캠핑장 이미지 */}
-            <ImageGallery images={images || []} onMoreClick={handleModalOpen}/>
-            {/* 캠핑장 이미지 모달창 */}
-            <ModalGallery open={openModal} onClose={handleModalClose} images={images || []}/>
-            {/* 주소 정보 */}
-            <AddressInfo address={campAddr?.streetAddr} tel={tel} homepage={homepage}/>
-            {/* 캠핑장 장문 소개 */}
-            <CampDetailIntro intro={intro}/>
-            {/* 운영정책 */}
-            <div>
-                {/* 다른 캠프 세부사항들 */}
-                <OperationPolicy
-                    industries={campDetails.indutys || []}
-                    outdoorFacility={campDetails.outdoorFacility || "부대시설 정보 없음"}
-                />
-            </div>
-            {/* 카카오 인터랙티브 맵 */}
+            <ImageGallery images={images || []} onMoreClick={handleModalOpen} />
+            <ModalGallery open={openModal} onClose={handleModalClose} images={images || []} />
+            <AddressInfo address={campAddr?.streetAddr} tel={tel} homepage={homepage} />
+            <CampDetailIntro intro={intro} />
+            <OperationPolicy
+                industries={campDetails.indutys || []}
+                outdoorFacility={campDetails.outdoorFacility || "부대시설 정보 없음"}
+            />
             <MapSection
                 latitude={campAddr?.latitude}
                 longitude={campAddr?.longitude}
@@ -87,16 +89,13 @@ function CampDetail() {
                 state={campAddr?.state}
             />
 
-            {/* 날짜 선택 */}
             <div className="camp-date-picker-container">
                 <h2>예약 가능한 날짜 선택</h2>
-                {/* 달력 */}
                 <CampDatePicker
                     checkin={checkin}
                     checkout={checkout}
                     handleDateChange={handleDateChange}
                 />
-                {/* 체크인/체크아웃 날짜 표시 */}
                 <div className="date-info">
                     <div className="date-box">
                         <span className="label">입실</span>
@@ -109,31 +108,24 @@ function CampDetail() {
                 </div>
             </div>
 
-            {/* 예약 가능한 캠핑지 목록 */}
             <div className="camp-site-list-available">
                 <h2>예약 가능한 캠핑지 목록</h2>
                 {availableSites && availableSites.length > 0 ? (
-                    availableSites
-                        .filter((site) => {
-                            const today = new Date(); // 오늘 날짜
-                            const checkinValid = !checkin || checkin >= today; // 체크인 날짜가 오늘 이후인지 확인
-                            const checkoutValid = !checkout || checkout >= checkin; // 체크아웃 날짜가 체크인 이후인지 확인
-                            return checkinValid && checkoutValid;
-                        })
-                        .map((site, index) => (
-                            <CampSiteCard
-                                locale={ko}
-                                key={index}
-                                data={site}
-                                count={1}
-                                onReserve={() => console.log(`${site.name} 예약하기`)}
-                            />
-                        ))
+                    availableSites.map((site, index) => (
+                        <CampSiteCard
+                            locale={ko}
+                            key={index}
+                            campId={campId}
+                            data={site}
+                            checkin={checkin}
+                            checkout={checkout}
+                            count={nights} // 박 수 전달
+                            onReserve={() => console.log(`${site} 예약하기`)}
+                        />
+                    ))
                 ) : (
                     <p>예약 가능한 캠핑지가 없습니다.</p>
                 )}
-
-                {/* 당일 예약 모달 */}
                 <ModalComponent
                     open={modalOpen}
                     onClose={() => setModalOpen(false)}
