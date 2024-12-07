@@ -7,7 +7,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
 function Signup() {
-    const [logo, setLogo] = useState(`${process.env.PUBLIC_URL}/logo.svg`);
+    const [logo, setLogo] = useState(`logo/logo.svg`);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -26,11 +26,11 @@ function Signup() {
     const navigate = useNavigate();
 
     const handleMouseEnter = () => {
-        setLogo(`${process.env.PUBLIC_URL}/logoClicked.svg`);
+        setLogo(`logo/logoClicked.svg`);
     };
 
     const handleMouseLeave = () => {
-        setLogo(`${process.env.PUBLIC_URL}/logo.svg`);
+        setLogo(`logo/logo.svg`);
     };
 
     const handleSignup = async (e) => {

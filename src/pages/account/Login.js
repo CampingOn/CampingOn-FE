@@ -10,7 +10,7 @@ import {useApi} from "../../hooks/useApi";
 import {userService} from "../../api/services/userService";
 
 function Login() {
-    const [logo, setLogo] = useState(`${process.env.PUBLIC_URL}/logo.svg`);
+    const [logo, setLogo] = useState(`/logo/logo.svg`);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -24,11 +24,11 @@ function Login() {
     const navigate = useNavigate();
 
     const handleMouseEnter = () => {
-        setLogo(`${process.env.PUBLIC_URL}/logoClicked.svg`);
+        setLogo(`/logo/logoClicked.svg`);
     };
 
     const handleMouseLeave = () => {
-        setLogo(`${process.env.PUBLIC_URL}/logo.svg`);
+        setLogo(`/logo/logo.svg`);
     };
 
     const handleLogin = async (e) => {
