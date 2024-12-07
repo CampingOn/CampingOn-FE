@@ -1,17 +1,14 @@
 import React from "react";
-import {Card, CardContent, Typography, Box } from "@mui/material";
-import YellowButton from "./YellowButton";
-import {TableBarOutlined} from "@mui/icons-material";
-import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
-import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
-import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
-
-
-
+import { Card, CardContent, Typography, Box } from "@mui/material";
+import YellowButton from "../YellowButton";
+import { TableBarOutlined } from "@mui/icons-material";
+import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
+import UpdateOutlinedIcon from "@mui/icons-material/UpdateOutlined";
+import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 
 const getImageBySiteType = (siteType) => {
     const imageMap = {
-        "카라반" : "/default/카라반.png",
+        "카라반": "/default/카라반.png",
         "일반": "/default/일반.png",
         "오토": "/default/오토.png",
         "글램핑": "/default/글램핑.png",
@@ -20,10 +17,20 @@ const getImageBySiteType = (siteType) => {
     return imageMap[siteType] || "profile.png"; // 기본 이미지
 };
 
-const CampSiteCard = ({ data, count, onReserve }) => {
-    const { siteType, maximumPeople, price, checkInTime, checkOutTime, indoorFacility } = data;
+// const CampSiteCard = ({ data, count, onReserve }) => {
+//     const { siteType, maximumPeople, price, checkInTime, checkOutTime, indoorFacility } = data;
+
+const CampSiteCard = ({ data = {}, count = 1, onReserve = () => {} }) => {
+    // 기본값 설정
+    const {
+        siteType = "알 수 없음",
+        maximumPeople = 0,
+        price = 0,
+        indoorFacility = "정보 없음",
+    } = data;
 
     const image = getImageBySiteType(siteType);
+
     return (
         <Card
             sx={{
@@ -51,7 +58,9 @@ const CampSiteCard = ({ data, count, onReserve }) => {
             {/* 정보 섹션 */}
             <Box sx={{ display: "flex", flexDirection: "column", flex: "3", padding: 2 }}>
                 <CardContent>
-                    <Typography variant="h5" sx={{marginBottom: 2, fontWeight: 'bold'}}>{siteType}</Typography>
+                    <Typography variant="h5" sx={{ marginBottom: 2, fontWeight: "bold" }}>
+                        {siteType}
+                    </Typography>
                     <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }} />
                     <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
                         <TableBarOutlined sx={{ fontSize: 20, marginRight: 1, color: "primary.main" }} />
@@ -69,14 +78,18 @@ const CampSiteCard = ({ data, count, onReserve }) => {
                     </Box>
                     <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
                         <ReceiptLongOutlinedIcon sx={{ fontSize: 20, marginRight: 1, color: "green" }} />
-                        <Typography variant="body2">1박당 {price.toLocaleString()}원</Typography>
+                        <Typography variant="body2">
+                            1박당 {price.toLocaleString()}원
+                        </Typography>
                     </Box>
                 </CardContent>
 
                 {/* 액션 버튼 */}
                 <Box sx={{ marginTop: "auto", textAlign: "right" }}>
                     {/* 총액 */}
-                    <Typography variant={"h6"}>총 결제 금액: {(price * count).toLocaleString()}원</Typography>
+                    <Typography variant={"h6"}>
+                        총 결제 금액: {(price * count).toLocaleString()}원
+                    </Typography>
                     {/* 예약 버튼 */}
                     <YellowButton onClick={onReserve}>예약하기</YellowButton>
                 </Box>
@@ -86,4 +99,3 @@ const CampSiteCard = ({ data, count, onReserve }) => {
 };
 
 export default CampSiteCard;
-

@@ -13,8 +13,8 @@ const OperationPolicy = ({
     if (showDefaultPolicies) {
         const defaultPolicies = [
             { label: '매너타임', value: '시작 22:00 | 종료 07:00' },
-            { label: '오토캠핑', value: '입실 14:00 | 퇴실 11:00' },
-            { label: '글램핑', value: '입실 14:00 | 퇴실 11:00' },
+            { label: '오토캠핑', value: '입실 15:00 | 퇴실 11:00' },
+            { label: '글램핑', value: '입실 15:00 | 퇴실 11:00' },
         ];
         policyData.push(...defaultPolicies);
     }

@@ -6,7 +6,7 @@ import ProfileCard from "./ProfileCard";
 import ScrollToTopFab from "./ScrollToTopFab";
 import WhiteButton from "./WhiteButton";
 import YellowButton from "./YellowButton";
-import CampSiteCard from "./CampSiteCard";
+import CampSiteCard from "./camp/CampSiteCard";
 import CampReservationCard from "./CampReservationCard";
 import ReservationConfirmCard from "./ReservationConfirmCard";
 import MainCarousel from "./MainCarousel";
