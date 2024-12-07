@@ -17,6 +17,18 @@ export const userService = {
 
     logout: () => {
         return apiClient.post("/api/logout");
+    },
+
+    getKeywordList: () => {
+        return apiClient.get("/api/keywords");
+    },
+
+    getMyKeywordList: () => {
+        return apiClient.get("/api/keywords/me");
+    },
+
+    updateMyKeyword: (selectedKeywords) => {
+        return apiClient.post("/api/keywords/me", selectedKeywords);
     }
 
 };
