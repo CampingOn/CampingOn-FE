@@ -1,19 +1,36 @@
-import apiClient from "api/axiosConfig";
+import apiClient from 'api/axiosConfig';
 
 export const reviewService = {
-
-    // 특정 캠핑장의 예약 가능한 캠핑지 목록 조회
-    getAvailableCampSites: (campId, checkin, checkout) => {
-        return apiClient.get(`/api/camps/${campId}/available`, {
-            params: {
-                checkin,
-                checkout,
+    // 리뷰 생성
+    createReview: (campId, reservationId, formData) => {
+        return apiClient.post(`/api/camps/${campId}/reviews/${reservationId}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
             },
         });
     },
 
-    // 특정 캠핑지 정보 조회
-    getCampSite: (campId, siteId) => {
-        return apiClient.get(`/api/camps/${campId}/sites/${siteId}`);
+    // 리뷰 수정
+    updateReview: (campId, reviewId, formData) => {
+        return apiClient.put(`/api/camps/${campId}/reviews/${reviewId}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
     },
-};
+
+    // 캠핑장 리뷰 목록 조회
+    getReviewsByCampId: (campId) => {
+        return apiClient.get(`/api/camps/${campId}/reviews`);
+    },
+
+    // 리뷰 상세 조회
+    getReviewDetail: (campId, reviewId) => {
+        return apiClient.get(`/api/camps/${campId}/reviews/${reviewId}`);
+    },
+
+    // 리뷰 삭제
+    deleteReview: (reviewId) => {
+        return apiClient.delete(`/api/camps/reviews/${reviewId}`);
+    }
+}

@@ -15,6 +15,9 @@ import OperationPolicy from "./OperationPolicy";
 import ImageUploader from "./ImageUploader";
 import KakaoMap from "./KakaoMap";
 import CustomSnackbar from "./CustomSnackbar";
+import ReviewModal from "./Review/ReviewModal";
+import ReviewForm from "./Review/ReviewForm";
+import ImageCarousel from "./ImageCarousel";
 
 
 export {
@@ -31,8 +34,11 @@ export {
     ReservationConfirmCard,
     MainCarousel,
     SearchBar,
-    OperationPolicy,
     ImageUploader,
+    ReviewModal,
+    ReviewForm,
+    ImageCarousel,
+    OperationPolicy,
     KakaoMap,
     CustomSnackbar
 };
