@@ -88,8 +88,15 @@ function Home() {
                 <MainCarousel/>
             </Box>
             {/* 검색창 영역 */}
-            <Box mb={4}>
-                <SearchBar onSearch={handleSearch} isLoading={false}/>
+            <Box
+                mb={4}
+                sx={{
+                    display: "flex",        // Flexbox 활성화
+                    justifyContent: "center", // 가로 방향 중앙 정렬
+                    alignItems: "center",    // 세로 방향 중앙 정렬 (필요 시)
+                }}
+            >
+                <SearchBar onSearch={handleSearch} isLoading={false} />
             </Box>
             {/* 추천 캠핑장 목록 */}
             {isAuthenticated && matchedCampsData?.content?.length > 0 && (
