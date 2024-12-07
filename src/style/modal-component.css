@@ -19,7 +19,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-button {
+.modal-button {
     margin-top: 10px;
     padding: 10px 20px;
     background-color: #fcd34d;
@@ -29,6 +29,6 @@ button {
     cursor: pointer;
 }
 
-button:hover {
+.modal-button:hover {
     background-color: #0056b3;
 }

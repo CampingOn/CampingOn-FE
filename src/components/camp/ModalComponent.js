@@ -9,7 +9,7 @@ const ModalComponent = ({ open, onClose, title, message }) => {
             <div className="modal-content">
                 <h3>{title}</h3>
                 <p>{message}</p>
-                <button onClick={onClose}>닫기</button>
+                <button className="modal-button" onClick={onClose}>닫기</button>
             </div>
         </div>
     );
