@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { campService } from "../../api/services/campService";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Snackbar } from "@mui/material";
 import CampBookmarkedCard from "../../components/CampBookmarkedCard";
 import ScrollToTopFab from "../../components/ScrollToTopFab";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -18,9 +18,11 @@ BookmarkBorderIcon.propTypes = {
 function MyBookmark() {
     const token = localStorage.getItem("accessToken");
     const [bookmarkCardData, setBookmarkCardData] = useState([]);
-    const [loading, setLoading] = useState(false); // 로딩 상태
-    const [page, setPage] = useState(0); // 페이지 번호
-    const [hasMore, setHasMore] = useState(true); // 더 로드할 데이터가 있는지 여부
+    const [loading, setLoading] = useState(false);
+    const [page, setPage] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
 
     const observerRef = useRef(null); // Intersection Observer 참조
 
@@ -64,6 +66,10 @@ function MyBookmark() {
         fetchBookmarkedCamps(); // 컴포넌트 로드 시 첫 번째 데이터 가져오기
     }, []);
 
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+    };
+
     return (
         <Box sx={{ padding: 2 }}>
             <br/>
@@ -101,6 +107,10 @@ function MyBookmark() {
                             streetAddr: camp.streetAddr,
                             keywords: camp.keywords,
                             isMarked: camp.marked
+                        }}
+                        onBookmarkChange={(message) => {
+                            setSnackbarMessage(message);
+                            setSnackbarOpen(true);
                         }}
                     />
                 ))
@@ -140,6 +150,13 @@ function MyBookmark() {
 
             {/* 무한 스크롤을 위한 Intersection Observer 트리거 */}
             <div ref={observerRef} style={{ height: '1px' }} />
+
+            <Snackbar
+                open={snackbarOpen}
+                onClose={handleSnackbarClose}
+                message={snackbarMessage}
+                autoHideDuration={1500}
+            />
 
             <ScrollToTopFab />
         </Box>
