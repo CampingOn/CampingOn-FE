@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useApi } from 'hooks/useApi';
-import { Box, Container, Typography } from '@mui/material';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
+import {useApi} from 'hooks/useApi';
+import {Box, Container, Typography} from '@mui/material';
 import Grid from '@mui/material/Grid';
 import SearchBar from 'components/SearchBar';
 import CampingCard from 'components/CampingCard';
 import ScrollToTopFab from 'components/ScrollToTopFab';
-import { searchInfoService } from 'api/services/searchInfoService';
-import { useLocation, useNavigate } from 'react-router-dom';
+import {searchInfoService} from 'api/services/searchInfoService';
+import {useLocation, useNavigate} from 'react-router-dom';
 
 function Search() {
     const location = useLocation();
@@ -31,7 +31,7 @@ function Search() {
         const params = new URLSearchParams(location.search);
         const city = params.get('city') || '';
         const keyword = params.get('keyword') || '';
-        setSearchParams({ city, keyword });
+        setSearchParams({city, keyword});
 
         if (city || keyword) {
             const initialSearchParams = {
@@ -78,7 +78,7 @@ function Search() {
                     loadCamps();
                 }
             },
-            { threshold: 1.0 }
+            {threshold: 1.0}
         );
 
         const target = document.querySelector('#load-more-trigger');
@@ -104,8 +104,8 @@ function Search() {
     };
 
     return (
-        <Container maxWidth="lg" sx={{ py: 4 }}>
-            <Box sx={{ mb: 4 }}>
+        <Container maxWidth="lg" sx={{py: 4}}>
+            <Box sx={{mb: 4}}>
                 <SearchBar
                     onSearch={handleSearch}
                     isLoading={isLoading}
@@ -115,32 +115,39 @@ function Search() {
             </Box>
 
             {camps.length === 0 && !isLoading && (
-                <Typography variant="h6" textAlign="center" sx={{ my: 4 }}>
+                <Typography variant="h6" textAlign="center" sx={{my: 4}}>
                     검색 결과가 없습니다.
                 </Typography>
             )}
 
-            <Grid container spacing={4} sx={{ mb: 4, justifyContent: 'center', px: 4 }}>
+            <Box sx={{
+                display: 'grid',
+                gridTemplateColumns: {
+                    xs: '1fr',
+                    sm: 'repeat(2, 1fr)',
+                    lg: 'repeat(3, 1fr)'
+                },
+                gap: 3,
+                mb: 4
+            }}>
                 {camps.map((camp) => (
-                    <Grid item xs={12} sm={6} md={4} key={camp.campId}>
-                        <CampingCard
-                            key={camp.campId}
-                            campId={camp.campId}
-                            thumbImage={camp.thumbImage}
-                            name={camp.name}
-                            address={camp.streetAddr}
-                            keywords={camp.keywords || []}
-                            lineIntro={camp.lineIntro}
-                            marked={camp.marked}
-                            onClick={() => handleCardClick(camp.campId)}
-                        />
-                    </Grid>
+                    <CampingCard
+                        key={camp.campId}
+                        campId={camp.campId}
+                        thumbImage={camp.thumbImage}
+                        name={camp.name}
+                        address={camp.streetAddr}
+                        keywords={camp.keywords || []}
+                        lineIntro={camp.lineIntro}
+                        marked={camp.marked}
+                        onClick={() => handleCardClick(camp.campId)}
+                    />
                 ))}
-            </Grid>
+            </Box>
 
-            <div id="load-more-trigger" style={{ height: '1px' }} />
+            <div id="load-more-trigger" style={{height: '1px'}}/>
 
-            <ScrollToTopFab />
+            <ScrollToTopFab/>
         </Container>
     );
 }
