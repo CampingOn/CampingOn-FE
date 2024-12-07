@@ -6,6 +6,8 @@ import { validateEmail, validatePassword } from 'utils/Validation';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import {useAuth} from "context/AuthContext";
+import {useApi} from "../../hooks/useApi";
+import {userService} from "../../api/services/userService";
 
 function Login() {
     const [logo, setLogo] = useState(`${process.env.PUBLIC_URL}/logo.svg`);
@@ -16,6 +18,8 @@ function Login() {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const { login } = useAuth();
+    const { execute: fetchSelectedTags, loading } = useApi(userService.getMyKeywordList);
+
 
     const navigate = useNavigate();
 
@@ -49,7 +53,12 @@ function Login() {
                 localStorage.setItem('accessToken', response.data.accessToken);
                 login();
 
-                navigate("/"); // 홈페이지로 이동
+                // 사용자 키워드 목록 가져오기
+                const keywordResponse = await fetchSelectedTags();
+                const userKeywords = keywordResponse?.keywords || []; // 키워드 목록 가져오기
+
+                navigate(userKeywords.length === 0 ? '/keyword' : '/');
+
             } catch (error) {
                 // 오류 메시지 표시
                 setSnackbarMessage('로그인 실패: 이메일 또는 비밀번호를 확인하세요.');
