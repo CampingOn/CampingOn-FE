@@ -11,6 +11,11 @@ import CampReservationCard from "./CampReservationCard";
 import ReservationConfirmCard from "./ReservationConfirmCard";
 import MainCarousel from "./MainCarousel";
 import SearchBar from "./SearchBar";
+import ImageUploader from "./ImageUploader";
+import ReviewModal from "./Review/ReviewModal";
+import ReviewForm from "./Review/ReviewForm";
+import ImageCarousel from "./ImageCarousel";
+
 
 export {
     Calendar,
@@ -25,5 +30,9 @@ export {
     CampReservationCard,
     ReservationConfirmCard,
     MainCarousel,
-    SearchBar
+    SearchBar,
+    ImageUploader,
+    ReviewModal,
+    ReviewForm,
+    ImageCarousel
 };
