@@ -3,9 +3,13 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import {Link, useNavigate, useLocation} from 'react-router-dom';
 import {useAuth} from 'context/AuthContext';
-import {YellowButton} from "components";
+import {WhiteButton, YellowButton} from "components";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
+import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
+import LockTwoToneIcon from '@mui/icons-material/LockTwoTone';
 
 const Header = () => {
     const location = useLocation();
@@ -168,10 +172,14 @@ const Header = () => {
                             </Tabs>
                         </div>
                     )}
-
-                    <YellowButton onClick={handleAuthClick}>
-                        {isAuthenticated ? 'Logout' : 'Login'}
-                    </YellowButton>
+                        {isAuthenticated ?
+                            <LockTwoToneIcon
+                                onClick={handleAuthClick}
+                                sx={{ fontSize: 30, color: "#ffc400", cursor: 'pointer', marginTop: '5px' }} /> :
+                            <LockOpenTwoToneIcon
+                                onClick={handleAuthClick}
+                                sx={{ fontSize: 30, color: "#ffc400", cursor: 'pointer', marginTop: '5px' }} />
+                        }
                 </Toolbar>
             </AppBar>
 
