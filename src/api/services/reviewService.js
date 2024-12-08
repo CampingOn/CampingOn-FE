@@ -2,16 +2,48 @@ import apiClient from 'api/axiosConfig';
 
 export const reviewService = {
     // 리뷰 생성
-    createReview: (campId, reservationId, formData) => {
+    createReview: (campId, reservationId, reviewData) => {
+        const formData = new FormData();
+        formData.append('title', reviewData.title);
+        formData.append('content', reviewData.content);
+        formData.append('isRecommend', reviewData.recommended.toString());  // boolean을 string으로 변환
+
+        // 이미지 파일들 처리
+        if (reviewData.images?.length > 0) {
+            reviewData.images.forEach(file => {
+                if (file instanceof File) {  // File 객체인 경우만 추가
+                    formData.append('s3Images', file);
+                }
+            });
+        }
+
+        // FormData 내용 확인
+        for (let pair of formData.entries()) {
+            console.log(pair[0], pair[1]);
+        }
+
         return apiClient.post(`/api/camps/${campId}/reviews/${reservationId}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-            },
+            }
         });
     },
 
     // 리뷰 수정
-    updateReview: (campId, reviewId, formData) => {
+    updateReview: (campId, reviewId, reviewData) => {
+        const formData = new FormData();
+        formData.append('title', reviewData.title);
+        formData.append('content', reviewData.content);
+        formData.append('isRecommend', reviewData.recommended.toString());
+
+        if (reviewData.images?.length > 0) {
+            reviewData.images.forEach(file => {
+                if (file instanceof File) {  // File 객체인 경우만 추가
+                    formData.append('s3Images', file);
+                }
+            });
+        }
+
         return apiClient.put(`/api/camps/${campId}/reviews/${reviewId}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',

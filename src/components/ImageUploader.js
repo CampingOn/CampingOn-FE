@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
     Box,
     Typography,
@@ -46,8 +46,11 @@ const DeleteButton = styled(IconButton)({
     }
 });
 
-const ImageUploader = ({ onImagesChange }) => {
-    const [images, setImages] = useState([]);
+const ImageUploader = ({ onChange, images: initialImages = [] }) => {
+    const [images, setImages] = useState(initialImages.map(file => ({    // 여기서 image를 파라미터로 받음
+        file,
+        preview: typeof file === 'string' ? file : URL.createObjectURL(file)
+    })));
     const [isDragging, setIsDragging] = useState(false);
 
     // 파일 유효성 검사 함수
@@ -87,10 +90,10 @@ const ImageUploader = ({ onImagesChange }) => {
 
         setImages(prev => {
             const updated = [...prev, ...newImages];
-            onImagesChange(updated.map(img => img.file));
+            onChange(updated.map(img => img.file));  // 여기도 변경
             return updated;
         });
-    }, [images, onImagesChange]);
+    }, [images, onChange]);
 
     // 드래그 앤 드롭 이벤트 핸들러
     const handleDragOver = useCallback((e) => {
@@ -118,17 +121,28 @@ const ImageUploader = ({ onImagesChange }) => {
     const handleDeleteImage = useCallback((index) => {
         setImages(prev => {
             const updated = prev.filter((_, i) => i !== index);
-            onImagesChange(updated.map(img => img.file));
+            onChange(updated.map(img => img.file));  // 여기도 변경
             return updated;
         });
-    }, [onImagesChange]);
+    }, [onChange]);
 
     // 컴포넌트 언마운트 시 미리보기 URL 정리
-    React.useEffect(() => {
+    useEffect(() => {
         return () => {
             images.forEach(image => URL.revokeObjectURL(image.preview));
         };
     }, [images]);
+
+    useEffect(() => {
+        if (initialImages.length > 0) {
+            const formattedImages = initialImages.map(file => ({  // image를 file로 변경
+                file,
+                preview: typeof file === 'string' ? file : URL.createObjectURL(file)  // image를 file로 변경
+            }));
+            setImages(formattedImages);
+            onChange(initialImages);
+        }
+    }, [initialImages, onChange]);
 
     return (
         <Box>
