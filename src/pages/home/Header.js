@@ -39,7 +39,7 @@ const Header = () => {
             case '/my-page':
                 return 3;
             default:
-                return 4;
+                return 0;
         }
     };
 
