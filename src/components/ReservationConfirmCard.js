@@ -19,7 +19,7 @@ const getImageBySiteType = (siteType) => {
 };
 
 const ReservationConfirmCard = ({ data }) => {
-    const { maximumPeople, price, checkinTime, checkoutTime, indoorFacility, siteType, campSimpleDto: { streetAddr } } = data;
+    const { maximumPeople, price, checkinTime, checkoutTime, indoorFacility, siteType, campSimpleDto: { campName, streetAddr } } = data;
 
     const image = getImageBySiteType(siteType);
 
@@ -55,7 +55,7 @@ const ReservationConfirmCard = ({ data }) => {
                 {/* 정보 섹션 */}
                 <Box sx={{ display: "flex", flexDirection: "column", flex: "3", padding: 2 }}>
                     <CardContent>
-                        <Typography variant="h5" sx={{ marginBottom: 2, fontWeight: 'bold' }}>{siteType}</Typography>
+                        <Typography variant="h5" sx={{ marginBottom: 2, fontWeight: 'bold' }}>{campName} - {siteType}</Typography>
                         <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
                             <LocationOnOutlinedIcon sx={{ fontSize: 20, marginRight: 1, color: "green" }} />
                             <Typography variant="body2">{streetAddr}</Typography>

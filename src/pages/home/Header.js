@@ -1,17 +1,33 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import {Link, useNavigate, useLocation} from 'react-router-dom';
 import {useAuth} from 'context/AuthContext';
-import {YellowButton} from "components";
+import {WhiteButton, YellowButton} from "components";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
+import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
+import LockTwoToneIcon from '@mui/icons-material/LockTwoTone';
 
 const Header = () => {
     const location = useLocation();
     const [logo, setLogo] = useState(`/logo/logoWide.svg`);
     const {isAuthenticated, logout, isLoading} = useAuth();
     const navigate = useNavigate();
+    const isFirstRender = useRef(true);
+
+    useEffect(() => {
+
+        // 최종 상태 체크를 위해 지연
+        const timer = setTimeout(() => {
+            console.log('👀 최종 로그인 상태:', isAuthenticated);
+        }, 100);
+
+        // 타이머 제거
+        return () => clearTimeout(timer);
+    }, [isAuthenticated]);
 
     useEffect(() => {
         setValue(getTabValue(location.pathname));
@@ -49,8 +65,6 @@ const Header = () => {
     if (isLoading) {
         return null;
     }
-
-    console.log('유저로그인상태', isAuthenticated);
 
     const handleAuthClick = () => {
         if (isAuthenticated) {
@@ -158,10 +172,14 @@ const Header = () => {
                             </Tabs>
                         </div>
                     )}
-
-                    <YellowButton onClick={handleAuthClick}>
-                        {isAuthenticated ? 'Logout' : 'Login'}
-                    </YellowButton>
+                        {isAuthenticated ?
+                            <LockTwoToneIcon
+                                onClick={handleAuthClick}
+                                sx={{ fontSize: 30, color: "#ffc400", cursor: 'pointer', marginTop: '5px' }} /> :
+                            <LockOpenTwoToneIcon
+                                onClick={handleAuthClick}
+                                sx={{ fontSize: 30, color: "#ffc400", cursor: 'pointer', marginTop: '5px' }} />
+                        }
                 </Toolbar>
             </AppBar>
 
