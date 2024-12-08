@@ -1,0 +1,58 @@
+/* 캠핑지 리스트 전체 컨테이너 */
+.camp-site-list-available {
+    margin-top: 0px;
+}
+
+/* 개별 캠핑지 카드 */
+.camp-site-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* 카드 hover 효과 */
+.camp-site-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 카드 제목 스타일 */
+.camp-site-card h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* 카드의 각 정보 행 스타일 */
+.camp-site-card p {
+    margin: 5px 0;
+    font-size: 1rem;
+    color: #555;
+}
+
+/* 예약 버튼 스타일 */
+.camp-site-card button {
+    background-color: #ffc400; /* YellowButton과 동일한 색상 */
+    color: #fff;
+    border: none;
+    border-radius: 0.375rem; /* YellowButton과 동일한 둥근 모서리 */
+    padding: 8px 16px; /* YellowButton의 small 크기와 동일한 패딩 */
+    font-size: 1rem; /* YellowButton의 small 크기와 동일한 폰트 크기 */
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    align-self: flex-end; /* 버튼을 카드 오른쪽 하단에 위치시킴 */
+}
+
+/* 버튼 hover 효과 */
+.camp-site-card button:hover {
+    background-color: #FCD34D; /* YellowButton hover 효과 색상 */
+}
