@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import apiClient from 'api/axiosConfig';
-import InputField from "components/InputField";
+import InputField from "components/common/InputField";
 import { validateEmail, validatePassword } from 'utils/Validation';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';

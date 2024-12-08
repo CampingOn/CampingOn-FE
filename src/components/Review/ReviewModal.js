@@ -9,8 +9,7 @@ import {
     Box
 } from '@mui/material';
 import { ThumbUp as ThumbUpIcon } from '@mui/icons-material';
-import { YellowButton } from 'components';
-import { ImageCarousel } from 'components';
+import { YellowButton, ImageCarousel } from 'components';
 
 function ReviewModal({ 
     open, 

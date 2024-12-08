@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { campService } from "../../api/services/campService";
 import { Box, Typography, Snackbar } from "@mui/material";
-import CampBookmarkedCard from "../../components/CampBookmarkedCard";
-import ScrollToTopFab from "../../components/ScrollToTopFab";
+import CampBookmarkedCard from "../../components/camp/CampBookmarkedCard";
+import ScrollToTopFab from "../../components/common/ScrollToTopFab";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import * as PropTypes from "prop-types";
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { bookmarkService } from "../api/services/bookmarkService";
+import { bookmarkService } from "../../api/services/bookmarkService";
 import { Box, IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";

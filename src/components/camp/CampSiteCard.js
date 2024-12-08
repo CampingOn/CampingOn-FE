@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent, Typography, Box } from "@mui/material";
-import YellowButton from "../YellowButton";
-import {FestivalOutlined, TableBarOutlined} from "@mui/icons-material";
+import YellowButton from "../common/YellowButton";
+import {FestivalOutlined} from "@mui/icons-material";
 import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
 import UpdateOutlinedIcon from "@mui/icons-material/UpdateOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";

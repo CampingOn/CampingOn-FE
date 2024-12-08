@@ -2,15 +2,9 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useCampDetail } from "../../hooks/useCampDetail";
 import useAvailableCampSites from "../../hooks/useAvailableCampSites";
-import ImageGallery from "../../components/camp/ImageGallery";
-import AddressInfo from "../../components/camp/AddressInfo";
-import CampDetailIntro from "../../components/camp/CampDetailIntro";
-import OperationPolicy from "../../components/OperationPolicy";
-import MapSection from "../../components/camp/MapSection";
-import ModalGallery from "../../components/camp/ModalGallery";
-import CampSiteCard from "../../components/camp/CampSiteCard";
-import CampDatePicker from "../../components/camp/CampDatePicker";
-import ModalComponent from "../../components/camp/ModalComponent";
+import {ImageGallery, AddressInfo, CampDetailIntro, OperationPolicy,
+    MapSection, ModalGallery, CampSiteCard, CampDatePicker, ModalComponent} from 'components';
+
 
 import { ko } from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";

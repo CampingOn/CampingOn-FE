@@ -6,7 +6,7 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { useNavigate } from "react-router-dom";
-import { bookmarkService } from "../api/services/bookmarkService";
+import { bookmarkService } from "../../api/services/bookmarkService";
 
 const CampBookmarkedCard = ({ data, onBookmarkChange }) => {
     const { campId, name, lineIntro, thumbImage, streetAddr, keywords, isMarked } = data;

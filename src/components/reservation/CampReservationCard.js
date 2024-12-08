@@ -15,8 +15,8 @@ import {
     TextField
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useApi } from "../hooks/useApi";
-import { reservationService } from "../api/services/reservationService";
+import { useApi } from "../../hooks/useApi";
+import { reservationService } from "../../api/services/reservationService";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import {KeyboardTab, Start} from "@mui/icons-material";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
