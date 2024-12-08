@@ -6,12 +6,15 @@ import ProfileCard from "./ProfileCard";
 import ScrollToTopFab from "./ScrollToTopFab";
 import WhiteButton from "./WhiteButton";
 import YellowButton from "./YellowButton";
-import CampSiteCard from "./CampSiteCard";
+import CampSiteCard from "./camp/CampSiteCard";
 import CampReservationCard from "./CampReservationCard";
 import ReservationConfirmCard from "./ReservationConfirmCard";
 import MainCarousel from "./MainCarousel";
 import SearchBar from "./SearchBar";
+import OperationPolicy from "./OperationPolicy";
 import ImageUploader from "./ImageUploader";
+import KakaoMap from "./KakaoMap";
+import CustomSnackbar from "./CustomSnackbar";
 import ReviewModal from "./Review/ReviewModal";
 import ReviewForm from "./Review/ReviewForm";
 import ImageCarousel from "./ImageCarousel";
@@ -34,5 +37,8 @@ export {
     ImageUploader,
     ReviewModal,
     ReviewForm,
-    ImageCarousel
+    ImageCarousel,
+    OperationPolicy,
+    KakaoMap,
+    CustomSnackbar
 };

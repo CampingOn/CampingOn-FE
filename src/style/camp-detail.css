@@ -125,7 +125,7 @@
 .camp-detail-gallery {
     display: grid;
     grid-template-columns: 1fr 1fr; /* 왼쪽과 오른쪽을 동일한 비율로 나눔 */
-    gap: 7px; /* 이미지 간의 간격 */
+    gap: 5px; /* 이미지 간의 간격 */
     margin: 20px 0;
     height: 600px; /* 전체 높이를 고정하여 1:1 비율 유지 */
 }
@@ -147,7 +147,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr; /* 2x2 형태로 썸네일 배치 */
     grid-template-rows: 1fr 1fr;
-    gap: 7px; /* 썸네일 간의 간격 */
+    gap: 5px; /* 썸네일 간의 간격 */
     height: 600px; /* 부모 높이에 맞추기 */
     position: relative; /* 내부 요소 위치 설정을 위해 상대 위치 사용 */
 }

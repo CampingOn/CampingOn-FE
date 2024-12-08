@@ -9,7 +9,7 @@ import Tab from '@mui/material/Tab';
 
 const Header = () => {
     const location = useLocation();
-    const [logo, setLogo] = useState(`${process.env.PUBLIC_URL}/logoWide.svg`);
+    const [logo, setLogo] = useState(`/logo/logoWide.svg`);
     const {isAuthenticated, logout, isLoading} = useAuth();
     const navigate = useNavigate();
 
@@ -26,9 +26,8 @@ const Header = () => {
                 return 1;
             case '/my-page':
                 return 2;
-            case '/':
             default:
-                return -1;
+                return 3;  // 숨겨진 탭의 인덱스
         }
     };
 
@@ -40,11 +39,11 @@ const Header = () => {
     }, [location.pathname]);
 
     const handleMouseEnter = () => {
-        setLogo(`${process.env.PUBLIC_URL}/logoWideClicked.svg`);
+        setLogo(`/logo/logoWideClicked.svg`);
     };
 
     const handleMouseLeave = () => {
-        setLogo(`${process.env.PUBLIC_URL}/logoWide.svg`);
+        setLogo(`/logo/logoWide.svg`);
     };
 
     if (isLoading) {
@@ -76,17 +75,10 @@ const Header = () => {
                 break;
             default:
                 navigate('/');
-                setValue(-1);
+                setValue(null);
                 break;
         }
     };
-
-    // 기본값이 -1인 경우, 메인 페이지로 이동
-    // useEffect(() => {
-    //     if (value === -1) {
-    //         setValue(0);
-    //     }
-    // }, [value]);
 
     return (
         <>
@@ -120,7 +112,8 @@ const Header = () => {
                                 sx={{
                                     '& .MuiTabs-indicator': {
                                         backgroundColor: '#ffc400',
-                                        height: '2.5px'
+                                        height: '2.5px',
+                                        display: value === 3 ? 'none' : 'block'
                                     },
                                 }}
                             >
@@ -149,6 +142,17 @@ const Header = () => {
                                             color: '#ffc400',
                                             fontWeight: 'bold',
                                         },
+                                    }}
+                                />
+                                <Tab
+                                    label="" style={{paddingBottom: '30px'}}
+                                    sx={{
+                                        padding: 0,
+                                        minWidth: 0,
+                                        width: 0,
+                                        overflow: 'hidden',
+                                        opacity: 0,
+                                        pointerEvents: 'none'
                                     }}
                                 />
                             </Tabs>

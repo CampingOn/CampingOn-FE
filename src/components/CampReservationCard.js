@@ -54,7 +54,6 @@ const CampReservationCard = ({ data, onReviewChange }) => {
     const {
         execute: cancelReservation,
         loading: cancelLoading,
-        error: cancelError,
     } = useApi(reservationService.cancelReservation);
 
     const handleNameClick = () => {
@@ -203,6 +202,8 @@ const CampReservationCard = ({ data, onReviewChange }) => {
 
     const buttonProps = getButtonProps();
 
+    const imageUrl = campResponseDto.thumbImage === ""? `${process.env.PUBLIC_URL}/default/NoThumb.jpg` : campResponseDto.thumbImage ;
+
     return (
         <Card
             sx={{
@@ -218,7 +219,7 @@ const CampReservationCard = ({ data, onReviewChange }) => {
             <Box
                 sx={{
                     flex: { sm: "2" },
-                    backgroundImage: `url(${campResponseDto.thumbImage})`,
+                    backgroundImage: `url(${imageUrl})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     height: { xs: 200, sm: "auto" },
@@ -244,6 +245,12 @@ const CampReservationCard = ({ data, onReviewChange }) => {
                         </Typography>
                     </Box>
                     <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
+                        <FestivalOutlined sx={{ fontSize: 20, marginRight: 1, color: "#ff7961" }} />
+                        <Typography variant="body2">
+                            내부시설: {campSiteResponseDto.indoorFacility}
+                        </Typography>
+                    </Box>
+                    <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
                         <Start sx={{ fontSize: 20, marginRight: 1, color: "#2c387e" }} />
                         <Typography variant="body2">
                             체크인 : {checkinDate} {checkinTime}
@@ -261,12 +268,7 @@ const CampReservationCard = ({ data, onReviewChange }) => {
                             {guestCnt}명
                         </Typography>
                     </Box>
-                    <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
-                        <FestivalOutlined sx={{ fontSize: 20, marginRight: 1, color: "#ff7961" }} />
-                        <Typography variant="body2">
-                            내부시설: {campSiteResponseDto.indoorFacility}
-                        </Typography>
-                    </Box>
+
                     <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
                         <ReceiptLongOutlinedIcon sx={{ fontSize: 20, marginRight: 1, color: "#ff9800" }} />
                         <Typography variant="body2">

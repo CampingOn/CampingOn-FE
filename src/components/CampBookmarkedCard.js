@@ -1,28 +1,22 @@
-import React, {useState} from "react";
-import {Card, CardContent, Typography, Box, IconButton, Chip, Snackbar} from "@mui/material";
+import React, { useState } from "react";
+import { Card, CardContent, Typography, Box, IconButton, Chip } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { useNavigate } from "react-router-dom";
-import {bookmarkService} from "../api/services/bookmarkService";
+import { bookmarkService } from "../api/services/bookmarkService";
 
-const CampBookmarkedCard = ({ data }) => {
+const CampBookmarkedCard = ({ data, onBookmarkChange }) => {
     const { campId, name, lineIntro, thumbImage, streetAddr, keywords, isMarked } = data;
     const summary = lineIntro.length > 100 ? `${lineIntro.slice(0, 100)} ...` : lineIntro;
     const navigate = useNavigate();
     const [liked, setLiked] = useState(isMarked);
-    const [snackbarBookmark, setSnackbarBookmark] = useState(false);
 
     const handleNameClick = () => {
         navigate(`/camps/${campId}`);
     };
-
-    const handleCloseBookmark = () => {
-        setSnackbarBookmark(false);
-    };
-
 
     const toggleLike = async (event) => {
         event.stopPropagation(); // 부모의 onClick 이벤트가 실행되지 않도록 중단
@@ -31,12 +25,13 @@ const CampBookmarkedCard = ({ data }) => {
             console.log("campId: " + campId);
             await bookmarkService.toggleBookmark(campId);
             setLiked(!liked);
-            setSnackbarBookmark(true);
+            onBookmarkChange("찜 상태를 변경하였습니다"); // 부모에게 알리기
         } catch (error) {
             console.error("찜 클릭 에러 : ", error);
         }
     };
 
+    const imageUrl = thumbImage === "" ? `${process.env.PUBLIC_URL}/default/NoThumb.jpg` : thumbImage;
     return (
         <Card
             sx={{
@@ -52,7 +47,7 @@ const CampBookmarkedCard = ({ data }) => {
             <Box
                 sx={{
                     flex: { sm: "2" },
-                    backgroundImage: `url(${thumbImage})`,
+                    backgroundImage: `url(${imageUrl})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     height: { xs: 200, sm: "auto" },
@@ -109,13 +104,6 @@ const CampBookmarkedCard = ({ data }) => {
                     </IconButton>
                 </Box>
             </Box>
-            <Snackbar
-                open={snackbarBookmark}
-                autoHideDuration={1500}
-                onClose={handleCloseBookmark}
-                message="찜 상태를 변경하였습니다"
-                anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-            />
         </Card>
     );
 };

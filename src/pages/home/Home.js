@@ -1,22 +1,43 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { useApi } from 'hooks/useApi';
-import { useNavigate } from 'react-router-dom';
-import { Box, Container, Typography } from "@mui/material";
-import { campService } from '../../api/services/campService';
-import { searchInfoService } from '../../api/services/searchInfoService';
-import CampingCard from '../../components/CampingCard';
+import React, {useEffect, useState, useRef, useCallback} from "react";
+import {useApi} from "hooks/useApi";
+import {useNavigate} from "react-router-dom";
+import {Box, Container, Typography} from "@mui/material";
+import {campService} from "../../api/services/campService";
+import {searchInfoService} from "../../api/services/searchInfoService";
+import CampingCard from "../../components/CampingCard";
 import ScrollToTopFab from "../../components/ScrollToTopFab";
 import MainCarousel from "../../components/MainCarousel";
 import SearchBar from "../../components/SearchBar";
-import { useAuth } from "../../context/AuthContext";
-import Grid from "@mui/material/Grid";
+import {useAuth} from "../../context/AuthContext";
+import Snackbar from "@mui/material/Snackbar";
 
 function Home() {
     const navigate = useNavigate();
-    const { isAuthenticated } = useAuth();
+    const {isAuthenticated} = useAuth();
     const [camps, setCamps] = useState([]);
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true); // 로드 가능한지 여부
+    const [snackbarNone, setSnackbarNone] = useState(false);
+    const [snackbarBookmark, setSnackbarBookmark] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+
+    const handleCloseNone = () => {
+        setSnackbarNone(false);
+    };
+
+    const handleCloseBookmark = () => {
+        setSnackbarBookmark(false);
+    };
+
+    const showSnackbarNone = () => {
+        setSnackbarMessage("회원만 이용할 수 있는 기능입니다.");
+        setSnackbarNone(true);
+    };
+
+    const showSnackbarBookmark = () => {
+        setSnackbarMessage("찜 상태를 변경하였습니다.");
+        setSnackbarBookmark(true);
+    };
 
     const {
         data: popularCampsData,
@@ -52,7 +73,7 @@ function Home() {
         navigate(`/camps/${campId}`);
     };
 
-    const handleSearch = ({ city, keyword }) => {
+    const handleSearch = ({city, keyword}) => {
         const params = new URLSearchParams();
         if (city) params.append('city', city);
         if (keyword) params.append('keyword', keyword);
@@ -74,7 +95,7 @@ function Home() {
 
     // Intersection Observer 설정
     useEffect(() => {
-        const observer = new IntersectionObserver(loadMore, { threshold: 1.0 });
+        const observer = new IntersectionObserver(loadMore, {threshold: 1.0});
         if (observerRef.current) observer.observe(observerRef.current);
         return () => {
             if (observerRef.current) observer.unobserve(observerRef.current);
@@ -82,19 +103,26 @@ function Home() {
     }, [loadMore]);
 
     return (
-        <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Container maxWidth="lg" sx={{py: 4}}>
             {/* 캐러셀 영역 */}
             <Box mb={4}>
-                <MainCarousel />
+                <MainCarousel/>
             </Box>
             {/* 검색창 영역 */}
-            <Box mb={4}>
-                <SearchBar onSearch={handleSearch} isLoading={false}/>
+            <Box
+                mb={4}
+                sx={{
+                    display: "flex",        // Flexbox 활성화
+                    justifyContent: "center", // 가로 방향 중앙 정렬
+                    alignItems: "center",    // 세로 방향 중앙 정렬 (필요 시)
+                }}
+            >
+                <SearchBar onSearch={handleSearch} isLoading={false} />
             </Box>
             {/* 추천 캠핑장 목록 */}
             {isAuthenticated && matchedCampsData?.content?.length > 0 && (
                 <>
-                    <Typography variant="h5" fontWeight="bold" sx={{ mb: 4 }}>
+                    <Typography variant="h5" fontWeight="bold" sx={{mb: 4}}>
                         {matchedCampsData.content[0]?.username}님을 위한 추천 캠핑장
                     </Typography>
                     <Box sx={{
@@ -118,6 +146,8 @@ function Home() {
                                 lineIntro={camp.lineIntro}
                                 marked={camp.marked}
                                 onClick={() => handleCardClick(camp.campId)}
+                                onShowSnackbarNone={showSnackbarNone}
+                                onShowSnackbarBookmark={showSnackbarBookmark}
                             />
                         ))}
                     </Box>
@@ -125,31 +155,53 @@ function Home() {
             )}
 
             {/* 인기 캠핑장 목록 */}
-            <Typography variant="h5" fontWeight="bold" sx={{ mb: 4 }}>
+            <Typography variant="h5" fontWeight="bold" sx={{mb: 4}}>
                 인기 캠핑장
             </Typography>
-            <Grid container spacing={4} sx={{ mb: 4, justifyContent: 'center', px: 4 }}>
+            <Box sx={{
+                display: 'grid',
+                gridTemplateColumns: {
+                    xs: '1fr',
+                    sm: 'repeat(2, 1fr)',
+                    lg: 'repeat(3, 1fr)'
+                },
+                gap: 3,
+                mb: 4
+            }}>
                 {camps.map((camp) => (
-                    <Grid item xs={12} sm={6} md={4} key={camp.campId}>
-                        <CampingCard
-                            key={camp.campId}
-                            campId={camp.campId}
-                            thumbImage={camp.thumbImage}
-                            name={camp.name}
-                            address={camp.streetAddr}
-                            keywords={camp.keywords || []}
-                            lineIntro={camp.lineIntro}
-                            marked={camp.marked}
-                            onClick={() => handleCardClick(camp.campId)}
-                        />
-                    </Grid>
+                    <CampingCard
+                        key={camp.campId}
+                        campId={camp.campId}
+                        thumbImage={camp.thumbImage}
+                        name={camp.name}
+                        address={camp.streetAddr}
+                        keywords={camp.keywords || []}
+                        lineIntro={camp.lineIntro}
+                        marked={camp.marked}
+                        onClick={() => handleCardClick(camp.campId)}
+                        onShowSnackbarNone={showSnackbarNone}
+                        onShowSnackbarBookmark={showSnackbarBookmark}
+                    />
                 ))}
-            </Grid>
+            </Box>
 
             {/* 무한 스크롤을 위한 Intersection Observer 트리거 */}
-            <div ref={observerRef} style={{ height: '1px' }} />
+            <div ref={observerRef} style={{height: '1px'}}/>
 
-            <ScrollToTopFab />
+            <Snackbar
+                open={snackbarNone}
+                autoHideDuration={1500}
+                onClose={handleCloseNone}
+                message={snackbarMessage}
+            />
+            <Snackbar
+                open={snackbarBookmark}
+                autoHideDuration={1500}
+                onClose={handleCloseBookmark}
+                message={snackbarMessage}
+            />
+
+            <ScrollToTopFab/>
         </Container>
     );
 }

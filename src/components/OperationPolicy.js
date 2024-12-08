@@ -1,14 +1,24 @@
 import React from 'react';
-import '../style/operation-policy.css'; // 스타일 분리
+import { Box, Typography, List, ListItem } from '@mui/material';
 
-const OperationPolicy = ({ industries, outdoorFacility }) => {
-    const policyData = [
-        { label: '매너타임', value: '시작 22:00 | 종료 07:00' },
-        { label: '오토캠핑', value: '입실 14:00 | 퇴실 11:00' },
-        { label: '글램핑', value: '입실 14:00 | 퇴실 11:00' },
-    ];
+const OperationPolicy = ({ 
+    additionalPolicies = [], 
+    title = '운영정책', 
+    showDefaultPolicies = true,
+    outdoorFacility,
+    industries
+}) => {
+    const policyData = [];
 
-    // 부대시설과 업종 정보를 추가로 병합
+    if (showDefaultPolicies) {
+        const defaultPolicies = [
+            { label: '매너타임', value: '시작 22:00 | 종료 07:00' },
+            { label: '오토캠핑', value: '입실 15:00 | 퇴실 11:00' },
+            { label: '글램핑', value: '입실 15:00 | 퇴실 11:00' },
+        ];
+        policyData.push(...defaultPolicies);
+    }
+
     if (outdoorFacility) {
         policyData.push({ label: '부대시설', value: outdoorFacility });
     }
@@ -18,18 +28,46 @@ const OperationPolicy = ({ industries, outdoorFacility }) => {
         policyData.push({ label: '업종', value: industriesValue });
     }
 
+    policyData.push(...additionalPolicies);
+
     return (
-        <div className="operation-policy">
-            <h2 className="operation-policy-title">운영정책</h2>
-            <ul className="operation-policy-list">
+        <Box sx={{
+            width: '100%',
+            maxWidth: '100%',
+            padding: '20px',
+            marginTop: '20px',
+            marginBottom: '20px',
+            boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+            borderRadius: '8px',
+            border: '1px solid #000000',
+            bgcolor: 'background.paper'
+        }}>
+            <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
+                {title}
+            </Typography>
+            <List sx={{ p: 0 }}>
                 {policyData.map((item, index) => (
-                    <li key={index} className="operation-policy-item">
-                        <span className="policy-label">{item.label}</span>
-                        <span className="policy-value">{item.value}</span>
-                    </li>
+                    item.value && (
+                        <ListItem 
+                            key={index}
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                py: 1,
+                                borderBottom: index === policyData.length - 1 ? 'none' : '1px solid #f0f0f0'
+                            }}
+                        >
+                            <Typography sx={{ fontWeight: 'bold', color: '#333' }}>
+                                {item.label}
+                            </Typography>
+                            <Typography sx={{ color: '#666' }}>
+                                {item.value}
+                            </Typography>
+                        </ListItem>
+                    )
                 ))}
-            </ul>
-        </div>
+            </List>
+        </Box>
     );
 };
 

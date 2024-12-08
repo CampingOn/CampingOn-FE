@@ -41,7 +41,7 @@ function MainCarousel() {
     };
 
     return (
-        <Box sx={{ position: 'relative', width: '100%', height: '450px' }}>
+        <Box sx={{ position: 'relative', width: '104%', height: '450px' }}>
             {/* Carousel */}
             <Carousel
                 autoPlay={true}
