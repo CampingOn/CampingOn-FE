@@ -1,4 +1,4 @@
-//account
+//common
 import DeleteAccount from './account/DeleteAccount';
 import MyKeyword from './account/MyKeyword';
 import MyPage from "./account/MyPage";

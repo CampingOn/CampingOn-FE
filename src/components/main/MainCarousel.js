@@ -6,25 +6,25 @@ function MainCarousel() {
     const carouselItems = [
         {
             id: 1,
-            image: 'carousel/carousel-3.jpg',
+            image: 'carousel/carousel3.jpg',
             title: '겨울 분위기 한가득! 겨울에 가기 좋은 캠핑지는?',
             link: 'https://camping-on.site',
         },
         {
             id: 2,
-            image: 'carousel/carousel-1.jpg',
+            image: 'carousel/carousel1.jpg',
             title: '캠핑 A to Z - 캠린이를 위한 꿀팁 총정리',
             link: 'https://m.blog.naver.com/kbcheckcard/220727060943',
         },
         {
             id: 3,
-            image: 'carousel/carousel-4.jpg',
+            image: 'carousel/carousel4.jpg',
             title: '별 보러 갈래? 별 보기 좋은 캠핑장 🌌',
             link: 'https://camping-on.site',
         },
         {
             id: 4,
-            image: 'carousel/carousel-2.jpg',
+            image: 'carousel/carousel2.jpg',
             title: '지금 당장 🏃‍♀️‍➡️🏃‍♀️‍➡️ 내 근처 캠핑장은?',
             link: 'https://camping-on.site',
         },

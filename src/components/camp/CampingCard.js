@@ -1,12 +1,21 @@
-import React, { useState } from "react";
-import { bookmarkService } from "../api/services/bookmarkService";
+import React, { useState, useEffect } from "react";
+import { bookmarkService } from "../../api/services/bookmarkService";
 import { Box, IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { getRandomThumbnail } from "../../utils/ThumbnailUtils";
+import {useAuth} from 'context/AuthContext';
 
 const CampingCard = ({ thumbImage, name, address, keywords, lineIntro, marked, onClick, campId, onShowSnackbarNone, onShowSnackbarBookmark }) => {
-    const isAuthenticated = localStorage.getItem("accessToken");
+    const isAuthenticated = useAuth();
     const [liked, setLiked] = useState(marked);
+    const [imageUrl, setImageUrl] = useState(""); // 이미지 URL 상태 추가
+
+    // 이미지가 없을 경우 랜덤으로 썸네일 선택
+    useEffect(() => {
+        const randomImage = getRandomThumbnail(thumbImage);
+        setImageUrl(randomImage);
+    }, [thumbImage]);
 
     const toggleLike = async (event) => {
         event.stopPropagation(); // 부모의 onClick 이벤트가 실행되지 않도록 중단
@@ -23,8 +32,6 @@ const CampingCard = ({ thumbImage, name, address, keywords, lineIntro, marked, o
             }
         }
     };
-
-    const imageUrl = thumbImage === "" ? `${process.env.PUBLIC_URL}/default/NoThumb.jpg` : thumbImage;
 
     return (
         <div

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import apiClient from 'api/axiosConfig';
-import InputField from "components/InputField";
+import InputField from "components/common/InputField";
 import { validateEmail, validatePassword } from 'utils/Validation';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -153,7 +153,7 @@ function Login() {
                             className="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400"
                         >
                             <img
-                                src={"google-logo.png"}
+                                src={"google.png"}
                                 alt="Google logo"
                                 className="h-5 w-5 mr-2"
                             />

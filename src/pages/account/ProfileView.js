@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import ProfileCard from "components/ProfileCard";
+import ProfileCard from "components/common/ProfileCard";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { userService } from "api/services/userService";
 import { useApi } from "hooks/useApi";

@@ -9,8 +9,7 @@ import {
     Box
 } from '@mui/material';
 import { ThumbUp as ThumbUpIcon } from '@mui/icons-material';
-import { YellowButton } from 'components';
-import { ImageCarousel } from 'components';
+import { YellowButton, ImageCarousel } from 'components';
 
 function ReviewModal({ 
     open, 
@@ -46,7 +45,7 @@ function ReviewModal({
                         ) : (
                             <Box sx={{ width: '100%', height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                 <img 
-                                    src="/default/review-image.jpg"
+                                    src="/default/reviewImage.jpg"
                                     alt="기본 이미지"
                                     style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
                                 />

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import InputField from "components/InputField";
+import InputField from "components/common/InputField";
 import apiClient from 'api/axiosConfig';
 
 // 회원가입 / 회원 정보 수정 시 중복 확인 필드

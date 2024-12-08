@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent, Typography, Box } from "@mui/material";
-import YellowButton from "../YellowButton";
-import { TableBarOutlined } from "@mui/icons-material";
+import YellowButton from "../common/YellowButton";
+import {FestivalOutlined} from "@mui/icons-material";
 import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
 import UpdateOutlinedIcon from "@mui/icons-material/UpdateOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
@@ -34,7 +34,7 @@ const CampSiteCard = ({ data = {}, campId, count, checkin, checkout }) => {
         siteType = "알 수 없음",
         maximumPeople = 0,
         price = 0,
-        indoorFacility = "정보 없음",
+        indoorFacility = "내부시설 정보 없음",
         siteId,
     } = data;
 
@@ -86,8 +86,8 @@ const CampSiteCard = ({ data = {}, campId, count, checkin, checkout }) => {
                     </Typography>
                     <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }} />
                     <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
-                        <TableBarOutlined sx={{ fontSize: 20, marginRight: 1, color: "primary.main" }} />
-                        <Typography variant="body2">{indoorFacility}</Typography>
+                        <FestivalOutlined sx={{ fontSize: 20, marginRight: 1, color: "#ff7961" }} />
+                        <Typography variant="body2">{indoorFacility?.trim() || "내부시설 정보 없음"}</Typography>
                     </Box>
                     <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
                         <PeopleOutlinedIcon sx={{ fontSize: 20, marginRight: 1, color: "#2c387e" }} />

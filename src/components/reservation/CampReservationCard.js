@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { defaultThumbnails, getRandomThumbnail } from "../../utils/ThumbnailUtils"; // 함수와 배열 임포트
 import {
     Card,
     CardContent,
@@ -15,8 +16,8 @@ import {
     TextField
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useApi } from "../hooks/useApi";
-import { reservationService } from "../api/services/reservationService";
+import { useApi } from "../../hooks/useApi";
+import { reservationService } from "../../api/services/reservationService";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import {KeyboardTab, Start} from "@mui/icons-material";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
@@ -122,7 +123,7 @@ const CampReservationCard = ({ data }) => {
 
     const buttonProps = getButtonProps();
 
-    const imageUrl = campResponseDto.thumbImage === ""? `${process.env.PUBLIC_URL}/default/NoThumb.jpg` : campResponseDto.thumbImage ;
+    const imageUrl = campResponseDto.thumbImage === "" ? getRandomThumbnail(defaultThumbnails) : campResponseDto.thumbImage;
 
     return (
         <Card
@@ -167,7 +168,7 @@ const CampReservationCard = ({ data }) => {
                     <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
                         <FestivalOutlined sx={{ fontSize: 20, marginRight: 1, color: "#ff7961" }} />
                         <Typography variant="body2">
-                            내부시설: {campSiteResponseDto.indoorFacility}
+                            {campSiteResponseDto.indoorFacility ? campSiteResponseDto.indoorFacility : "내부시설 정보 없음"}
                         </Typography>
                     </Box>
                     <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>

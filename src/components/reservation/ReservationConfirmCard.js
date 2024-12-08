@@ -62,7 +62,7 @@ const ReservationConfirmCard = ({ data }) => {
                         </Box>
                         <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
                             <FestivalOutlined sx={{ fontSize: 20, marginRight: 1, color: "#ff7961" }} />
-                            <Typography variant="body2">내부시설: {indoorFacility ? indoorFacility : "없음"}</Typography>
+                            <Typography variant="body2">{indoorFacility ? indoorFacility : "내부시설 정보 없음"}</Typography>
                         </Box>
                         <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
                             <UpdateOutlinedIcon sx={{ fontSize: 20, marginRight: 1, color: "#ffc107" }} />

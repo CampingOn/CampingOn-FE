@@ -4,7 +4,7 @@ import {campSiteService} from 'api/services/campSiteService';
 import {reservationService } from "api/services/reservationService";
 import {ReservationConfirmCard, YellowButton, OperationPolicy, CustomSnackbar} from 'components';
 import {useApi} from "hooks/useApi";
-import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 const Reservation = () => {
     const { campId, siteId } = useParams();

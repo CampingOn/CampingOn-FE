@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import apiClient from 'api/axiosConfig';
-import InputField from "components/InputField";
+import InputField from "components/common/InputField";
 import {userService} from "../../api/services/userService";
 import { useApi } from "../../hooks/useApi";
 import { validatePassword, validateNickname } from 'utils/Validation';
