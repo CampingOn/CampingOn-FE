@@ -88,12 +88,8 @@ const ImageUploader = ({ onChange, images: initialImages = [] }) => {
             preview: URL.createObjectURL(file)
         }));
 
-        setImages(prev => {
-            const updated = [...prev, ...newImages];
-            onChange(updated.map(img => img.file));  // 여기도 변경
-            return updated;
-        });
-    }, [images, onChange]);
+        setImages(prev => [...prev, ...newImages]);
+    }, [images]);
 
     // 드래그 앤 드롭 이벤트 핸들러
     const handleDragOver = useCallback((e) => {
@@ -119,12 +115,8 @@ const ImageUploader = ({ onChange, images: initialImages = [] }) => {
 
     // 이미지 삭제 핸들러
     const handleDeleteImage = useCallback((index) => {
-        setImages(prev => {
-            const updated = prev.filter((_, i) => i !== index);
-            onChange(updated.map(img => img.file));  // 여기도 변경
-            return updated;
-        });
-    }, [onChange]);
+        setImages(prev => prev.filter((_, i) => i !== index));
+    }, []);
 
     // 컴포넌트 언마운트 시 미리보기 URL 정리
     useEffect(() => {
@@ -135,14 +127,19 @@ const ImageUploader = ({ onChange, images: initialImages = [] }) => {
 
     useEffect(() => {
         if (initialImages.length > 0) {
-            const formattedImages = initialImages.map(file => ({  // image를 file로 변경
+            const formattedImages = initialImages.map(file => ({
                 file,
-                preview: typeof file === 'string' ? file : URL.createObjectURL(file)  // image를 file로 변경
+                preview: typeof file === 'string' ? file : URL.createObjectURL(file)
             }));
             setImages(formattedImages);
-            onChange(initialImages);
         }
-    }, [initialImages, onChange]);
+    }, [initialImages]);
+
+    // 이미지 상태가 변경될 때만 onChange 호출
+    useEffect(() => {
+        const files = images.map(img => img.file).filter(file => file instanceof File);
+        onChange(files);
+    }, [images, onChange]);
 
     return (
         <Box>
