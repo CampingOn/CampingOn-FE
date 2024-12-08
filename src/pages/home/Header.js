@@ -13,7 +13,6 @@ const Header = () => {
     const [logo, setLogo] = useState(`/logo/logoWide.svg`);
     const {isAuthenticated, logout, isLoading} = useAuth();
     const navigate = useNavigate();
-    const isFirstRender = useRef(true);
 
     useEffect(() => {
 
@@ -34,13 +33,13 @@ const Header = () => {
     const getTabValue = (pathname) => {
         switch (pathname) {
             case '/my-reservation':
-                return 0;
-            case '/my-bookmark':
                 return 1;
-            case '/my-page':
+            case '/my-bookmark':
                 return 2;
+            case '/my-page':
+                return 3;
             default:
-                return 3;  // 숨겨진 탭의 인덱스
+                return 4;
         }
     };
 
@@ -75,18 +74,18 @@ const Header = () => {
         setValue(newValue);
 
         switch (newValue) {
-            case 0:
+            case 1:
                 navigate('/my-reservation');
                 break;
-            case 1:
+            case 2:
                 navigate('/my-bookmark');
                 break;
-            case 2:
+            case 3:
                 navigate('/my-page');
                 break;
             default:
                 navigate('/');
-                setValue(null);
+                setValue(0);
                 break;
         }
     };
@@ -124,10 +123,20 @@ const Header = () => {
                                     '& .MuiTabs-indicator': {
                                         backgroundColor: '#ffc400',
                                         height: '2.5px',
-                                        display: value === 3 ? 'none' : 'block'
                                     },
                                 }}
                             >
+                                <Tab
+                                    label="" style={{paddingBottom: '30px'}}
+                                    sx={{
+                                        padding: 0,
+                                        minWidth: 0,
+                                        width: 0,
+                                        overflow: 'hidden',
+                                        opacity: 0,
+                                        pointerEvents: 'none'
+                                    }}
+                                />
                                 <Tab
                                     label="나의예약" style={{paddingBottom: '30px'}}
                                     sx={{
@@ -153,17 +162,6 @@ const Header = () => {
                                             color: '#ffc400',
                                             fontWeight: 'bold',
                                         },
-                                    }}
-                                />
-                                <Tab
-                                    label="" style={{paddingBottom: '30px'}}
-                                    sx={{
-                                        padding: 0,
-                                        minWidth: 0,
-                                        width: 0,
-                                        overflow: 'hidden',
-                                        opacity: 0,
-                                        pointerEvents: 'none'
                                     }}
                                 />
                             </Tabs>
