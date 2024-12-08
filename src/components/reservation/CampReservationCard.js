@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { defaultThumbnails, getRandomThumbnail } from "../../utils/ThumbnailUtils"; // 함수와 배열 임포트
 import {
     Card,
     CardContent,
@@ -122,7 +123,7 @@ const CampReservationCard = ({ data }) => {
 
     const buttonProps = getButtonProps();
 
-    const imageUrl = campResponseDto.thumbImage === ""? `${process.env.PUBLIC_URL}/default/NoThumb.jpg` : campResponseDto.thumbImage ;
+    const imageUrl = campResponseDto.thumbImage === "" ? getRandomThumbnail(defaultThumbnails) : campResponseDto.thumbImage;
 
     return (
         <Card

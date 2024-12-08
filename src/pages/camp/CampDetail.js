@@ -1,14 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useCampDetail } from "../../hooks/useCampDetail";
 import useAvailableCampSites from "../../hooks/useAvailableCampSites";
-import {ImageGallery, AddressInfo, CampDetailIntro, OperationPolicy,
-    MapSection, ModalGallery, CampSiteCard, CampDatePicker, ModalComponent} from 'components';
-
-
+import {
+    ImageGallery,
+    AddressInfo,
+    CampDetailIntro,
+    OperationPolicy,
+    MapSection,
+    ModalGallery,
+    CampSiteCard,
+    CampDatePicker,
+    ModalComponent
+} from 'components';
+import { defaultThumbnails, getRandomThumbnail } from "utils/ThumbnailUtils"; // 랜덤 썸네일 유틸 임포트
 import { ko } from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
-
 import "../../style/camp-detail.css";
 import "../../style/available-list.css";
 
@@ -68,7 +75,18 @@ function CampDetail() {
     return (
         <div className="camp-detail-container">
             <h1 className="camp-detail-title">{name || "캠핑장 이름 없음"}</h1>
-            <ImageGallery images={images || []} onMoreClick={handleModalOpen} />
+            {/* images가 빈 배열일 경우 랜덤 썸네일로 채우기 */}
+            {(!images || images.length === 0) ? (
+                <div className="main-image" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', marginBottom: '20px'}}>
+                    <img 
+                        src={getRandomThumbnail("")}
+                        alt="랜덤 썸네일" 
+                        style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                    />
+                </div>
+            ) : (
+                <ImageGallery images={images} onMoreClick={handleModalOpen} />
+            )}
             <ModalGallery open={openModal} onClose={handleModalClose} images={images || []} />
             <AddressInfo address={campAddr?.streetAddr} tel={tel} homepage={homepage} />
             <CampDetailIntro intro={intro} />
@@ -124,7 +142,7 @@ function CampDetail() {
                     open={modalOpen}
                     onClose={() => setModalOpen(false)}
                     title="당일 예약 안내"
-                    message="※ 당일 예약은 전화로만 가능합니다."
+                    message="※ 당일 예약�� 전화로만 가능합니다."
                 />
             </div>
         </div>

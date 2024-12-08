@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, Typography, Box, IconButton, Chip } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -7,12 +7,20 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { useNavigate } from "react-router-dom";
 import { bookmarkService } from "../../api/services/bookmarkService";
+import { getRandomThumbnail } from "../../utils/ThumbnailUtils";
 
 const CampBookmarkedCard = ({ data, onBookmarkChange }) => {
     const { campId, name, lineIntro, thumbImage, streetAddr, keywords, isMarked } = data;
     const summary = lineIntro.length > 100 ? `${lineIntro.slice(0, 100)} ...` : lineIntro;
     const navigate = useNavigate();
     const [liked, setLiked] = useState(isMarked);
+    const [imageUrl, setImageUrl] = useState("");
+
+    // 이미지가 없을 경우 랜덤으로 썸네일 선택
+    useEffect(() => {
+        const randomImage = getRandomThumbnail(thumbImage);
+        setImageUrl(randomImage);
+    }, [thumbImage]);
 
     const handleNameClick = () => {
         navigate(`/camps/${campId}`);
@@ -31,7 +39,6 @@ const CampBookmarkedCard = ({ data, onBookmarkChange }) => {
         }
     };
 
-    const imageUrl = thumbImage === "" ? `${process.env.PUBLIC_URL}/default/NoThumb.jpg` : thumbImage;
     return (
         <Card
             sx={{
