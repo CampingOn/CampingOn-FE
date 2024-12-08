@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import {Link, useNavigate, useLocation} from 'react-router-dom';
@@ -12,6 +12,18 @@ const Header = () => {
     const [logo, setLogo] = useState(`/logo/logoWide.svg`);
     const {isAuthenticated, logout, isLoading} = useAuth();
     const navigate = useNavigate();
+    const isFirstRender = useRef(true);
+
+    useEffect(() => {
+
+        // 최종 상태 체크를 위해 지연
+        const timer = setTimeout(() => {
+            console.log('👀 최종 로그인 상태:', isAuthenticated);
+        }, 100);
+
+        // 타이머 제거
+        return () => clearTimeout(timer);
+    }, [isAuthenticated]);
 
     useEffect(() => {
         setValue(getTabValue(location.pathname));
@@ -49,8 +61,6 @@ const Header = () => {
     if (isLoading) {
         return null;
     }
-
-    console.log('유저로그인상태', isAuthenticated);
 
     const handleAuthClick = () => {
         if (isAuthenticated) {
