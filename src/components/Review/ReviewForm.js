@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Dialog,
     DialogContent,
@@ -20,12 +20,31 @@ function ReviewForm({ open, onClose, onSubmit, initialData = null, campName }) {
         title: initialData?.title || '',      // title 추가
         content: initialData?.content || '',
         recommended: initialData?.recommended || false,
-        images: initialData?.images || []
+        images: initialData?.images || [],
+        id: initialData?.id || null
     });
 
-    const handleSubmit = () => {
-        onSubmit(formData);
-        onClose();
+    useEffect(() => {
+        if (initialData) {
+            setFormData({
+                title: initialData.title || '',
+                content: initialData.content || '',
+                recommended: initialData.recommended || false,
+                images: initialData.images || [],
+                id: initialData.id || null
+            });
+        }
+    }, [initialData]);
+
+    const handleSubmit = async () => {
+        try {
+            const response = await onSubmit(formData);
+            // 생성된 리뷰의 ID를 저장
+            const createdReviewId = response.data.id;
+            onClose();
+        } catch (error) {
+            console.error('리뷰 저장 실패:', error);
+        }
     };
 
     return (
@@ -38,25 +57,10 @@ function ReviewForm({ open, onClose, onSubmit, initialData = null, campName }) {
                 borderBottom: '1px solid',
                 borderColor: 'divider'
             }}>
-                <Typography variant="h6">
+                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                     {campName}
                 </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Button
-                        variant={formData.recommended ? "contained" : "outlined"}
-                        color={formData.recommended ? "primary" : "inherit"}
-                        startIcon={<ThumbUpIcon />}
-                        onClick={() => setFormData(prev => ({ ...prev, recommended: !prev.recommended }))}
-                        sx={{
-                            minWidth: '100px',
-                            bgcolor: formData.recommended ? 'primary.main' : 'transparent',
-                            '&:hover': {
-                                bgcolor: formData.recommended ? 'primary.dark' : 'rgba(0, 0, 0, 0.04)'
-                            }
-                        }}
-                    >
-                        추천
-                    </Button>
                     <IconButton
                         aria-label="close"
                         onClick={onClose}
@@ -70,6 +74,7 @@ function ReviewForm({ open, onClose, onSubmit, initialData = null, campName }) {
                 <Box sx={{ my: 2 }}>
                     <ImageUploader
                         images={formData.images}
+                        initialImages={initialData?.images || []}
                         onChange={(images) => setFormData(prev => ({ ...prev, images }))}
                     />
                 </Box>
@@ -90,25 +95,33 @@ function ReviewForm({ open, onClose, onSubmit, initialData = null, campName }) {
                     value={formData.content}
                     onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
                 />
+
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
+                    <Button
+                        variant={formData.recommended ? "contained" : "outlined"}
+                        color={formData.recommended ? "primary" : "inherit"}
+                        startIcon={<ThumbUpIcon />}
+                        onClick={() => setFormData(prev => ({ ...prev, recommended: !prev.recommended }))}
+                        sx={{
+                            minWidth: '100px',
+                            bgcolor: formData.recommended ? 'primary.main' : 'transparent',
+                            '&:hover': {
+                                bgcolor: formData.recommended ? 'primary.dark' : 'rgba(0, 0, 0, 0.04)'
+                            }
+                        }}
+                    >
+                        추천
+                    </Button>
+                </Box>
             </DialogContent>
 
-            <DialogActions sx={{ 
-                p: 2, 
-                display: 'flex', 
+            <DialogActions sx={{
+                p: 2,
+                display: 'flex',
                 justifyContent: 'center',
-                gap: 2 
+                gap: 2
             }}>
-                {initialData && (
-                    <Button 
-                        onClick={onClose}
-                        variant="outlined"
-                        color="error"
-                        sx={{ minWidth: '120px' }}
-                    >
-                        삭제
-                    </Button>
-                )}
-                <Button 
+                <Button
                     onClick={handleSubmit}
                     variant="contained"
                     sx={{

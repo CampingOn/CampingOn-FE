@@ -23,6 +23,11 @@ const MyReservation = () => {
         triggerOnce: false,
     });
 
+    const refreshReservations = () => {
+        setPage(0);  // 페이지를 0으로 리셋
+        getReservations(0);  // 데이터 새로 로드
+    };
+
     useEffect(() => {
         // 페이지 0부터 데이터 로드 시작
         getReservations(page);
@@ -110,7 +115,7 @@ const MyReservation = () => {
             </Typography>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                 {reservations.map((reservation) => (
-                    <CampReservationCard key={reservation.id} data={reservation} />
+                    <CampReservationCard key={reservation.id} data={reservation} onReviewChange={refreshReservations} />
                 ))}
             </Box>
             {/* 로딩 중이면 로딩 표시 */}
