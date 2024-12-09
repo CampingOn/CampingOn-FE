@@ -57,19 +57,19 @@ function ReviewModal({
                 {/* 추천 버튼 */}
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mt: 2 }}>
                     <Button
-                        variant={review?.isRecommend ? "contained" : "outlined"}
-                        color={review?.isRecommend ? "primary" : "inherit"}
+                        variant={review?.recommended ? "contained" : "outlined"}
+                        color={review?.recommended ? "primary" : "inherit"}
                         disabled
                         startIcon={<ThumbUpIcon />}
                         sx={{
                             minWidth: '100px',
-                            bgcolor: review?.isRecommend ? 'primary.main' : 'transparent',
-                            color: review?.isRecommend ? 'white' : 'text.secondary',
-                            borderColor: review?.isRecommend ? 'primary.main' : 'grey.300',
+                            bgcolor: review?.recommended ? 'primary.main' : 'transparent',
+                            color: review?.recommended ? 'white' : 'text.secondary',
+                            borderColor: review?.recommended ? 'primary.main' : 'grey.300',
                             '&.Mui-disabled': {
-                                bgcolor: review?.isRecommend ? 'primary.main' : 'transparent',
-                                color: review?.isRecommend ? 'white' : 'text.secondary',
-                                borderColor: review?.isRecommend ? 'primary.main' : 'grey.300',
+                                bgcolor: review?.recommended ? 'primary.main' : 'transparent',
+                                color: review?.recommended ? 'white' : 'text.secondary',
+                                borderColor: review?.recommended ? 'primary.main' : 'grey.300',
                             }
                         }}
                     >

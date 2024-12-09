@@ -21,7 +21,7 @@ function ReviewForm({open, onClose, onSubmit, campName}) {
     const [formData, setFormData] = useState({
         title: '',
         content: '',
-        isRecommend: false,
+        recommended: false,
         images: []
     });
     // 확인 다이얼로그 상태
@@ -151,15 +151,15 @@ function ReviewForm({open, onClose, onSubmit, campName}) {
 
                     <Box sx={{display: 'flex', justifyContent: 'flex-end', mt: 1}}>
                         <Button
-                            variant={formData.isRecommend ? "contained" : "outlined"}
-                            color={formData.isRecommend ? "primary" : "inherit"}
+                            variant={formData.recommended ? "contained" : "outlined"}
+                            color={formData.recommended ? "primary" : "inherit"}
                             startIcon={<ThumbUpIcon/>}
-                            onClick={() => setFormData(prev => ({...prev, isRecommend: !prev.isRecommend}))}
+                            onClick={() => setFormData(prev => ({...prev, recommended: !prev.recommended}))}
                             sx={{
                                 minWidth: '100px',
-                                bgcolor: formData.isRecommend ? 'primary.main' : 'transparent',
+                                bgcolor: formData.recommended ? 'primary.main' : 'transparent',
                                 '&:hover': {
-                                    bgcolor: formData.isRecommend ? 'primary.dark' : 'rgba(0, 0, 0, 0.04)'
+                                    bgcolor: formData.recommended ? 'primary.dark' : 'rgba(0, 0, 0, 0.04)'
                                 }
                             }}
                         >
