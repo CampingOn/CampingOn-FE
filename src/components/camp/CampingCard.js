@@ -6,7 +6,8 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { getRandomThumbnail } from "../../utils/ThumbnailUtils";
 import {useAuth} from 'context/AuthContext';
 
-const CampingCard = ({ thumbImage, name, address, keywords, lineIntro, marked, onClick, campId, onShowSnackbarNone, onShowSnackbarBookmark }) => {
+const CampingCard = ({ thumbImage, name, address, keywords, lineIntro, marked, onClick, campId
+                         , onShowSnackbarNone, onShowSnackbarBookmark, className }) => {
     const isAuthenticated = useAuth();
     const [liked, setLiked] = useState(marked);
     const [imageUrl, setImageUrl] = useState(""); // 이미지 URL 상태 추가
@@ -36,7 +37,7 @@ const CampingCard = ({ thumbImage, name, address, keywords, lineIntro, marked, o
     return (
         <div
             onClick={onClick} // 부모 컴포넌트에서 전달받은 onClick 이벤트 연결
-            className="w-96 h-72 border border-gray-200 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:-translate-y-2"
+            className={className}
         >
             <div className="relative w-full h-36"> {/* 이미지 영역 */}
                 <img
@@ -58,7 +59,7 @@ const CampingCard = ({ thumbImage, name, address, keywords, lineIntro, marked, o
                 <div
                     className="flex flex-wrap gap-1 mb-1"
                     style={{
-                        maxHeight: "calc(1 * 1.5rem)", // 한 줄의 높이(1.5rem) * 2줄
+                        maxHeight: "calc(2 * 1.5rem)", // 한 줄의 높이(1.5rem) * 2줄
                         overflow: "hidden",           // 2줄 초과 내용은 숨김 처리
                     }}
                 >
