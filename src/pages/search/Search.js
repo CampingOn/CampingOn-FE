@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useApi } from 'hooks/useApi';
-import { Box, Container, Typography } from '@mui/material';
-import {ScrollToTopFab, SearchBar, CampingCard} from 'components';
+import { Box, Container, Typography, CircularProgress } from '@mui/material';
+import {ScrollToTopFab, SearchBar, CampingCard,  NoResultsFound} from 'components';
 import { searchInfoService } from 'api/services/searchInfoService';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar';
@@ -33,7 +33,11 @@ function Search() {
         const params = new URLSearchParams(location.search);
         const city = params.get('city') || '';
         const keyword = params.get('keyword') || '';
-        setSearchParams({city, keyword});
+
+        setSearchParams({ city, keyword });
+        setCamps([]); // 캠프 목록 초기화
+        setPage(0);   // 페이지 초기화
+        setHasMore(true); // hasMore 초기화
 
         if (city || keyword) {
             const initialSearchParams = {
@@ -42,9 +46,13 @@ function Search() {
                 city: city,
                 keyword: keyword
             };
-            setCamps([]);
-            setPage(0);
-            searchCamps(initialSearchParams);
+            searchCamps(initialSearchParams).then(data => {
+                if (data?.content) {
+                    setCamps(data.content);
+                    setHasMore(data.totalElements > 12);
+                    setPage(1); // 다음 페이지를 위해 1로 설정
+                }
+            });
         }
     }, [location.search]);
 
@@ -60,13 +68,15 @@ function Search() {
                 keyword: searchParams.keyword
             };
             const data = await searchCamps(params);
-            const newCamps = data?.content || [];
 
-            setCamps((prev) => [...prev, ...newCamps]);
-            setPage((prev) => prev + 1);
-            setHasMore(data.totalElements > (page + 1) * 12);
+            if (data?.content) {
+                setCamps(prev => [...prev, ...data.content]);
+                setHasMore(data.totalElements > (page + 1) * 12);
+                setPage(prev => prev + 1);
+            }
         } catch (error) {
             console.error('캠핑장 검색 중 오류 발생:', error);
+            setHasMore(false);
         }
     }, [page, hasMore, isLoading, searchParams, searchCamps]);
 
@@ -135,9 +145,7 @@ function Search() {
             </Box>
 
             {camps.length === 0 && !isLoading && (
-                <Typography variant="h6" textAlign="center" sx={{my: 4}}>
-                    검색 결과가 없습니다.
-                </Typography>
+                <NoResultsFound />
             )}
 
             <Box sx={{
