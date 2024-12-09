@@ -25,6 +25,7 @@ import ModalComponent from "./camp/ModalComponent";
 import MapSection from "./camp/MapSection";
 import ModalGallery from "./camp/ModalGallery";
 import KeywordSelection from "./main/KeywordSelection";
+import NoResultsFound from "./main/NoResultsFound";
 
 export {
     Calendar,
@@ -54,4 +55,5 @@ export {
     MapSection,
     ModalGallery,
     KeywordSelection,
+    NoResultsFound,
 };
