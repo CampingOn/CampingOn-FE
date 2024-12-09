@@ -30,7 +30,7 @@ function ImageCarousel({ images }) {
     }
 
     return (
-        <Box sx={{ position: 'relative', width: '100%', height: 300 }}>
+        <Box sx={{ position: 'relative', width: '80%', margin: '0 auto', height: 300 }}>
             <Box
                 sx={{
                     width: '100%',
@@ -85,20 +85,36 @@ function ImageCarousel({ images }) {
                         <KeyboardArrowRight fontSize="large" />
                     </IconButton>
 
+                    {/* 페이지 인디케이터 점 */}
                     <Box
                         sx={{
                             position: 'absolute',
-                            bottom: 8,
+                            bottom: 16,
                             left: '50%',
                             transform: 'translateX(-50%)',
-                            bgcolor: 'rgba(0,0,0,0.5)',
-                            color: 'white',
-                            px: 2,
-                            py: 0.5,
-                            borderRadius: 1
+                            display: 'flex',
+                            gap: 1
                         }}
                     >
-                        {currentIndex + 1} / {images.length}
+                        {images.map((_, index) => (
+                            <Box
+                                key={index}
+                                sx={{
+                                    width: 8,
+                                    height: 8,
+                                    borderRadius: '50%',
+                                    bgcolor: currentIndex === index
+                                        ? '#FCD34D'
+                                        : 'rgba(0, 0, 0, 0.25)',
+                                    transition: 'all 0.3s ease',
+                                    cursor: 'pointer',
+                                    '&:hover': {
+                                        transform: 'scale(1.2)'
+                                    }
+                                }}
+                                onClick={() => setCurrentIndex(index)}
+                            />
+                        ))}
                     </Box>
                 </>
             )}
