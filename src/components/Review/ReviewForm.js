@@ -26,6 +26,8 @@ function ReviewForm({open, onClose, onSubmit, campName}) {
     });
     // 확인 다이얼로그 상태
     const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+    const [titleError, setTitleError] = useState('');
+    const [contentError, setContentError] = useState('');
 
     const handleSubmitClick = () => {
         setConfirmDialogOpen(true);
@@ -38,6 +40,54 @@ function ReviewForm({open, onClose, onSubmit, campName}) {
             onClose();
         } catch (error) {
             console.error('리뷰 저장 실패:', error);
+        }
+    };
+
+    // 필수 입력값 검증
+    const isFormValid = formData.title.trim() !== '' && formData.content.trim() !== '';
+
+    const handleTitleChange = (e) => {
+        const value = e.target.value;
+        setFormData(prev => ({...prev, title: value}));
+        setTitleError(value.trim() === '' ? '제목을 입력하세요.' : '');
+    };
+
+    const handleContentChange = (e) => {
+        const value = e.target.value;
+        setFormData(prev => ({...prev, content: value}));
+        setContentError(value.trim() === '' ? '내용을 입력하세요.' : '');
+    };
+
+    // 입력창 공통 스타일
+    const commonTextFieldStyles = {
+        '& .MuiOutlinedInput-root': {
+            '& .MuiOutlinedInput-input': {
+                '&::selection': {
+                    backgroundColor: 'transparent'
+                },
+                '&:focus': {
+                    outline: 'none'
+                }
+            },
+            '& fieldset': {
+                borderColor: 'rgba(0, 0, 0, 0.23)'
+            },
+            '&:hover fieldset': {
+                borderColor: 'rgba(0, 0, 0, 0.23)'
+            },
+            // focused 스타일 수정
+            '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'rgba(0, 0, 0, 0.23) !important',
+                borderWidth: 1
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: 'rgba(0, 0, 0, 0.23) !important',
+                borderWidth: 1
+            }
+        },
+        // 라벨 스타일 수정
+        '& .MuiInputLabel-root.Mui-focused': {
+            color: 'rgba(0, 0, 0, 0.6) !important'
         }
     };
 
@@ -76,9 +126,13 @@ function ReviewForm({open, onClose, onSubmit, campName}) {
                     <TextField
                         fullWidth
                         label="제목"
+                        required
                         value={formData.title}
-                        onChange={(e) => setFormData(prev => ({...prev, title: e.target.value}))}
-                        sx={{mb: 2}}
+                        onChange={handleTitleChange}
+                        onBlur={() => setTitleError(formData.title.trim() === '' ? '제목을 입력하세요.' : '')}
+                        error={!!titleError}
+                        helperText={titleError}
+                        sx={{mb: 2, ...commonTextFieldStyles}}
                     />
 
                     <TextField
@@ -86,8 +140,13 @@ function ReviewForm({open, onClose, onSubmit, campName}) {
                         multiline
                         rows={4}
                         label="후기 내용"
+                        required
                         value={formData.content}
-                        onChange={(e) => setFormData(prev => ({...prev, content: e.target.value}))}
+                        onChange={handleContentChange}
+                        onBlur={() => setContentError(formData.content.trim() === '' ? '내용을 입력하세요.' : '')}
+                        error={!!contentError}
+                        helperText={contentError}
+                        sx={commonTextFieldStyles}
                     />
 
                     <Box sx={{display: 'flex', justifyContent: 'flex-end', mt: 1}}>
@@ -118,11 +177,12 @@ function ReviewForm({open, onClose, onSubmit, campName}) {
                     <Button
                         onClick={handleSubmitClick}
                         variant="contained"
+                        disabled={!isFormValid}
                         sx={{
                             minWidth: '120px',
-                            bgcolor: '#FCD34D',
+                            bgcolor: isFormValid ? '#FCD34D' : '#E5E7EB',
                             '&:hover': {
-                                bgcolor: '#F6AD55'
+                                bgcolor: isFormValid ? '#F6AD55' : '#E5E7EB'
                             }
                         }}
                     >
