@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Card,
     CardContent,
@@ -48,9 +48,10 @@ const CampReservationCard = ({ data, onReviewChange }) => {
     const [cancelReason, setCancelReason] = useState(""); // 취소 사유 상태
     const [selectedReservationId, setSelectedReservationId] = useState(null); // 선택된 예약 ID
     const [localStatus, setLocalStatus] = useState(status);
+
     const [reviewFormOpen, setReviewFormOpen] = useState(false);
     const [reviewModalOpen, setReviewModalOpen] = useState(false);
-    const [detailedReview, setDetailedReview] = useState(null);
+
     const {
         execute: cancelReservation,
         loading: cancelLoading,
@@ -64,7 +65,6 @@ const CampReservationCard = ({ data, onReviewChange }) => {
         setSelectedReservationId(reservationId);
         setOpen(true); // 예약 취소 모달 열기
     };
-
 
     const handleConfirmCancel = async () => {
         try {
@@ -94,14 +94,15 @@ const CampReservationCard = ({ data, onReviewChange }) => {
         }
     };
 
+
     const handleButtonClick = (reservationId) => {
         if (status === "예약완료") {
             handleCancelClick(reservationId);
         } else if (status === "체크인완료") {
-            if (reviewDto) {
-                handleReviewClick();
-            } else {
+            if (!reviewDto) {
                 setReviewFormOpen(true);
+            } else {
+                handleReviewClick();
             }
         }
     };
@@ -109,23 +110,17 @@ const CampReservationCard = ({ data, onReviewChange }) => {
     // ReviewForm의 작성 핸들러
     const handleReviewSubmit = async (formData) => {
         try {
-            const response = await reviewService.createReview(campResponseDto.id, id, formData);
-            const createdReview = response.data;
-
-            // 상세 정보 가져오기
-            const { data: detailData } = await reviewService.getReviewDetail(
+            await reviewService.createReview(
                 campResponseDto.id,
-                createdReview.id
+                data.id,
+                formData
             );
-            setDetailedReview(detailData);
-
             setReviewFormOpen(false);
-            setSnackbarMessage("리뷰가 성공적으로 작성되었습니다.");
+            setSnackbarMessage("리뷰가 작성되었습니다.");
             setSnackbarSeverity("success");
             setSnackbarOpen(true);
-            onReviewChange?.();
+            onReviewChange();
         } catch (error) {
-            console.error("리뷰 작성 실패:", error.response?.data);
             setSnackbarMessage(error.response?.data?.message || "리뷰 작성 중 오류가 발생했습니다.");
             setSnackbarSeverity("error");
             setSnackbarOpen(true);
@@ -134,48 +129,15 @@ const CampReservationCard = ({ data, onReviewChange }) => {
 
     const handleReviewClick = async () => {
         try {
-            if (reviewDto.id) {
-                const { data } = await reviewService.getReviewDetail(
-                    campResponseDto.id,
-                    reviewDto.id
-                );
-
-                setDetailedReview({
-                    ...data,
-                    images: data.images || []
-                });
-                setReviewModalOpen(true);  // 데이터를 받아온 후에 모달을 열기
+            if (reviewDto?.id) {
+                setReviewModalOpen(true);
             }
         } catch (error) {
-            console.error('Review detail error:', error);
             setSnackbarMessage("리뷰 정보를 불러오는데 실패했습니다.");
             setSnackbarSeverity("error");
             setSnackbarOpen(true);
         }
     };
-
-    // ReviewModal의 삭제 핸들러
-    const handleReviewDelete = async () => {
-        try {
-            if (!reviewDto?.id) {
-                setSnackbarMessage("리뷰 정보를 찾을 수 없습니다.");
-                setSnackbarSeverity("error");
-                setSnackbarOpen(true);
-                return;
-            }
-            await reviewService.deleteReview(reviewDto.id);
-            setReviewModalOpen(false);
-            setSnackbarMessage("리뷰가 삭제되었습니다.");
-            setSnackbarSeverity("success");
-            setSnackbarOpen(true);
-            onReviewChange();  // 목록 새로고침
-        } catch (error) {
-            setSnackbarMessage("리뷰 삭제 중 오류가 발생했습니다.");
-            setSnackbarSeverity("error");
-            setSnackbarOpen(true);
-        }
-    };
-
 
     const handleClose = () => {
         setOpen(false); // 모달 닫기
@@ -202,7 +164,9 @@ const CampReservationCard = ({ data, onReviewChange }) => {
 
     const buttonProps = getButtonProps();
 
-    const imageUrl = campResponseDto.thumbImage === ""? `${process.env.PUBLIC_URL}/default/NoThumb.jpg` : campResponseDto.thumbImage ;
+    const imageUrl = campResponseDto.thumbImage === ""
+        ? `${process.env.PUBLIC_URL}/default/NoThumb.jpg`
+        : campResponseDto.thumbImage ;
 
     return (
         <Card
@@ -298,35 +262,13 @@ const CampReservationCard = ({ data, onReviewChange }) => {
                 onClose={() => setReviewFormOpen(false)}
                 onSubmit={handleReviewSubmit}
                 campName={campResponseDto.campName}
-                initialData={detailedReview}  // 상세 리뷰 데이터 전달
             />
             {/* 리뷰 상세 모달 */}
             <ReviewModal
                 open={reviewModalOpen}
                 onClose={() => setReviewModalOpen(false)}
-                review={detailedReview || (reviewDto?.id ? reviewDto : {})}
-                isOwner={true}
+                review={reviewDto}
                 campName={campResponseDto.campName}
-                onEdit={() => {
-                    setReviewModalOpen(false);
-                    // 수정 폼 열기 전에 상세 데이터 확인
-                    if (!detailedReview) {
-                        // 상세 데이터가 없으면 가져오기
-                        reviewService.getReviewDetail(campResponseDto.id, reviewDto.id)
-                            .then(({ data }) => {
-                                setDetailedReview(data);
-                                setReviewFormOpen(true);
-                            })
-                            .catch(error => {
-                                setSnackbarMessage("리뷰 정보를 불러오는데 실패했습니다.");
-                                setSnackbarSeverity("error");
-                                setSnackbarOpen(true);
-                            });
-                    } else {
-                        setReviewFormOpen(true);
-                    }
-                }}
-                onDelete={handleReviewDelete}
             />
 
             {/* 예약 취소 확인 모달 */}
