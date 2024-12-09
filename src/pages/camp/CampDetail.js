@@ -13,7 +13,7 @@ import {
     CampDatePicker,
     ModalComponent
 } from 'components';
-import { defaultThumbnails, getRandomThumbnail } from "utils/ThumbnailUtils"; // 랜덤 썸네일 유틸 임포트
+import { getRandomThumbnail } from "utils/ThumbnailUtils";
 import { ko } from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import "../../style/camp-detail.css";

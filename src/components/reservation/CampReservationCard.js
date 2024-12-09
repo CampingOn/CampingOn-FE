@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { defaultThumbnails, getRandomThumbnail } from "../../utils/ThumbnailUtils"; // 함수와 배열 임포트
+import { getRandomThumbnail } from "../../utils/ThumbnailUtils";
 import {
     Card,
     CardContent,
@@ -165,8 +165,6 @@ const CampReservationCard = ({ data, onReviewChange }) => {
 
     const buttonProps = getButtonProps();
 
-    const imageUrl = campResponseDto.thumbImage === "" ? getRandomThumbnail(defaultThumbnails) : campResponseDto.thumbImage;
-
     return (
         <Card
             sx={{
@@ -182,15 +180,33 @@ const CampReservationCard = ({ data, onReviewChange }) => {
             <Box
                 sx={{
                     flex: { sm: "2" },
-                    backgroundImage: `url(${imageUrl})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
                     height: { xs: 200, sm: "auto" },
                     aspectRatio: { sm: "16 / 9" },
                     width: { xs: "100%", sm: "auto" },
+                    ...(campResponseDto.thumbImage ? {
+                        backgroundImage: `url(${campResponseDto.thumbImage})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                    } : {
+                        position: 'relative'
+                    })
                 }}
-            />
-
+            >
+                {(!campResponseDto.thumbImage || campResponseDto.thumbImage === "") && (
+                    <img
+                        src={getRandomThumbnail("")}
+                        alt="기본 이미지"
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            position: 'absolute',
+                            top: 0,
+                            left: 0
+                        }}
+                    />
+                )}
+            </Box>
             {/* 정보 섹션 */}
             <Box sx={{ display: "flex", flexDirection: "column", flex: "3", padding: 2 }}>
                 <CardContent>

@@ -5,6 +5,7 @@ import {reservationService } from "api/services/reservationService";
 import {ReservationConfirmCard, YellowButton, OperationPolicy, CustomSnackbar} from 'components';
 import {useApi} from "hooks/useApi";
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import StyledSelect from 'components/common/StyledSelect';
 
 const Reservation = () => {
     const { campId, siteId } = useParams();
@@ -276,26 +277,46 @@ const Reservation = () => {
                             width: '100%'
                         }}>
                             <FormControl variant="outlined" style={{width: '150px'}}>
-                                <InputLabel id="guestCnt-label">게스트 수 선택</InputLabel>
-                                <Select
+                                <InputLabel 
+                                    id="guestCnt-label"
+                                    sx={{
+                                        '&.Mui-focused': { 
+                                            color: '#ffc400'
+                                        }
+                                    }}
+                                >
+                                    게스트 수 선택
+                                </InputLabel>
+                                <StyledSelect
                                     labelId="guestCnt-label"
                                     id="guestCnt"
                                     value={guestCnt}
                                     onChange={handleGuestCntChange}
                                     label="게스트 수 선택"
-                                    variant="outlined"
-                                    sx={{
-                                        '& .MuiOutlinedInput-root': {
-                                            '& fieldset': {
-                                                borderColor: '#ffc400',
-                                            },
-                                            '&:hover fieldset': {
-                                                borderColor: '#ffc400',
-                                            },
-                                            '&.Mui-focused fieldset': {
-                                                borderColor: '#ffc400',
-                                            },
-                                        },
+                                    style={{width: '170px'}}
+                                    MenuProps={{ 
+                                        PaperProps: {
+                                            sx: {
+                                                '& .MuiMenuItem-root': {
+                                                    '&.Mui-selected': {
+                                                        backgroundColor: '#fcd34d !important',
+                                                        color: 'white',
+                                                        '&:hover': {
+                                                            backgroundColor: '#fcd34d !important',
+                                                        },
+                                                        '& .MuiTouchRipple-child': {
+                                                            backgroundColor: 'rgb(255,255,255)'
+                                                        }
+                                                    },
+                                                    '&:hover': {
+                                                        backgroundColor: 'rgba(252,211,77,0.22)'
+                                                    },
+                                                    '& .MuiTouchRipple-child': {
+                                                        backgroundColor: 'rgba(168,131,0,0.38)'
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }}
                                 >
                                     {[...Array(campSiteData.maximumPeople)].map((_, index) => (
@@ -303,13 +324,13 @@ const Reservation = () => {
                                             {index + 1}명
                                         </MenuItem>
                                     ))}
-                                </Select>
+                                </StyledSelect>
                             </FormControl>
 
                             <YellowButton
                                 onClick={handleReserve}
-                                size="large" 
-                                style={{padding: '10px 50px', backgroundColor: '#ff6927'}}
+                                size="large"
+                                style={{backgroundColor: '#ff8146'}}
                             >
                                 예약하기
                             </YellowButton>
