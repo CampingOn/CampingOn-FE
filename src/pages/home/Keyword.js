@@ -1,4 +1,4 @@
-import KeywordSelection from "../../components/KeywordSelection";
+import KeywordSelection from "../../components/main/KeywordSelection";
 import {Box, Typography} from "@mui/material";
 
 const Keyword = () => {
