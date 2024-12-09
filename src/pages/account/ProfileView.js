@@ -7,7 +7,7 @@ import { reservationService } from "api/services/reservationService";
 import { CampReservationCard } from "components";
 
 
-const imageUrl = 'profile.png';
+const imageUrl = 'default/profile.png';
 
 const ProfileView = () => {
 
