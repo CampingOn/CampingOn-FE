@@ -78,7 +78,7 @@ apiClient.interceptors.response.use(
 
                 try {
                     // Refresh Token으로 Access Token 재발급
-                    const response = await axios.get(`${baseUrl}/api/token/refresh`, {
+                    const response = await axios.get(`${baseUrl}api/token/refresh`, {
                         withCredentials: true, // 쿠키를 통한 인증
                     });
 
