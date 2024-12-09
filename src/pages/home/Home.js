@@ -4,10 +4,7 @@ import {useNavigate} from "react-router-dom";
 import {Box, Container, Typography} from "@mui/material";
 import {campService} from "../../api/services/campService";
 import {searchInfoService} from "../../api/services/searchInfoService";
-import CampingCard from "../../components/CampingCard";
-import ScrollToTopFab from "../../components/ScrollToTopFab";
-import MainCarousel from "../../components/MainCarousel";
-import SearchBar from "../../components/SearchBar";
+import {CampingCard, ScrollToTopFab, MainCarousel, SearchBar, } from 'components';
 import {useAuth} from "../../context/AuthContext";
 import Snackbar from "@mui/material/Snackbar";
 

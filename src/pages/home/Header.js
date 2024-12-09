@@ -1,17 +1,29 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import {Link, useNavigate, useLocation} from 'react-router-dom';
 import {useAuth} from 'context/AuthContext';
-import {YellowButton} from "components";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
+import LockTwoToneIcon from '@mui/icons-material/LockTwoTone';
 
 const Header = () => {
     const location = useLocation();
     const [logo, setLogo] = useState(`/logo/logoWide.svg`);
     const {isAuthenticated, logout, isLoading} = useAuth();
     const navigate = useNavigate();
+
+    useEffect(() => {
+
+        // 최종 상태 체크를 위해 지연
+        const timer = setTimeout(() => {
+            console.log('👀 최종 로그인 상태:', isAuthenticated);
+        }, 100);
+
+        // 타이머 제거
+        return () => clearTimeout(timer);
+    }, [isAuthenticated]);
 
     useEffect(() => {
         setValue(getTabValue(location.pathname));
@@ -21,13 +33,13 @@ const Header = () => {
     const getTabValue = (pathname) => {
         switch (pathname) {
             case '/my-reservation':
-                return 0;
-            case '/my-bookmark':
                 return 1;
-            case '/my-page':
+            case '/my-bookmark':
                 return 2;
+            case '/my-page':
+                return 3;
             default:
-                return 3;  // 숨겨진 탭의 인덱스
+                return 0;
         }
     };
 
@@ -50,8 +62,6 @@ const Header = () => {
         return null;
     }
 
-    console.log('유저로그인상태', isAuthenticated);
-
     const handleAuthClick = () => {
         if (isAuthenticated) {
             logout();
@@ -64,18 +74,18 @@ const Header = () => {
         setValue(newValue);
 
         switch (newValue) {
-            case 0:
+            case 1:
                 navigate('/my-reservation');
                 break;
-            case 1:
+            case 2:
                 navigate('/my-bookmark');
                 break;
-            case 2:
+            case 3:
                 navigate('/my-page');
                 break;
             default:
                 navigate('/');
-                setValue(null);
+                setValue(0);
                 break;
         }
     };
@@ -113,10 +123,20 @@ const Header = () => {
                                     '& .MuiTabs-indicator': {
                                         backgroundColor: '#ffc400',
                                         height: '2.5px',
-                                        display: value === 3 ? 'none' : 'block'
                                     },
                                 }}
                             >
+                                <Tab
+                                    label="" style={{paddingBottom: '30px'}}
+                                    sx={{
+                                        padding: 0,
+                                        minWidth: 0,
+                                        width: 0,
+                                        overflow: 'hidden',
+                                        opacity: 0,
+                                        pointerEvents: 'none'
+                                    }}
+                                />
                                 <Tab
                                     label="나의예약" style={{paddingBottom: '30px'}}
                                     sx={{
@@ -144,24 +164,17 @@ const Header = () => {
                                         },
                                     }}
                                 />
-                                <Tab
-                                    label="" style={{paddingBottom: '30px'}}
-                                    sx={{
-                                        padding: 0,
-                                        minWidth: 0,
-                                        width: 0,
-                                        overflow: 'hidden',
-                                        opacity: 0,
-                                        pointerEvents: 'none'
-                                    }}
-                                />
                             </Tabs>
                         </div>
                     )}
-
-                    <YellowButton onClick={handleAuthClick}>
-                        {isAuthenticated ? 'Logout' : 'Login'}
-                    </YellowButton>
+                        {isAuthenticated ?
+                            <LockTwoToneIcon
+                                onClick={handleAuthClick}
+                                sx={{ fontSize: 30, color: "#ffc400", cursor: 'pointer', marginTop: '5px' }} /> :
+                            <LockOpenTwoToneIcon
+                                onClick={handleAuthClick}
+                                sx={{ fontSize: 30, color: "#ffc400", cursor: 'pointer', marginTop: '5px' }} />
+                        }
                 </Toolbar>
             </AppBar>
 

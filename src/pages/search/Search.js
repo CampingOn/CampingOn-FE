@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useApi } from 'hooks/useApi';
 import { Box, Container, Typography } from '@mui/material';
-import ScrollToTopFab from 'components/ScrollToTopFab';
+import {ScrollToTopFab, SearchBar, CampingCard} from 'components';
 import { searchInfoService } from 'api/services/searchInfoService';
 import { useLocation, useNavigate } from 'react-router-dom';
-import SearchBar from 'components/SearchBar';
-import CampingCard from 'components/CampingCard';
 import Snackbar from '@mui/material/Snackbar';
 
 function Search() {

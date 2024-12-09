@@ -21,7 +21,7 @@ function ImageCarousel({ images }) {
         return (
             <Box sx={{ width: '100%', height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <img
-                    src="/default/review-image.jpg"
+                    src="/default/reviewImage.jpg"
                     alt="기본 이미지"
                     style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
                 />

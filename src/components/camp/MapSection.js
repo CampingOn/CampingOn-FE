@@ -1,5 +1,5 @@
 import React from "react";
-import KakaoMap from "../../components/KakaoMap";
+import KakaoMap from "./KakaoMap";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 const MapSection = ({ latitude, longitude, name, state }) => (

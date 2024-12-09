@@ -15,7 +15,7 @@ import {
     Close as CloseIcon,
     ThumbUp as ThumbUpIcon
 } from '@mui/icons-material';
-import ImageUploader from '../ImageUploader';
+import ImageUploader from './ImageUploader';
 
 function ReviewForm({open, onClose, onSubmit, campName}) {
     const [formData, setFormData] = useState({

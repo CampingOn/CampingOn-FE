@@ -19,7 +19,7 @@ const getImageBySiteType = (siteType) => {
 };
 
 const ReservationConfirmCard = ({ data }) => {
-    const { maximumPeople, price, checkinTime, checkoutTime, indoorFacility, siteType, campSimpleDto: { streetAddr } } = data;
+    const { maximumPeople, price, checkinTime, checkoutTime, indoorFacility, siteType, campSimpleDto: { campName, streetAddr } } = data;
 
     const image = getImageBySiteType(siteType);
 
@@ -55,14 +55,14 @@ const ReservationConfirmCard = ({ data }) => {
                 {/* 정보 섹션 */}
                 <Box sx={{ display: "flex", flexDirection: "column", flex: "3", padding: 2 }}>
                     <CardContent>
-                        <Typography variant="h5" sx={{ marginBottom: 2, fontWeight: 'bold' }}>{siteType}</Typography>
+                        <Typography variant="h5" sx={{ marginBottom: 2, fontWeight: 'bold' }}>{campName} - {siteType}</Typography>
                         <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
                             <LocationOnOutlinedIcon sx={{ fontSize: 20, marginRight: 1, color: "green" }} />
                             <Typography variant="body2">{streetAddr}</Typography>
                         </Box>
                         <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
                             <FestivalOutlined sx={{ fontSize: 20, marginRight: 1, color: "#ff7961" }} />
-                            <Typography variant="body2">내부시설: {indoorFacility ? indoorFacility : "없음"}</Typography>
+                            <Typography variant="body2">{indoorFacility ? indoorFacility : "내부시설 정보 없음"}</Typography>
                         </Box>
                         <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
                             <UpdateOutlinedIcon sx={{ fontSize: 20, marginRight: 1, color: "#ffc107" }} />

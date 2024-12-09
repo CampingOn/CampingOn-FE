@@ -4,7 +4,7 @@ import {campSiteService} from 'api/services/campSiteService';
 import {reservationService } from "api/services/reservationService";
 import {ReservationConfirmCard, YellowButton, OperationPolicy, CustomSnackbar} from 'components';
 import {useApi} from "hooks/useApi";
-import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 const Reservation = () => {
     const { campId, siteId } = useParams();
@@ -172,7 +172,7 @@ const Reservation = () => {
             totalPrice: info.totalPrice
         };
 
-        console.log('예약 요청 정보:', requestData);
+        console.table([{title: '새 예약 요청', ...requestData}]);
 
         await createReservation(requestData);
         
@@ -230,32 +230,18 @@ const Reservation = () => {
             <Box sx={{
                 padding: '0 16px',
                 minHeight: '100vh',
-                paddingBottom: '100px'
+                paddingBottom: '0px'
             }}>
                 {campSiteData ? (
                     <div>
-                        <div style={{fontSize: '0.9rem', textAlign: 'left', margin: '30px 0 0 0'}}>
-                            {campSiteData.campSimpleDto.city} {campSiteData.campSimpleDto.state}
-                        </div>
-                        <div style={{fontSize: '1.8rem', textAlign: 'left', margin: '5px 0 20px 0', fontWeight: 'bold'}}>
-                            <Link 
-                                to={`/camps/${campSiteData.campSimpleDto.campId}`}
-                                style={{ 
-                                    textDecoration: 'none', 
-                                    color: 'inherit',
-                                    '&:hover': {
-                                        textDecoration: 'underline'
-                                    }
-                                }}
-                            >
-                                {campSiteData.campSimpleDto.campName}
-                            </Link>
+                        <div style={{fontSize: '1.8rem', textAlign: 'left', margin: '30px 0 20px 0', fontWeight: 'bold'}}>
+                            예약 확인
                         </div>
                         <ReservationConfirmCard
                             data={campSiteData}
                         />
 
-                        <div className="camp-detail-intro-box" style={{ marginTop: '50px'}}>
+                        <div className="camp-detail-intro-box" style={{ marginTop: '30px'}}>
                             <span className="camp-detail-intro-title">예약 안내</span>
                             <div className="camp-detail-description" style={{
                                 padding: '10px 5px',
@@ -287,7 +273,6 @@ const Reservation = () => {
                             justifyContent: 'space-between',
                             alignItems: 'center',
                             marginTop: '30px',
-                            marginBottom: '60px',
                             width: '100%'
                         }}>
                             <FormControl variant="outlined" style={{width: '150px'}}>
@@ -324,7 +309,7 @@ const Reservation = () => {
                             <YellowButton
                                 onClick={handleReserve}
                                 size="large" 
-                                style={{padding: '10px 50px'}}
+                                style={{padding: '10px 50px', backgroundColor: '#ff6927'}}
                             >
                                 예약하기
                             </YellowButton>
