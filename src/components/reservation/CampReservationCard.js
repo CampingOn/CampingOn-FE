@@ -23,9 +23,10 @@ import {KeyboardTab, Start} from "@mui/icons-material";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
 import {FestivalOutlined} from "@mui/icons-material";
+import { ReviewModal, ReviewForm } from 'components';
+import { reviewService } from 'api/services/reviewService';
 
-
-const CampReservationCard = ({ data }) => {
+const CampReservationCard = ({ data, onReviewChange }) => {
     const {
         id,
         checkinDate,
@@ -37,7 +38,8 @@ const CampReservationCard = ({ data }) => {
         totalPrice,
         campResponseDto,
         campAddrResponseDto,
-        campSiteResponseDto
+        campSiteResponseDto,
+        reviewDto,
     } = data;
     const navigate = useNavigate();
     const [open, setOpen] = useState(false); // 예약 취소 모달 상태
@@ -47,6 +49,10 @@ const CampReservationCard = ({ data }) => {
     const [cancelReason, setCancelReason] = useState(""); // 취소 사유 상태
     const [selectedReservationId, setSelectedReservationId] = useState(null); // 선택된 예약 ID
     const [localStatus, setLocalStatus] = useState(status);
+
+    const [reviewFormOpen, setReviewFormOpen] = useState(false);
+    const [reviewModalOpen, setReviewModalOpen] = useState(false);
+
     const {
         execute: cancelReservation,
         loading: cancelLoading,
@@ -60,7 +66,6 @@ const CampReservationCard = ({ data }) => {
         setSelectedReservationId(reservationId);
         setOpen(true); // 예약 취소 모달 열기
     };
-
 
     const handleConfirmCancel = async () => {
         try {
@@ -90,15 +95,50 @@ const CampReservationCard = ({ data }) => {
         }
     };
 
+
     const handleButtonClick = (reservationId) => {
         if (status === "예약완료") {
-            handleCancelClick(reservationId); // 예약 취소 모달 열기
-            console.log(reservationId);
+            handleCancelClick(reservationId);
         } else if (status === "체크인완료") {
-            console.log("후기 작성 모달 열기"); // 후기 작성 동작
+            if (!reviewDto) {
+                setReviewFormOpen(true);
+            } else {
+                handleReviewClick();
+            }
         }
     };
 
+    // ReviewForm의 작성 핸들러
+    const handleReviewSubmit = async (formData) => {
+        try {
+            await reviewService.createReview(
+                campResponseDto.id,
+                data.id,
+                formData
+            );
+            setReviewFormOpen(false);
+            setSnackbarMessage("리뷰가 작성되었습니다.");
+            setSnackbarSeverity("success");
+            setSnackbarOpen(true);
+            onReviewChange();
+        } catch (error) {
+            setSnackbarMessage(error.response?.data?.message || "리뷰 작성 중 오류가 발생했습니다.");
+            setSnackbarSeverity("error");
+            setSnackbarOpen(true);
+        }
+    };
+
+    const handleReviewClick = async () => {
+        try {
+            if (reviewDto?.id) {
+                setReviewModalOpen(true);
+            }
+        } catch (error) {
+            setSnackbarMessage("리뷰 정보를 불러오는데 실패했습니다.");
+            setSnackbarSeverity("error");
+            setSnackbarOpen(true);
+        }
+    };
 
     const handleClose = () => {
         setOpen(false); // 모달 닫기
@@ -115,7 +155,9 @@ const CampReservationCard = ({ data }) => {
             case "예약취소":
                 return { text: "예약 취소됨", variant: "outlined", disabled: true };
             case "체크인완료":
-                return { text: "후기 작성", variant: "contained", disabled: false };
+                return reviewDto
+                    ? { text: "후기 확인", variant: "contained", disabled: false }
+                    : { text: "후기 작성", variant: "contained", disabled: false };
             default:
                 return { text: "상태 없음", variant: "contained", disabled: true };
         }
@@ -210,6 +252,22 @@ const CampReservationCard = ({ data }) => {
                     </Button>
                 </Box>
             </Box>
+
+            {/* 리뷰 작성 폼 */}
+            <ReviewForm
+                open={reviewFormOpen}
+                onClose={() => setReviewFormOpen(false)}
+                onSubmit={handleReviewSubmit}
+                campName={campResponseDto.campName}
+            />
+            {/* 리뷰 상세 모달 */}
+            <ReviewModal
+                open={reviewModalOpen}
+                onClose={() => setReviewModalOpen(false)}
+                review={reviewDto}
+                campName={campResponseDto.campName}
+            />
+
             {/* 예약 취소 확인 모달 */}
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>예약 취소</DialogTitle>

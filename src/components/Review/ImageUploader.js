@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
     Box,
     Typography,
@@ -46,8 +46,11 @@ const DeleteButton = styled(IconButton)({
     }
 });
 
-const ImageUploader = ({ onImagesChange }) => {
-    const [images, setImages] = useState([]);
+const ImageUploader = ({ onChange, images: initialImages = [] }) => {
+    const [images, setImages] = useState(initialImages.map(file => ({    // 여기서 image를 파라미터로 받음
+        file,
+        preview: typeof file === 'string' ? file : URL.createObjectURL(file)
+    })));
     const [isDragging, setIsDragging] = useState(false);
 
     // 파일 유효성 검사 함수
@@ -85,12 +88,8 @@ const ImageUploader = ({ onImagesChange }) => {
             preview: URL.createObjectURL(file)
         }));
 
-        setImages(prev => {
-            const updated = [...prev, ...newImages];
-            onImagesChange(updated.map(img => img.file));
-            return updated;
-        });
-    }, [images, onImagesChange]);
+        setImages(prev => [...prev, ...newImages]);
+    }, [images]);
 
     // 드래그 앤 드롭 이벤트 핸들러
     const handleDragOver = useCallback((e) => {
@@ -116,19 +115,31 @@ const ImageUploader = ({ onImagesChange }) => {
 
     // 이미지 삭제 핸들러
     const handleDeleteImage = useCallback((index) => {
-        setImages(prev => {
-            const updated = prev.filter((_, i) => i !== index);
-            onImagesChange(updated.map(img => img.file));
-            return updated;
-        });
-    }, [onImagesChange]);
+        setImages(prev => prev.filter((_, i) => i !== index));
+    }, []);
 
     // 컴포넌트 언마운트 시 미리보기 URL 정리
-    React.useEffect(() => {
+    useEffect(() => {
         return () => {
             images.forEach(image => URL.revokeObjectURL(image.preview));
         };
     }, [images]);
+
+    useEffect(() => {
+        if (initialImages.length > 0) {
+            const formattedImages = initialImages.map(file => ({
+                file,
+                preview: typeof file === 'string' ? file : URL.createObjectURL(file)
+            }));
+            setImages(formattedImages);
+        }
+    }, [initialImages]);
+
+    // 이미지 상태가 변경될 때만 onChange 호출
+    useEffect(() => {
+        const files = images.map(img => img.file).filter(file => file instanceof File);
+        onChange(files);
+    }, [images, onChange]);
 
     return (
         <Box>
