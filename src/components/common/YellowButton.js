@@ -17,6 +17,15 @@ const StyledButton = styled(Button)(({ size }) => ({
     '&:hover': {
         backgroundColor: '#FCD34D',
     },
+    '@media (max-width: 600px)': {
+        padding: '10px 20px',
+    },
+    '@media (min-width: 601px) and (max-width: 960px)': {
+        padding: '10px 70px',
+    },
+    '@media (min-width: 961px)': {
+        padding: '10px 150px',
+    }
 }));
 
 const YellowButton = ({ onClick, children, size = 'extra-small', style }) => {
