@@ -18,5 +18,11 @@ export const searchInfoService = {
         return apiClient.get('/api/mongo/camps/matched', {
             params: { page, size }
         });
+    },
+
+    getAutocompleteResults: (word) => {
+        return apiClient.get('/api/mongo/camps/autocomplete', {
+            params: {word}
+        });
     }
 };
