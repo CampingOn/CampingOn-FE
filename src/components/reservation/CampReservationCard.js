@@ -52,6 +52,8 @@ const CampReservationCard = ({ data, onReviewChange }) => {
 
     const [reviewFormOpen, setReviewFormOpen] = useState(false);
     const [reviewModalOpen, setReviewModalOpen] = useState(false);
+    // 리뷰 상세 정보
+    const [reviewDetail, setReviewDetail] = useState(null);
 
     const {
         execute: cancelReservation,
@@ -131,6 +133,13 @@ const CampReservationCard = ({ data, onReviewChange }) => {
     const handleReviewClick = async () => {
         try {
             if (reviewDto?.id) {
+                console.log('리뷰 조회 시작 - reviewDto:', reviewDto);
+                // 리뷰 상세 정보 API 호출
+                const response = await reviewService.getReviewDetail(reviewDto.id);
+                console.log('저장된 리뷰 상세 정보:', response.data);
+                // 상세 정보 저장
+                setReviewDetail(response.data);
+
                 setReviewModalOpen(true);
             }
         } catch (error) {
@@ -280,7 +289,7 @@ const CampReservationCard = ({ data, onReviewChange }) => {
             <ReviewModal
                 open={reviewModalOpen}
                 onClose={() => setReviewModalOpen(false)}
-                review={reviewDto}
+                review={reviewDetail}   // 상세 정보 전달
                 campName={campResponseDto.campName}
             />
 

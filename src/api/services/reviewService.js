@@ -6,7 +6,7 @@ export const reviewService = {
         const formData = new FormData();
         formData.append('title', reviewData.title);
         formData.append('content', reviewData.content);
-        formData.append('isRecommend', reviewData.isRecommend.toString());  // boolean을 string으로 변환
+        formData.append('recommended', reviewData.recommended ? 'true' : 'false');  // boolean을 string으로 변환
 
         // 이미지 파일들 처리
         if (reviewData.images?.length > 0) {
