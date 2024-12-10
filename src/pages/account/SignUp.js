@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import apiClient from 'api/axiosConfig';
-import InputField from "components/common/InputField";
 import {validateEmail, validatePassword, validateNickname, DuplicateCheckField} from 'utils/Validation';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import { CustomInput } from "components";
 
 function Signup() {
     const [logo, setLogo] = useState(`logo/logo.svg`);
@@ -38,7 +38,7 @@ function Signup() {
         if (!name) setNameError('이름을 입력하세요.');
         if (!email) setEmailError('이메일을 입력하세요.');
         if (!password) setPasswordError('비밀번호를 입력하세요.');
-        if(!nickname) setNicknameError('닉네임을 입력하세요.')
+        if (!nickname) setNicknameError('닉네임을 입력하세요.');
         if (password !== confirmPassword) setIsPasswordMatch(false);
 
         if (name && email && password && password === confirmPassword) {
@@ -87,7 +87,7 @@ function Signup() {
                         placeholder="example@example.com"
                         onStatusChange={setIsEmailChecked}
                     />
-                    <InputField
+                    <CustomInput
                         id="password"
                         label="비밀번호"
                         type="password"
@@ -96,14 +96,14 @@ function Signup() {
                         onBlur={() =>
                             setPasswordError(
                                 !validatePassword(password)
-                                    ? '비밀번호는 최소 8자 이상이며 숫자와 문자, 특수문자를 포함해야 합니다.'
+                                    ? '최소 8자 이상이며 숫자와 특수문자를 포함해야 합니다.'
                                     : ''
                             )
                         }
                         error={passwordError}
-                        placeholder={"8자 이상 숫자와 특수문자 포함"}
+                        placeholder="8자 이상 숫자와 특수문자 포함"
                     />
-                    <InputField
+                    <CustomInput
                         id="confirm-password"
                         label="비밀번호 확인"
                         type="password"
@@ -113,7 +113,7 @@ function Signup() {
                         error={!isPasswordMatch ? '비밀번호가 일치하지 않습니다.' : ''}
                         placeholder="··········"
                     />
-                    <InputField
+                    <CustomInput
                         id="name"
                         label="이름"
                         value={name}
@@ -137,7 +137,7 @@ function Signup() {
                         type="submit"
                         className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${
                             isEmailChecked && isNicknameChecked
-                                ? "bg-yellow-400 hover:bg-yellow-300"
+                                ? "bg-[#ffc400] hover:bg-[#ff8146]"
                                 : "bg-gray-300 cursor-not-allowed"
                         }`}
                         disabled={!isEmailChecked || !isNicknameChecked}
@@ -146,7 +146,9 @@ function Signup() {
                     </button>
                     <p className="flex justify-between items-center p-2.5">
                         <span className="text-gray-500">이미 회원이라면?</span>
-                        <a href="/login" className="text-yellow-500 hover:underline no-underline">로그인 하러가기 →</a>
+                        <a href="/login" className="text-[#ffc400] hover:text-[#ff8146] hover:underline no-underline">
+                            로그인 하러가기 →
+                        </a>
                     </p>
                 </form>
             </div>
