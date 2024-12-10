@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import { useCampDetail } from "../../hooks/useCampDetail";
+import React, {useState} from "react";
+import {useParams} from "react-router-dom";
+import {useCampDetail} from "../../hooks/useCampDetail";
 import useAvailableCampSites from "../../hooks/useAvailableCampSites";
 import {
     ImageGallery,
@@ -13,11 +13,12 @@ import {
     CampDatePicker,
     ModalComponent
 } from 'components';
-import { getRandomThumbnail } from "utils/ThumbnailUtils";
-import { ko } from "date-fns/locale";
+import {getRandomThumbnail} from "utils/ThumbnailUtils";
+import {ko} from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import "../../style/camp-detail.css";
 import "../../style/available-list.css";
+import CampInfo from "../../components/camp/CampInfo";
 
 function calculateNights(checkin, checkout) {
     if (!checkin || !checkout) return 1; // 체크인 또는 체크아웃이 없으면 기본 1박
@@ -30,12 +31,12 @@ function calculateNights(checkin, checkout) {
 }
 
 function CampDetail() {
-    const { campId } = useParams();
+    const {campId} = useParams();
     const [checkin, setCheckin] = useState(null); // 체크인 날짜
     const [checkout, setCheckout] = useState(null); // 체크아웃 날짜
     const [modalOpen, setModalOpen] = useState(false);
 
-    const { data: availableSites, loading, error } = useAvailableCampSites(
+    const {data: availableSites, loading, error} = useAvailableCampSites(
         campId,
         checkin ? checkin.toISOString().split("T")[0] : null,
         checkout ? checkout.toISOString().split("T")[0] : null
@@ -54,7 +55,7 @@ function CampDetail() {
         }
     };
 
-    const { campDetails, loading: detailLoading, error: detailError } = useCampDetail(campId);
+    const {campDetails, loading: detailLoading, error: detailError} = useCampDetail(campId);
     const [openModal, setOpenModal] = useState(false);
 
     const handleModalOpen = () => setOpenModal(true);
@@ -66,7 +67,7 @@ function CampDetail() {
     if (!campDetails) return <div>캠핑장 정보를 찾을 수 없습니다.</div>;
     if (detailLoading) return <div>로딩 중...</div>;
 
-    const { campAddr, images, intro, name, tel, homepage } = campDetails;
+    const {campAddr, images, intro, name, tel, homepage, campInfo} = campDetails;
 
     // 박 수 계산
     const nights = calculateNights(checkin, checkout);
@@ -74,22 +75,37 @@ function CampDetail() {
 
     return (
         <div className="camp-detail-container">
-            <h1 className="camp-detail-title">{name || "캠핑장 이름 없음"}</h1>
+            <div className="camp-detail-header"
+                 style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}
+            >
+                <h1 className="camp-detail-title">{name || "캠핑장 이름 없음"}</h1>
+                <CampInfo
+                    recommend={campInfo.recommendCnt} // 추천 수
+                    bookmark={campInfo.bookmarkCnt} // 찜 수
+                /></div>
+
             {/* images가 빈 배열일 경우 랜덤 썸네일로 채우기 */}
             {(!images || images.length === 0) ? (
-                <div className="main-image" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '600px', marginBottom: "20px" }}>
+                <div className="main-image" style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                    height: '600px',
+                    marginBottom: "20px"
+                }}>
                     <img
                         src={getRandomThumbnail("", campId)}
                         alt="랜덤 썸네일"
-                        style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                        style={{objectFit: 'cover', width: '100%', height: '100%'}}
                     />
                 </div>
             ) : (
-                <ImageGallery images={images} onMoreClick={handleModalOpen} />
+                <ImageGallery images={images} onMoreClick={handleModalOpen}/>
             )}
-            <ModalGallery open={openModal} onClose={handleModalClose} images={images || []} />
-            <AddressInfo address={campAddr?.streetAddr} tel={tel} homepage={homepage} />
-            <CampDetailIntro intro={intro} />
+            <ModalGallery open={openModal} onClose={handleModalClose} images={images || []}/>
+            <AddressInfo address={campAddr?.streetAddr} tel={tel} homepage={homepage}/>
+            <CampDetailIntro intro={intro}/>
             <OperationPolicy
                 industries={campDetails.indutys || []}
                 outdoorFacility={campDetails.outdoorFacility || "부대시설 정보 없음"}
