@@ -68,8 +68,8 @@ const CampReservationCard = ({data, buttonInVisible, onReviewChange}) => {
             if (localStatus === "예약완료" && selectedReservationId) {
                 const requestData = {
                     id: selectedReservationId,
-                    campId: campResponseDto.id,
-                    campSiteId: campSiteResponseDto.id,
+                    campId: campResponseDto.campId,
+                    campSiteId: campSiteResponseDto.siteId,
                     status: localStatus,
                     cancelReason,
                 };
@@ -108,7 +108,7 @@ const CampReservationCard = ({data, buttonInVisible, onReviewChange}) => {
     const handleReviewSubmit = async (formData) => {
         try {
             await reviewService.createReview(
-                campResponseDto.id,
+                campResponseDto.campId,
                 data.id,
                 formData
             );
@@ -167,7 +167,7 @@ const CampReservationCard = ({data, buttonInVisible, onReviewChange}) => {
     };
 
     const buttonProps = getButtonProps();
-
+    const thumbnailUrl = campResponseDto.thumbImage || getRandomThumbnail("", campResponseDto.campId);
 
     return (
         <Card
@@ -181,38 +181,19 @@ const CampReservationCard = ({data, buttonInVisible, onReviewChange}) => {
             }}
         >
             {/* 이미지 섹션 */}
-
             <Box
                 sx={{
-                    flex: {sm: "2"},
-                    height: {xs: 200, sm: "auto"},
-                    aspectRatio: {sm: "16 / 9"},
-                    width: {xs: "100%", sm: "auto"},
-                    ...(campResponseDto.thumbImage ? {
-                        backgroundImage: `url(${campResponseDto.thumbImage})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                    } : {
-                        position: 'relative'
-                    })
+                    flex: { sm: "2" },
+                    height: { xs: 200, sm: "auto" },
+                    aspectRatio: { sm: "16 / 9" },
+                    width: { xs: "100%", sm: "auto" },
+                    backgroundImage: `url(${thumbnailUrl})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    position: 'relative'
                 }}
             >
-                {(!campResponseDto.thumbImage || campResponseDto.thumbImage === "") && (
-                    <img
-                        src={getRandomThumbnail("", data.campId)}
-                        alt="기본 이미지"
-                        style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                            position: 'absolute',
-                            top: 0,
-                            left: 0
-                        }}
-                    />
-                )}
             </Box>
-
             {/* 정보 섹션 */}
             <Box sx={{display: "flex", flexDirection: "column", flex: "3", padding: 2}}>
                 <CardContent>
@@ -220,14 +201,14 @@ const CampReservationCard = ({data, buttonInVisible, onReviewChange}) => {
                         variant="h5"
                         sx={{marginBottom: 2, fontWeight: 'bold'}}
                     >
-                        <a href={`/camps/${campResponseDto.id}`} style={{textDecoration: 'none', color: 'inherit'}}>
+                        <a href={`/camps/${campResponseDto.campId}`} style={{textDecoration: 'none', color: 'inherit'}}>
                             {campResponseDto.campName} - {campSiteResponseDto.siteType}
                         </a>
                     </Typography>
                     <Box sx={{display: "flex", alignItems: "center", marginBottom: 1}}>
                         <LocationOnOutlinedIcon sx={{fontSize: 20, marginRight: 1, color: "green"}}/>
                         <Typography variant="body2">
-                            {campAddrResponseDto.streetAddr} {campAddrResponseDto.city.detailedAddr}
+                            {campAddrResponseDto.streetAddr}
                         </Typography>
                     </Box>
                     <Box sx={{display: "flex", alignItems: "center", marginBottom: 1}}>
