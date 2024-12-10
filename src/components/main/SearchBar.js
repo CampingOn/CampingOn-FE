@@ -43,7 +43,7 @@ function SearchBar({ onSearch, isLoading, initialCity = '', initialKeyword = '' 
 
     const commonStyles = {
         '& .MuiOutlinedInput-root': {
-            borderRadius: '15px',
+            borderRadius: '0.375rem',
             '& .MuiOutlinedInput-input': {
                 '&::selection': {
                     backgroundColor: 'transparent'
@@ -63,8 +63,8 @@ function SearchBar({ onSearch, isLoading, initialCity = '', initialKeyword = '' 
         },
         // focused 스타일을 밖으로 이동
         '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: '#F6AD55 !important',
-            borderWidth: 2
+            borderColor: '#ffc400 !important',
+            borderWidth: 1.5
         },
         // 라벨 스타일을 별도로 지정
         '& .MuiInputLabel-root.Mui-focused': {
@@ -151,16 +151,16 @@ function SearchBar({ onSearch, isLoading, initialCity = '', initialKeyword = '' 
                 startIcon={<SearchIcon />}
                 sx={{
                     width: '20%',
-                    bgcolor: '#FCD34D',
+                    bgcolor: '#ffc400',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
                     '&:hover': {
-                        bgcolor: '#F6AD55',
+                        bgcolor: '#ff8146',
                         transform: 'translateY(-2px)',
-                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                        opacity: 0.9
+                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
                     },
                     px: 3,
                     py: 1,
-                    borderRadius: '10px',
+                    borderRadius: '0.375rem',
                     height: '40px'
                 }}
             >

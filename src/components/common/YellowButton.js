@@ -2,34 +2,50 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 
-const StyledButton = styled(Button)(({ size }) => ({
-    backgroundColor: '#ffc400',
+const StyledButton = styled(Button)(({ size, customColor }) => ({
+    backgroundColor: customColor || '#ffc400',
     color: 'white',
     borderRadius: '0.375rem',
-    padding: size === 'large' ? '12px 24px' : 
-             size === 'small' ? '8px 16px' : 
-             size === 'extra-small' ? '8px 16px' :
-             '4px 8px',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+    padding: size === 'large' ? '12px 150px' : 
+             size === 'small' ? '8px 40px' :
+             size === 'extra-small' ? '8px 30px' :
+             '4px 20px',
     fontSize: size === 'large' ? '1.2rem' : 
               size === 'small' ? '1rem' : 
               size === 'extra-small' ? '0.8rem' :
               '0.8rem',
     '&:hover': {
-        backgroundColor: '#FCD34D',
+        backgroundColor: customColor ? 
+            `#ff6927` :
+            '#ff8146',
     },
     '@media (max-width: 600px)': {
-        padding: '10px 20px',
+        padding: size === 'large' ? '10px 30px' :
+                size === 'small' ? '8px 30px' : 
+                size === 'extra-small' ? '6px 20px' :
+                '4px 15px',
     },
     '@media (min-width: 601px) and (max-width: 960px)': {
-        padding: '10px 70px',
-    },
-    '@media (min-width: 961px)': {
-        padding: '10px 150px',
+        padding: size === 'large' ? '10px 80px' :
+                size === 'small' ? '8px 40px' : 
+                size === 'extra-small' ? '8px 25px' :
+                '4px 18px',
     }
 }));
 
 const YellowButton = ({ onClick, children, size = 'extra-small', style }) => {
-    return <StyledButton onClick={onClick} size={size} style={style}>{children}</StyledButton>;
+    const customColor = style?.backgroundColor;
+    return (
+        <StyledButton 
+            onClick={onClick} 
+            size={size} 
+            customColor={customColor}
+            style={{...style, backgroundColor: undefined}}  // backgroundColor를 제외한 나머지 스타일
+        >
+            {children}
+        </StyledButton>
+    );
 };
 
 export default YellowButton;
