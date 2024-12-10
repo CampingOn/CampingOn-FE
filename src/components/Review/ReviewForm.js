@@ -28,6 +28,7 @@ function ReviewForm({open, onClose, onSubmit, campName}) {
     const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
     const [titleError, setTitleError] = useState('');
     const [contentError, setContentError] = useState('');
+    const [imageError, setImageError] = useState('이미지를 업로드하지 않는 경우 기본 이미지가 제공됩니다.');
 
     const handleSubmitClick = () => {
         setConfirmDialogOpen(true);
@@ -120,6 +121,7 @@ function ReviewForm({open, onClose, onSubmit, campName}) {
                         <ImageUploader
                             images={formData.images}
                             onChange={(images) => setFormData(prev => ({ ...prev, images }))}
+                            helperText={imageError}
                         />
                     </Box>
 

@@ -44,7 +44,7 @@ function App() {
                             <Header/>
                         </div>
                     </HiddenUtils>
-                    <div className='content' style={{ margin: '0 15%'}}>
+                    <div className='content' style={{ margin: '0 15% 160px 15%'}}>
                         <Router />
                     </div>
                 </div>

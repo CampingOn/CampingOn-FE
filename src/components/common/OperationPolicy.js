@@ -6,7 +6,8 @@ const OperationPolicy = ({
     title = '운영정책', 
     showDefaultPolicies = true,
     outdoorFacility,
-    industries
+    industries,
+    animalAdmission
 }) => {
     const policyData = [];
 
@@ -26,6 +27,10 @@ const OperationPolicy = ({
     if (industries && industries.length > 0) {
         const industriesValue = industries.join(', ');
         policyData.push({ label: '업종', value: industriesValue });
+    }
+
+    if (animalAdmission) {
+        policyData.push({ label: '반려동물 반입', value: animalAdmission });
     }
 
     policyData.push(...additionalPolicies);
@@ -48,7 +53,7 @@ const OperationPolicy = ({
             <List sx={{ p: 0 }}>
                 {policyData.map((item, index) => (
                     item.value && (
-                        <ListItem 
+                        <ListItem
                             key={index}
                             sx={{
                                 display: 'flex',

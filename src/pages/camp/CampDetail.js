@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useCampDetail } from "../../hooks/useCampDetail";
 import useAvailableCampSites from "../../hooks/useAvailableCampSites";
@@ -60,7 +60,7 @@ function CampDetail() {
     const handleModalOpen = () => setOpenModal(true);
     const handleModalClose = () => setOpenModal(false);
 
-    if (loading) return <div>로딩 중...</div>;
+
     if (error) return <div>에러 발생: {error}</div>;
     if (detailError) return <div>에러 발생: {detailError}</div>;
     if (!campDetails) return <div>캠핑장 정보를 찾을 수 없습니다.</div>;
@@ -77,10 +77,10 @@ function CampDetail() {
             <h1 className="camp-detail-title">{name || "캠핑장 이름 없음"}</h1>
             {/* images가 빈 배열일 경우 랜덤 썸네일로 채우기 */}
             {(!images || images.length === 0) ? (
-                <div className="main-image" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', marginBottom: '20px'}}>
-                    <img 
-                        src={getRandomThumbnail("")}
-                        alt="랜덤 썸네일" 
+                <div className="main-image" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '600px', marginBottom: "20px" }}>
+                    <img
+                        src={getRandomThumbnail("", campId)}
+                        alt="랜덤 썸네일"
                         style={{ objectFit: 'cover', width: '100%', height: '100%' }}
                     />
                 </div>
@@ -93,6 +93,7 @@ function CampDetail() {
             <OperationPolicy
                 industries={campDetails.indutys || []}
                 outdoorFacility={campDetails.outdoorFacility || "부대시설 정보 없음"}
+                animalAdmission={campDetails.animalAdmission}
             />
             <MapSection
                 latitude={campAddr?.latitude}
@@ -110,18 +111,19 @@ function CampDetail() {
                 />
                 <div className="date-info">
                     <div className="date-box">
-                        <span className="label">입실</span>
-                        <span className="date">{checkin ? checkin.toLocaleDateString("ko-KR") : "날짜를 선택하세요"}</span>
+                        <span className="label">입실일</span>
+                        <span className="date">{checkin ? checkin.toLocaleDateString("ko-KR") : "날짜를 선택하기"}</span>
                     </div>
                     <div className="date-box">
-                        <span className="label">퇴실</span>
-                        <span className="date">{checkout ? checkout.toLocaleDateString("ko-KR") : "날짜를 선택하세요"}</span>
+                        <span className="label">퇴실일</span>
+                        <span className="date">{checkout ? checkout.toLocaleDateString("ko-KR") : "날짜를 선택하기"}</span>
                     </div>
                 </div>
             </div>
 
             <div className="camp-site-list-available">
                 <h2>예약 가능한 캠핑지 목록</h2>
+                {/*if (loading) return <div>로딩 중...</div>;*/}
                 {availableSites && availableSites.length > 0 ? (
                     availableSites.map((site, index) => (
                         <CampSiteCard
@@ -142,7 +144,7 @@ function CampDetail() {
                     open={modalOpen}
                     onClose={() => setModalOpen(false)}
                     title="당일 예약 안내"
-                    message="※ 당일 예약�� 전화로만 가능합니다."
+                    message="※ 당일 예약은 전화로만 가능합니다."
                 />
             </div>
         </div>

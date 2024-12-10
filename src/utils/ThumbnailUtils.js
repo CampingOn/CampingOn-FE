@@ -4,8 +4,10 @@ export const defaultThumbnails = [
     `${process.env.PUBLIC_URL}/default/thumbnail/image3.png`,
 ];
 
-export const getRandomThumbnail = (thumbImage) => {
-    return thumbImage === "" 
-        ? defaultThumbnails[Math.floor(Math.random() * defaultThumbnails.length)] 
-        : thumbImage;
+export const getRandomThumbnail = (thumbImage, id) => {
+    if (thumbImage === "") {
+        const index = id % defaultThumbnails.length;
+        return defaultThumbnails[index];
+    }
+    return thumbImage;
 }; 
