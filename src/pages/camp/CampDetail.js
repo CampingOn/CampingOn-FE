@@ -77,9 +77,9 @@ function CampDetail() {
             <h1 className="camp-detail-title">{name || "캠핑장 이름 없음"}</h1>
             {/* images가 빈 배열일 경우 랜덤 썸네일로 채우기 */}
             {(!images || images.length === 0) ? (
-                <div className="main-image" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', marginBottom: '20px'}}>
+                <div className="main-image" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '600px', marginBottom: "20px" }}>
                     <img
-                        src={getRandomThumbnail("")}
+                        src={getRandomThumbnail("", campId)}
                         alt="랜덤 썸네일"
                         style={{ objectFit: 'cover', width: '100%', height: '100%' }}
                     />
