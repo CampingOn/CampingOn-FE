@@ -14,7 +14,7 @@ const CampingCard = ({ thumbImage, name, address, keywords, lineIntro, marked, o
 
     // 이미지가 없을 경우 랜덤으로 썸네일 선택
     useEffect(() => {
-        const randomImage = getRandomThumbnail(thumbImage);
+        const randomImage = getRandomThumbnail(thumbImage, campId);
         setImageUrl(randomImage);
     }, [thumbImage]);
 

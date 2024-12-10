@@ -114,13 +114,15 @@ const CampSiteCard = ({ data = {}, campId, count, checkin, checkout }) => {
                         총 결제 금액: {totalPrice.toLocaleString()}원
                     </Typography>
                     {/* 예약 버튼 */}
-                    <YellowButton>
-                        <Link
-                            to={`/camps/${campId}/sites/${siteId}?checkin=${formattedCheckin}&checkout=${formattedCheckout}`}
-                        >
+                    <Link
+                        to={`/camps/${campId}/sites/${siteId}?checkin=${formattedCheckin}&checkout=${formattedCheckout}`}
+                    >
+                    <YellowButton
+                        size="small"
+                    >
                             예약하기
-                        </Link>
                     </YellowButton>
+                    </Link>
                 </Box>
             </Box>
         </Card>

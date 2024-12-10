@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { getRandomThumbnail } from "../../utils/ThumbnailUtils";
+import React, {useState} from "react";
+import {getRandomThumbnail} from "../../utils/ThumbnailUtils";
 import {
     Card,
     CardContent,
@@ -15,18 +15,18 @@ import {
     Alert,
     TextField
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { useApi } from "../../hooks/useApi";
-import { reservationService } from "../../api/services/reservationService";
+import {useNavigate} from "react-router-dom";
+import {useApi} from "../../hooks/useApi";
+import {reservationService} from "../../api/services/reservationService";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import {KeyboardTab, Start} from "@mui/icons-material";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
 import {FestivalOutlined} from "@mui/icons-material";
-import { ReviewModal, ReviewForm } from 'components';
-import { reviewService } from 'api/services/reviewService';
+import {ReviewModal, ReviewForm} from 'components';
+import {reviewService} from 'api/services/reviewService';
 
-const CampReservationCard = ({ data, onReviewChange }) => {
+const CampReservationCard = ({data, onReviewChange}) => {
     const {
         id,
         checkinDate,
@@ -160,15 +160,15 @@ const CampReservationCard = ({ data, onReviewChange }) => {
     const getButtonProps = () => {
         switch (localStatus) {
             case "예약완료":
-                return { text: "예약 취소", variant: "outlined", disabled: false };
+                return {text: "예약 취소", variant: "outlined", disabled: false};
             case "예약취소":
-                return { text: "예약 취소됨", variant: "outlined", disabled: true };
+                return {text: "예약 취소됨", variant: "outlined", disabled: true};
             case "체크인완료":
                 return reviewDto
-                    ? { text: "후기 확인", variant: "contained", disabled: false }
-                    : { text: "후기 작성", variant: "contained", disabled: false };
+                    ? {text: "후기 확인", variant: "contained", disabled: false}
+                    : {text: "후기 작성", variant: "contained", disabled: false};
             default:
-                return { text: "상태 없음", variant: "contained", disabled: true };
+                return {text: "상태 없음", variant: "contained", disabled: true};
         }
     };
 
@@ -178,20 +178,20 @@ const CampReservationCard = ({ data, onReviewChange }) => {
         <Card
             sx={{
                 display: "flex",
-                flexDirection: { xs: "column", sm: "column", md: "column", lg: "row" }, // md 이하 column, lg 이상 row
+                flexDirection: {xs: "column", sm: "column", md: "column", lg: "row"}, // md 이하 column, lg 이상 row
                 margin: 2,
                 boxShadow: 3,
                 transition: "transform 0.3s",
-                "&:hover": { transform: "scale(1.02)" },
+                "&:hover": {transform: "scale(1.02)"},
             }}
         >
             {/* 이미지 섹션 */}
             <Box
                 sx={{
-                    flex: { sm: "2" },
-                    height: { xs: 200, sm: "auto" },
-                    aspectRatio: { sm: "16 / 9" },
-                    width: { xs: "100%", sm: "auto" },
+                    flex: {sm: "2"},
+                    height: {xs: 200, sm: "auto"},
+                    aspectRatio: {sm: "16 / 9"},
+                    width: {xs: "100%", sm: "auto"},
                     ...(campResponseDto.thumbImage ? {
                         backgroundImage: `url(${campResponseDto.thumbImage})`,
                         backgroundSize: "cover",
@@ -203,7 +203,7 @@ const CampReservationCard = ({ data, onReviewChange }) => {
             >
                 {(!campResponseDto.thumbImage || campResponseDto.thumbImage === "") && (
                     <img
-                        src={getRandomThumbnail("")}
+                        src={getRandomThumbnail("", data.campId)}
                         alt="기본 이미지"
                         style={{
                             width: '100%',
@@ -217,7 +217,7 @@ const CampReservationCard = ({ data, onReviewChange }) => {
                 )}
             </Box>
             {/* 정보 섹션 */}
-            <Box sx={{ display: "flex", flexDirection: "column", flex: "3", padding: 2 }}>
+            <Box sx={{display: "flex", flexDirection: "column", flex: "3", padding: 2}}>
                 <CardContent>
                     <Typography
                         variant="h5"
@@ -226,39 +226,39 @@ const CampReservationCard = ({ data, onReviewChange }) => {
                     >
                         {campResponseDto.campName} - {campSiteResponseDto.siteType}
                     </Typography>
-                    <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
-                        <LocationOnOutlinedIcon sx={{ fontSize: 20, marginRight: 1, color: "green" }} />
+                    <Box sx={{display: "flex", alignItems: "center", marginBottom: 1}}>
+                        <LocationOnOutlinedIcon sx={{fontSize: 20, marginRight: 1, color: "green"}}/>
                         <Typography variant="body2">
                             {campAddrResponseDto.streetAddr} {campAddrResponseDto.city.detailedAddr}
                         </Typography>
                     </Box>
-                    <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
-                        <FestivalOutlined sx={{ fontSize: 20, marginRight: 1, color: "#ff7961" }} />
+                    <Box sx={{display: "flex", alignItems: "center", marginBottom: 1}}>
+                        <FestivalOutlined sx={{fontSize: 20, marginRight: 1, color: "#ff7961"}}/>
                         <Typography variant="body2">
                             {campSiteResponseDto.indoorFacility ? campSiteResponseDto.indoorFacility : "내부시설 정보 없음"}
                         </Typography>
                     </Box>
-                    <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
-                        <Start sx={{ fontSize: 20, marginRight: 1, color: "#2c387e" }} />
+                    <Box sx={{display: "flex", alignItems: "center", marginBottom: 1}}>
+                        <Start sx={{fontSize: 20, marginRight: 1, color: "#2c387e"}}/>
                         <Typography variant="body2">
                             체크인 : {checkinDate} {checkinTime}
                         </Typography>
                     </Box>
-                    <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
-                        <KeyboardTab sx={{ fontSize: 20, marginRight: 1, color: "#ffc107" }} />
+                    <Box sx={{display: "flex", alignItems: "center", marginBottom: 1}}>
+                        <KeyboardTab sx={{fontSize: 20, marginRight: 1, color: "#ffc107"}}/>
                         <Typography variant="body2">
                             체크아웃: {checkoutDate} {checkoutTime}
                         </Typography>
                     </Box>
-                    <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
-                        <PeopleOutlinedIcon sx={{ fontSize: 20, marginRight: 1, color: "#6573c3" }} />
+                    <Box sx={{display: "flex", alignItems: "center", marginBottom: 1}}>
+                        <PeopleOutlinedIcon sx={{fontSize: 20, marginRight: 1, color: "#6573c3"}}/>
                         <Typography variant="body2">
                             {guestCnt}명
                         </Typography>
                     </Box>
 
-                    <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
-                        <ReceiptLongOutlinedIcon sx={{ fontSize: 20, marginRight: 1, color: "#ff9800" }} />
+                    <Box sx={{display: "flex", alignItems: "center", marginBottom: 1}}>
+                        <ReceiptLongOutlinedIcon sx={{fontSize: 20, marginRight: 1, color: "#ff9800"}}/>
                         <Typography variant="body2">
                             결제금액: {totalPrice.toLocaleString()}원
                         </Typography>
@@ -266,7 +266,7 @@ const CampReservationCard = ({ data, onReviewChange }) => {
                 </CardContent>
 
                 {/* 예약 관련 처리 버튼 */}
-                <Box sx={{ marginTop: "auto", textAlign: "right" }}>
+                <Box sx={{marginTop: "auto", textAlign: "right"}}>
                     <Button
                         variant={buttonProps.variant}
                         color='warning'
@@ -315,7 +315,8 @@ const CampReservationCard = ({ data, onReviewChange }) => {
                     <Button onClick={handleClose} color="primary">
                         취소
                     </Button>
-                    <Button onClick={handleConfirmCancel} color="error" autoFocus disabled={cancelLoading || !cancelReason}>
+                    <Button onClick={handleConfirmCancel} color="error" autoFocus
+                            disabled={cancelLoading || !cancelReason}>
                         확인
                     </Button>
                 </DialogActions>
@@ -325,9 +326,9 @@ const CampReservationCard = ({ data, onReviewChange }) => {
                 open={snackbarOpen}
                 autoHideDuration={4000}
                 onClose={handleSnackbarClose}
-                anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+                anchorOrigin={{vertical: "bottom", horizontal: "left"}}
             >
-                <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: "100%" }}>
+                <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{width: "100%"}}>
                     {snackbarMessage}
                 </Alert>
             </Snackbar>

@@ -35,8 +35,6 @@ const OperationPolicy = ({
 
     policyData.push(...additionalPolicies);
 
-    policyData.push(...additionalPolicies);
-
     return (
         <Box sx={{
             width: '100%',
