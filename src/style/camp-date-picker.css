@@ -1,51 +1,88 @@
+/* 달력 컨테이너 스타일 */
+.camp-date-picker-container {
+    margin: 0; /* 컨테이너 간격 제거 */
+    display: flex;
+    flex-direction: column; /* 세로 정렬 */
+    align-items: center; /* 내부 요소 가운데 정렬 */
+    gap: 0; /* 간격 제거 */
+    position: relative; /* 위치 지정 */
+}
+
+/* 달력 스타일 */
+.datepicker-wrapper {
+    position: relative;
+    width: auto;
+    margin: 0; /* 달력과 텍스트 박스 간격 제거 */
+}
+
+/* 달력 박스 스타일 */
 .react-datepicker {
-    transform: scale(1.5); /* 크기 확대 */
+    transform: scale(1); /* 크기 확대 (1.5에서 1.8로 증가) */
     transform-origin: top center; /* 확대 기준점을 중앙으로 설정 */
     margin-bottom: 0; /* 달력과 아래 텍스트의 간격 제거 */
     width: auto; /* 자동 크기 */
-    text-align: center; /* 달력 텍스트 가운데 정렬 */
+    text-align: center; /* 텍스트 가운데 정렬 */
 }
 
 /* 텍스트 크기 조정 */
 .react-datepicker__day,
-.react-datepicker__day-name,
+.react-datepicker__day-name {
+    font-size: 1.5rem; /* 글자 크기 */
+    text-align: center; /* 가운데 정렬 */
+    letter-spacing: 1px; /* 글자 간격 */
+}
 .react-datepicker__current-month {
-    font-size: 1.2rem; /* 텍스트 크기 확대 */
+    font-size: 1.5rem; /* 텍스트 크기 확대 */
     text-align: center; /* 텍스트를 가운데 정렬 */
 }
 
 /* 날짜 선택 영역 패딩 및 크기 조정 */
 .react-datepicker__month {
-    padding: 20px; /* 패딩 설정 */
-    max-width: 600px; /* 최대 가로 길이 설정 */
+    padding: 25px; /* 내부 패딩 증가 */
+    max-width: 700px; /* 최대 가로 길이 증가 */
     display: flex; /* 플렉스 박스 활성화 */
     flex-direction: column; /* 세로 정렬 */
     align-items: center; /* 항목을 가운데 정렬 */
-}
-
-/* 컨테이너 스타일 */
-.camp-date-picker-container {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column; /* 세로 정렬 */
-    align-items: center; /* 내부 요소 가운데 정렬 */
-    gap: 10px; /* 간격 추가 */
+    justify-content: space-between; /* 주차 간격 조정 */
 }
 
 /* 달력 아래 텍스트 박스 스타일 */
 .date-info {
     display: flex;
     justify-content: center; /* 중앙 정렬 */
-    gap: 20px; /* 입실/퇴실 간격 */
-    margin-top: 132px; /* 달력과 텍스트 박스 간격 축소 */
-    padding: 10px; /* 내부 여백 */
+    gap: 30px; /* 입실/퇴실 간격 */
+    padding: 10px; /* 내부 여백 증가 */
     background-color: #ffd672; /* 배경 색상 */
-    border: 1.5px solid #c3c3c3;
+    border: 1.5px solid #c3c3c3; /* 테두리 */
     border-radius: 8px; /* 모서리 둥글게 */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
-    width: 424px; /* 고정된 가로 크기 */
+    width: 430px; /* 가로 크기 증가 */
     height: auto; /* 높이는 내용에 따라 자동으로 조정 */
+    margin: -7px; /* 텍스트 박스 간격 제거 */
+    margin-bottom: 100px;
+    position: relative; /* 기본 위치에 유지 */
 }
+
+/* 날짜 칸 스타일 */
+.react-datepicker__day {
+    width: 3rem; /* 날짜 칸 너비 증가 */
+    height: 3rem; /* 날짜 칸 높이 증가 */
+    line-height: 3rem; /* 텍스트 중앙 정렬 */
+    font-size: 1.5rem; /* 날짜 텍스트 크기 증가 */
+    text-align: center;
+}
+
+
+/* 날짜 선택 영역 패딩 및 크기 조정 */
+.react-datepicker__month {
+    padding: 20px; /* 내부 패딩 */
+    max-width: 600px; /* 최대 가로 길이 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between; /* 주차 간격 조정 */
+}
+
 
 /* 개별 텍스트 박스 스타일 */
 .date-box {
@@ -81,4 +118,13 @@
     font-size: 16px;
     color: #222;
     font-weight: bold;
+}
+
+/* 캘린더 날짜 취소 버튼 */
+.datepicker-wrapper {
+    position: relative;
+}
+
+.react-datepicker__day--outside-month {
+    visibility: hidden; /* 다음 달 날짜 숨김 */
 }
