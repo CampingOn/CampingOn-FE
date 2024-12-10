@@ -34,10 +34,11 @@ function Search() {
         const city = params.get('city') || '';
         const keyword = params.get('keyword') || '';
 
+
         setSearchParams({ city, keyword });
-        setCamps([]); // 캠프 목록 초기화
-        setPage(0);   // 페이지 초기화
-        setHasMore(true); // hasMore 초기화
+        setCamps([]);
+        setPage(0);
+        setHasMore(true);
 
         if (city || keyword) {
             const initialSearchParams = {
@@ -50,7 +51,7 @@ function Search() {
                 if (data?.content) {
                     setCamps(data.content);
                     setHasMore(data.totalElements > 12);
-                    setPage(1); // 다음 페이지를 위해 1로 설정
+                    setPage(1);
                 }
             });
         }
@@ -105,6 +106,14 @@ function Search() {
     };
 
     const handleSearch = (searchValues) => {
+        // 현재 검색 파라미터와 새로운 검색 파라미터 비교
+        const isSameSearch =
+            searchParams.city === searchValues.city &&
+            searchParams.keyword === searchValues.keyword;
+
+        // 같은 검색이면 return
+        if (isSameSearch) return;
+
         const params = new URLSearchParams();
         if (searchValues.city) params.append('city', searchValues.city);
         if (searchValues.keyword) params.append('keyword', searchValues.keyword);
