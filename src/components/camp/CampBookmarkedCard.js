@@ -69,9 +69,10 @@ const CampBookmarkedCard = ({ data, onBookmarkChange }) => {
                     <Typography
                         variant="h5"
                         sx={{ marginBottom: 2, fontWeight: 'bold' }}
-                        onClick={handleNameClick}
                     >
-                        {name}
+                        <a href={`/camps/${campId}`} style={{textDecoration: 'none', color: 'inherit'}}>
+                            {name}
+                        </a>
                     </Typography>
                     <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
                         <LocationOnOutlinedIcon sx={{ fontSize: 20, marginRight: 1, color: "green" }} />
