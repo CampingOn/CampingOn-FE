@@ -46,7 +46,7 @@ const DeleteButton = styled(IconButton)({
     }
 });
 
-const ImageUploader = ({ onChange, images: initialImages = [] }) => {
+const ImageUploader = ({ onChange, images: initialImages = [], helperText }) => {
     const [images, setImages] = useState(initialImages.map(file => ({    // 여기서 image를 파라미터로 받음
         file,
         preview: typeof file === 'string' ? file : URL.createObjectURL(file)
@@ -167,6 +167,21 @@ const ImageUploader = ({ onChange, images: initialImages = [] }) => {
                     </Typography>
                 </UploadArea>
             </label>
+
+            {/* 안내 문구 추가 */}
+            {helperText && (
+                <Typography
+                    variant="caption"
+                    color="textSecondary"
+                    sx={{
+                        display: 'block',
+                        mt: 1,
+                        ml: 1
+                    }}
+                >
+                    {helperText}
+                </Typography>
+            )}
 
             {images.length > 0 && (
                 <ImageList sx={{ mt: 2 }} cols={4} gap={8}>
