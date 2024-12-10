@@ -175,11 +175,12 @@ function Search() {
                         name={camp.name}
                         address={camp.streetAddr}
                         keywords={camp.keywords || []}
-                        lineIntro={camp.lineIntro}
+                        lineIntro={camp.lineIntro || `${camp.streetAddr.split(' ').slice(0, 2).join(' ')}에 있는 ${camp.name}`}
                         marked={camp.marked}
                         onClick={() => handleCardClick(camp.campId)}
                         onShowSnackbarNone={showSnackbarNone}   // 전달
                         onShowSnackbarBookmark={showSnackbarBookmark} // 전달
+                        className={"w-96 h-100 border border-gray-200 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:-translate-y-2"}
                     />
                 ))}
             </Box>
