@@ -68,7 +68,7 @@ const CampBookmarkedCard = ({ data, onBookmarkChange }) => {
                 <CardContent>
                     <Typography
                         variant="h5"
-                        sx={{ marginBottom: 2, fontWeight: 'bold' }}
+                        sx={{ marginBottom: 2, fontWeight: 'bold' ,cursor: 'pointer'}}
                         onClick={handleNameClick}
                     >
                         {name}

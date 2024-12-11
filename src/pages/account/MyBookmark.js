@@ -102,7 +102,7 @@ function MyBookmark() {
                         data={{
                             campId: camp.campId,
                             name: camp.name,
-                            lineIntro: camp.lineIntro,
+                            lineIntro: camp.lineIntro || `${camp.streetAddr.split(' ').slice(0, 2).join(' ')}에 있는 ${camp.name}`,
                             thumbImage: camp.thumbImage,
                             streetAddr: camp.streetAddr,
                             keywords: camp.keywords,
