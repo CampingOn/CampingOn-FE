@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { TextField, Autocomplete, Button, Box, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
+import { searchInfoService } from 'api/services/searchInfoService';  // 자동완성
 
 function SearchBar({ onSearch, isLoading, initialCity = '', initialKeyword = '' }) {
     const [city, setCity] = useState(initialCity);
     const [keyword, setKeyword] = useState(initialKeyword);
     const [keywordSuggestions, setKeywordSuggestions] = useState([]);
+    const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);  // 자동완성
 
     useEffect(() => {
         setCity(initialCity);
@@ -38,6 +40,46 @@ function SearchBar({ onSearch, isLoading, initialCity = '', initialKeyword = '' 
     const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
             handleSearch();
+        }
+    };
+
+    // 자동완성 데이터 반영
+    const fetchAutocompleteSuggestions = async (value) => {
+        if (!value || value.length < 3) {   // 단어 길이 3미만은 자동완성x
+            setAutocompleteSuggestions([]);
+            return;
+        }
+        try {
+            const response = await searchInfoService.getAutocompleteResults(value);
+            setAutocompleteSuggestions(response.data);
+        } catch (error) {
+            console.error('자동완성 데이터 fetch 실패:', error);
+            setAutocompleteSuggestions([]);
+        }
+    };
+
+    // 디바운싱
+    const debounce = (func, delay) => {
+        let timeoutId;
+        return (...args) => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => func(...args), delay);
+        };
+    };
+
+    // debounced fetch
+    const debouncedFetch = React.useCallback(
+        debounce(fetchAutocompleteSuggestions, 300),
+        []
+    );
+
+    // 키워드 입력 변경 핸들러 수정
+    const handleKeywordChange = (event, newValue) => {
+        setKeyword(newValue || '');
+        if (newValue) {
+            debouncedFetch(newValue);
+        } else {
+            setAutocompleteSuggestions([]);
         }
     };
 
@@ -107,10 +149,10 @@ function SearchBar({ onSearch, isLoading, initialCity = '', initialKeyword = '' 
                     ...commonStyles
                 }}
                 freeSolo
-                options={keywordSuggestions}
+                options={autocompleteSuggestions}
                 value={keyword}
-                onChange={(event, newValue) => setKeyword(newValue || '')}
-                onInputChange={(event, newValue) => setKeyword(newValue)}
+                onChange={handleKeywordChange}
+                onInputChange={handleKeywordChange}
                 disableClearable
                 onKeyDown={handleKeyPress}
                 renderInput={(params) => {
