@@ -7,7 +7,6 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { useInView } from "react-intersection-observer";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import { COMMON_STYLES } from 'constants/styles';
 
 const SnackbarContext = createContext();
 

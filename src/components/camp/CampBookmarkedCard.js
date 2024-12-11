@@ -36,11 +36,12 @@ const CampBookmarkedCard = ({ data, onBookmarkChange }) => {
     };
 
     return (
+        <div style={{ marginBottom: "20px" }}>
         <Card
             sx={{
                 display: "flex",
                 flexDirection: { xs: "column", sm: "row" },
-                margin: 2,
+                marginBottom: 2,
                 boxShadow: 3,
                 transition: "transform 0.3s",
                 "&:hover": { transform: "scale(1.02)" },
@@ -109,6 +110,7 @@ const CampBookmarkedCard = ({ data, onBookmarkChange }) => {
                 </Box>
             </Box>
         </Card>
+        </div>
     );
 };
 
