@@ -181,10 +181,11 @@ function ReviewForm({open, onClose, onSubmit, campName}) {
                         variant="contained"
                         disabled={!isFormValid}
                         sx={{
-                            minWidth: '120px',
-                            bgcolor: isFormValid ? '#FCD34D' : '#E5E7EB',
+                            backgroundColor: '#ffc400',
+                            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
                             '&:hover': {
-                                bgcolor: isFormValid ? '#F6AD55' : '#E5E7EB'
+                                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                                backgroundColor: '#ff8146'
                             }
                         }}
                     >
@@ -206,10 +207,10 @@ function ReviewForm({open, onClose, onSubmit, campName}) {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setConfirmDialogOpen(false)} color="primary">
+                    <Button onClick={() => setConfirmDialogOpen(false)} color="primary" sx={{ color: '#666666' }} >
                         취소
                     </Button>
-                    <Button onClick={handleConfirmedSubmit} color="warning" variant="contained">
+                    <Button onClick={handleConfirmedSubmit} color="warning" variant="primary" sx={{ color: '#ff6927' }}>
                         작성
                     </Button>
                 </DialogActions>

@@ -248,6 +248,12 @@ const CampReservationCard = ({data, buttonInVisible, onReviewChange}) => {
                             color='warning'
                             onClick={() => handleButtonClick(id)}
                             disabled={buttonProps.disabled}
+                            sx={{
+                                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                                '&:hover': {
+                                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                                }
+                            }}
                         >
                             {buttonProps.text}
                         </Button>
@@ -290,11 +296,11 @@ const CampReservationCard = ({data, buttonInVisible, onReviewChange}) => {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">
+                    <Button onClick={handleClose} color="primary" sx={{ color: '#666666' }}>
                         취소
                     </Button>
                     <Button onClick={handleConfirmCancel} color="error" autoFocus
-                            disabled={cancelLoading || !cancelReason}>
+                            disabled={cancelLoading || !cancelReason} sx={{ color: '#ff6927' }}>
                         확인
                     </Button>
                 </DialogActions>
