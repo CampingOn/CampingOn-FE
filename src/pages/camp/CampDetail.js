@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
 import {useCampDetail} from "../../hooks/useCampDetail";
 import useAvailableCampSites from "../../hooks/useAvailableCampSites";
@@ -38,6 +38,7 @@ function CampDetail() {
     const [checkin, setCheckin] = useState(null); // 체크인 날짜
     const [checkout, setCheckout] = useState(null); // 체크아웃 날짜
     const [modalOpen, setModalOpen] = useState(false);
+    const [localAvailableSites, setLocalAvailableSites] = useState([]);
 
     const {data: availableSites, error} = useAvailableCampSites(
         campId,
@@ -45,16 +46,24 @@ function CampDetail() {
         checkout ? checkout.toISOString().split("T")[0] : null
     );
 
-    const handleDateChange = (dates) => {
+    useEffect(() => {
+        setLocalAvailableSites(availableSites || []);
+    }, [availableSites]);
+
+    const handleDateChange = (dates, isClearing = false) => {
         const [start, end] = dates;
         setCheckin(start);
         setCheckout(end);
 
+        if (isClearing) {
+            setLocalAvailableSites([]);
+        }
+
         const today = new Date();
-        today.setHours(0, 0, 0, 0); // 날짜만 비교하도록 시간 제거
+        today.setHours(0, 0, 0, 0);
 
         if (start && start.toDateString() === today.toDateString()) {
-            setModalOpen(true); // 당일 예약인 경우 모달 열기
+            setModalOpen(true);
         }
     };
 
@@ -158,7 +167,7 @@ function CampDetail() {
             <div className="camp-site-list-available">
                 <h1 style={{fontSize: '1.8rem', fontWeight: 'bold', marginBottom: '20px'}}>예약 가능한 캠핑지 목록</h1>
                 {/* 캠핑지가 없을 때 빈 카드 표시 */}
-                {!availableSites || availableSites.length === 0 ? (
+                {!localAvailableSites || localAvailableSites.length === 0 ? (
                     <div
                         className="placeholder-card"
                         style={{
@@ -176,7 +185,7 @@ function CampDetail() {
                     </div>
                 ) : (
                     <div style={{ marginBottom: '40px' }}>
-                        {availableSites.map((site, index) => (
+                        {localAvailableSites.map((site, index) => (
                             <div key={index} style={{ marginBottom: '20px' }}>
                                 <CampSiteCard
                                     locale={ko}

@@ -11,7 +11,7 @@ const CampDatePicker = ({ checkin, checkout, handleDateChange }) => {
     const [modalOpen, setModalOpen] = useState(false); // 모달 상태
 
     const clearDates = () => {
-        handleDateChange([null, null]); // 입실일과 퇴실일 초기화
+        handleDateChange([null, null], true); // 두 번째 파라미터로 초기화 여부 전달
         setModalOpen(false); // 모달 닫기
     };
 
@@ -44,7 +44,7 @@ const CampDatePicker = ({ checkin, checkout, handleDateChange }) => {
             }
         }
 
-        handleDateChange(dates); // 유효한 날짜만 반영
+        handleDateChange(dates, false); // 일반 날짜 선택은 초기화 아님을 표시
     };
 
     return (
