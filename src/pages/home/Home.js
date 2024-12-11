@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 import {Box, Container, Typography} from "@mui/material";
 import {campService} from "../../api/services/campService";
 import {searchInfoService} from "../../api/services/searchInfoService";
-import {CampingCard, ScrollToTopFab, MainCarousel, SearchBar, } from 'components';
+import {CampingCard, CampingCardCarousel, ScrollToTopFab, MainCarousel, SearchBar, } from 'components';
 import {useAuth} from "../../context/AuthContext";
 import Snackbar from "@mui/material/Snackbar";
 
@@ -17,6 +17,7 @@ function Home() {
     const [snackbarNone, setSnackbarNone] = useState(false);
     const [snackbarBookmark, setSnackbarBookmark] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
+
 
     const handleCloseNone = () => {
         setSnackbarNone(false);
@@ -123,31 +124,15 @@ function Home() {
                         {matchedCampsData.content[0]?.username}님을 위한 추천 캠핑장
                     </Typography>
                     <Box sx={{
-                        display: 'grid',
-                        gridTemplateColumns: {
-                            xs: '1fr',
-                            sm: 'repeat(2, 1fr)',
-                            lg: 'repeat(3, 1fr)'
-                        },
-                        gap: 3,
-                        mb: 4
+                        mb: 2
                     }}>
-                        {matchedCampsData.content.map((camp) => (
-                            <CampingCard
-                                key={camp.campId}
-                                campId={camp.campId}
-                                thumbImage={camp.thumbImage}
-                                name={camp.name}
-                                address={camp.streetAddr}
-                                keywords={camp.keywords || []}
-                                lineIntro={camp.lineIntro || `${camp.streetAddr.split(' ').slice(0, 2).join(' ')}에 있는 ${camp.name}`}
-                                marked={camp.marked}
-                                onClick={() => handleCardClick(camp.campId)}
-                                onShowSnackbarNone={showSnackbarNone}
-                                onShowSnackbarBookmark={showSnackbarBookmark}
-                                className={"w-96 h-100 border border-gray-200 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:-translate-y-2"}
-                            />
-                        ))}
+                        <CampingCardCarousel
+                            camps={matchedCampsData.content}
+                            itemsPerView={3}
+                            handleCardClick={handleCardClick}
+                            showSnackbarNone={showSnackbarNone}
+                            showSnackbarBookmark={showSnackbarBookmark}
+                        />
                     </Box>
                 </>
             )}
