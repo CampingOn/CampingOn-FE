@@ -100,7 +100,7 @@ function Home() {
     }, [loadMore]);
 
     return (
-        <Container maxWidth="lg" sx={{py: 4}}>
+        <Container style={{ padding: '0', marginTop: '60px' }}>
             {/* 캐러셀 영역 */}
             <Box mb={4}>
                 <MainCarousel/>
@@ -130,7 +130,9 @@ function Home() {
                             lg: 'repeat(3, 1fr)'
                         },
                         gap: 3,
-                        mb: 4
+                        mb: 4,
+                        width: '100%',
+                        margin: '0 auto'
                     }}>
                         {matchedCampsData.content.map((camp) => (
                             <CampingCard
@@ -145,7 +147,7 @@ function Home() {
                                 onClick={() => handleCardClick(camp.campId)}
                                 onShowSnackbarNone={showSnackbarNone}
                                 onShowSnackbarBookmark={showSnackbarBookmark}
-                                className={"w-96 h-100 border border-gray-200 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:-translate-y-2"}
+                                className="border border-gray-200 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:-translate-y-2"
                             />
                         ))}
                     </Box>
@@ -164,7 +166,9 @@ function Home() {
                     lg: 'repeat(3, 1fr)'
                 },
                 gap: 3,
-                mb: 4
+                mb: 4,
+                width: '100%',
+                margin: '0 auto'
             }}>
                 {camps.map((camp) => (
                     <CampingCard
@@ -179,7 +183,7 @@ function Home() {
                         onClick={() => handleCardClick(camp.campId)}
                         onShowSnackbarNone={showSnackbarNone}
                         onShowSnackbarBookmark={showSnackbarBookmark}
-                        className={"w-96 h-64 border border-gray-200 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:-translate-y-2"}
+                        className="border border-gray-200 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:-translate-y-2"
                     />
                 ))}
             </Box>
