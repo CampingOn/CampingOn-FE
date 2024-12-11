@@ -21,7 +21,6 @@
 .camp-date-picker-container h2 {
     font-size: 1.2rem; /* 제목 크기 */
     text-align: center; /* 중앙 정렬 */
-    margin-bottom: 10px; /* 아래 여백 */
     font-weight: bold;
 }
 
