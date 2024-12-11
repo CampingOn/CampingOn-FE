@@ -187,7 +187,7 @@ function CampDetail() {
             </div>
             <Box sx={{padding: 4}}>
                 <Typography variant="h4" gutterBottom sx={{fontWeight: "bold", marginBottom: 4}}>
-                    캠핑장 리뷰
+                    후기
                 </Typography>
                 <ReviewList campId={campId}/>
             </Box>
