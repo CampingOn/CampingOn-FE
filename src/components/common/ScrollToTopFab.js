@@ -25,6 +25,7 @@ function ScrollToTopFab({
                     bottom: bottom,
                     right: right,
                     zIndex: 1,
+
                 }
             },
             React.createElement(Fab, {
@@ -32,9 +33,9 @@ function ScrollToTopFab({
                     size: size,
                     "aria-label": "페이지 최상단으로 이동",
                     sx: {
-                        bgcolor: '#FFC107',
+                        backgroundColor: '#ffc400',
                         '&:hover': {
-                            bgcolor: '#E5AD06',
+                            backgroundColor: 'rgba(255,196,0,0.8)',
                         }
                     }
                 },

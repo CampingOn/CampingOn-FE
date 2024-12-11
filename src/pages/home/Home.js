@@ -119,9 +119,31 @@ function Home() {
             {/* 추천 캠핑장 목록 */}
             {isAuthenticated && matchedCampsData?.content?.length > 0 && (
                 <>
-                    <Typography variant="h5" fontWeight="bold" sx={{mb: 4}}>
-                        {matchedCampsData.content[0]?.username}님을 위한 추천 캠핑장 🏕️
-                    </Typography>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between', // 좌우 정렬
+                            alignItems: 'flex-end', // 아래쪽 기준으로 정렬
+                            mb: 4, // 아래쪽 여백
+                        }}
+                    >
+                        <Typography variant="h5" fontWeight="bold">
+                            {matchedCampsData.content[0]?.username}님을 위한 추천 캠핑장 🏕️
+                        </Typography>
+                        <Typography
+                            variant="body2"
+                            sx={{
+                                color: "#9e9e9e",
+                                cursor: "pointer",
+                                "&:hover": { color: "#616161" }, // 호버 시 색상 변경
+                                fontSize: "0.875rem", // 작은 글씨 크기
+                            }}
+                            onClick={() => navigate("/keyword")}
+                        >
+                            키워드를 바꾸고싶다면? →
+                        </Typography>
+                    </Box>
+
                     <Box sx={{
                         display: 'grid',
                         gridTemplateColumns: {
