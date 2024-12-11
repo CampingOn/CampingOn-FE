@@ -1,10 +1,47 @@
-import React, { useEffect, useState } from "react";
+import React, {createContext, useContext, useEffect, useState} from "react";
 import { useApi } from "hooks/useApi";
 import { reservationService } from "api/services/reservationService";
 import { CampReservationCard, ScrollToTopFab } from "components";
 import { Box, Typography, CircularProgress } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { useInView } from "react-intersection-observer";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+
+const SnackbarContext = createContext();
+
+export const useSnackbar = () => useContext(SnackbarContext);
+
+const SnackbarProvider = ({ children }) => {
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [snackbarSeverity, setSnackbarSeverity] = useState("success"); // "success" | "error" | "info" | "warning"
+
+    const showSnackbar = (message, severity = "success") => {
+        setSnackbarMessage(message);
+        setSnackbarSeverity(severity);
+        setSnackbarOpen(true);
+    };
+
+    const closeSnackbar = () => setSnackbarOpen(false);
+
+    return (
+        <SnackbarContext.Provider value={showSnackbar}>
+            {children}
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={4000}
+                onClose={closeSnackbar}
+                anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+            >
+                <Alert onClose={closeSnackbar} severity={snackbarSeverity} sx={{ width: "100%" }}>
+                    {snackbarMessage}
+                </Alert>
+            </Snackbar>
+        </SnackbarContext.Provider>
+    );
+};
+
 
 const MyReservation = () => {
     const {
@@ -109,25 +146,28 @@ const MyReservation = () => {
         );
 
     return (
-        <Box sx={{ padding: 4 }}>
-            <Typography variant="h5" gutterBottom sx={{ fontWeight: "bold", marginTop: 4 }}>
-                나의 예약 목록
-            </Typography>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                {reservations.map((reservation) => (
-                    <CampReservationCard key={reservation.id} data={reservation} onReviewChange={refreshReservations} />
-                ))}
-            </Box>
-            {/* 로딩 중이면 로딩 표시 */}
-            {loadingReservations && (
-                <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-                    <CircularProgress size={24} />
+        <SnackbarProvider>
+            <Box sx={{ padding: 4 }}>
+                <Typography variant="h5" gutterBottom sx={{ fontWeight: "bold", marginTop: 4 }}>
+                    나의 예약 목록
+                </Typography>
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                    {reservations.map((reservation) => (
+                        <CampReservationCard key={reservation.id} data={reservation} onReviewChange={refreshReservations} />
+                    ))}
                 </Box>
-            )}
-            {/* 로드 더보기 트리거 */}
-            <Box ref={loadMoreRef} sx={{ height: 20, mt: 2 }} />
-            <ScrollToTopFab />
-        </Box>
+                {/* 로딩 중이면 로딩 표시 */}
+                {loadingReservations && (
+                    <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+                        <CircularProgress size={24} />
+                    </Box>
+                )}
+                {/* 로드 더보기 트리거 */}
+                <Box ref={loadMoreRef} sx={{ height: 20, mt: 2 }} />
+                <ScrollToTopFab />
+            </Box>
+        </SnackbarProvider>
+
     );
 };
 

@@ -1,6 +1,6 @@
 import Calendar from "./camp/Calendar";
 import CampingCard from "./camp/CampingCard";
-import InputField from "./common/InputField";
+import CustomInput from "./common/CustomInputField";
 import LoadMoreButton from "./common/LoadMoreButton";
 import ProfileCard from "./common/ProfileCard";
 import ScrollToTopFab from "./common/ScrollToTopFab";
@@ -31,7 +31,7 @@ import CampingCardCarousel from "./camp/CampingCardCarousel";
 export {
     Calendar,
     CampingCard,
-    InputField,
+    CustomInput,
     LoadMoreButton,
     ProfileCard,
     ScrollToTopFab,

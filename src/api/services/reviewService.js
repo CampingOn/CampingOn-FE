@@ -30,8 +30,8 @@ export const reviewService = {
     },
 
     // 캠핑장 리뷰 목록 조회
-    getReviewsByCampId: (campId) => {
-        return apiClient.get(`/api/camps/${campId}/reviews`);
+    getReviewsByCampId: (campId, params) => {
+        return apiClient.get(`/api/camps/${campId}/reviews`, { params });
     },
 
     // 리뷰 상세 조회

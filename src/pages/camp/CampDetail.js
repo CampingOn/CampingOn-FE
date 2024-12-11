@@ -7,7 +7,7 @@ import {
     AddressInfo,
     CampDetailIntro,
     OperationPolicy,
-    MapSection,
+    KakaoMap,
     ModalGallery,
     CampSiteCard,
     CampDatePicker,
@@ -19,6 +19,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import "../../style/camp-detail.css";
 import "../../style/available-list.css";
 import CampInfo from "../../components/camp/CampInfo";
+import ReviewList from "../../components/Review/ReviewList";
+import { Box, Typography } from "@mui/material";
+
 
 function calculateNights(checkin, checkout) {
     if (!checkin || !checkout) return 1; // 체크인 또는 체크아웃이 없으면 기본 1박
@@ -36,7 +39,7 @@ function CampDetail() {
     const [checkout, setCheckout] = useState(null); // 체크아웃 날짜
     const [modalOpen, setModalOpen] = useState(false);
 
-    const {data: availableSites, loading, error} = useAvailableCampSites(
+    const {data: availableSites, error} = useAvailableCampSites(
         campId,
         checkin ? checkin.toISOString().split("T")[0] : null,
         checkout ? checkout.toISOString().split("T")[0] : null
@@ -91,8 +94,7 @@ function CampDetail() {
                     justifyContent: 'center',
                     alignItems: 'center',
                     width: '100%',
-                    height: '600px',
-                    marginBottom: "20px"
+                    marginBottom: '20px'
                 }}>
                     <img
                         src={getRandomThumbnail("", campId)}
@@ -106,17 +108,23 @@ function CampDetail() {
             <ModalGallery open={openModal} onClose={handleModalClose} images={images || []}/>
             <AddressInfo address={campAddr?.streetAddr} tel={tel} homepage={homepage}/>
             <CampDetailIntro intro={intro}/>
-            <OperationPolicy
-                industries={campDetails.indutys || []}
-                outdoorFacility={campDetails.outdoorFacility || "부대시설 정보 없음"}
-                animalAdmission={campDetails.animalAdmission}
-            />
-            <MapSection
-                latitude={campAddr?.latitude}
-                longitude={campAddr?.longitude}
-                name={name}
-                state={campAddr?.state}
-            />
+            <div style={{display: 'flex', gap: '16px', width: '100%'}}>
+                <Box style={{flex: '1', marginRight: '10px'}}>
+                    <OperationPolicy
+                        industries={campDetails.indutys || []}
+                        outdoorFacility={campDetails.outdoorFacility || "부대시설 정보 없음"}
+                        animalAdmission={campDetails.animalAdmission}
+                    />
+                </Box>
+                <Box style={{flex: '1', marginLeft: '10px'}}>
+                    <KakaoMap
+                        latitude={campAddr?.latitude}
+                        longitude={campAddr?.longitude}
+                        locationName={name}
+                        state={campAddr?.state}
+                    />
+                </Box>
+            </div>
 
             <div className="camp-date-picker-container">
                 <h2>예약 가능한 날짜 선택</h2>
@@ -139,8 +147,24 @@ function CampDetail() {
 
             <div className="camp-site-list-available">
                 <h2>예약 가능한 캠핑지 목록</h2>
-                {/*if (loading) return <div>로딩 중...</div>;*/}
-                {availableSites && availableSites.length > 0 ? (
+                {/* 캠핑지가 없을 때 빈 카드 표시 */}
+                {!availableSites || availableSites.length === 0 ? (
+                    <div
+                        className="placeholder-card"
+                        style={{
+                            border: "1px dashed #ddd",
+                            borderRadius: "8px",
+                            height: "370px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            margin: "20px 0",
+                            color: "#999",
+                        }}
+                    >
+                        날짜를 선택하여 캠핑지를 확인하세요.
+                    </div>
+                ) : (
                     availableSites.map((site, index) => (
                         <CampSiteCard
                             locale={ko}
@@ -150,11 +174,9 @@ function CampDetail() {
                             checkin={checkin}
                             checkout={checkout}
                             count={nights} // 박 수 전달
-                            onReserve={() => console.log(`${site} 예약하기`)}
+                            // onReserve={() => console.log(${site} 예약하기)}
                         />
                     ))
-                ) : (
-                    <p>예약 가능한 캠핑지가 없습니다.</p>
                 )}
                 <ModalComponent
                     open={modalOpen}
@@ -163,6 +185,12 @@ function CampDetail() {
                     message="※ 당일 예약은 전화로만 가능합니다."
                 />
             </div>
+            <Box sx={{padding: 4}}>
+                <Typography variant="h4" gutterBottom sx={{fontWeight: "bold", marginBottom: 4}}>
+                    후기
+                </Typography>
+                <ReviewList campId={campId}/>
+            </Box>
         </div>
     );
 }

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import InputField from "components/common/InputField";
 import apiClient from 'api/axiosConfig';
+import { CustomInput } from "components";
 
 // 회원가입 / 회원 정보 수정 시 중복 확인 필드
 export function DuplicateCheckField({ id, label, type, qtype, value, onChange, validateFn, placeholder, successMessage, onStatusChange }) {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
-    const handleBlur = async () => {
+    const handleClick = async () => {
         if (!validateFn(value)) {
             setError(`${label} 형식이 올바르지 않습니다.`);
             setSuccess('');
@@ -35,17 +35,34 @@ export function DuplicateCheckField({ id, label, type, qtype, value, onChange, v
         }
     };
 
+    const handleBlur = (e) => {
+        if (!validateFn(e.target.value)) {
+            setError(`${label} 형식이 올바르지 않습니다.`);
+            onStatusChange(false);
+        } else {
+            setError('');
+        }
+    };
+
     return (
-        <InputField
+        <CustomInput
             id={id}
             label={label}
             type={type}
             value={value}
-            onChange={onChange}
+            onChange={(e) => {
+                onChange(e);
+                if (!validateFn(e.target.value)) {
+                    setError(`${label} 형식이 올바르지 않습니다.`);
+                    onStatusChange(false);
+                } else {
+                    setError('');
+                }
+            }}
             onBlur={handleBlur}
             error={error}
             buttonText="중복 확인"
-            onButtonClick={handleBlur}
+            onButtonClick={handleClick}
             buttonVisible={true}
             placeholder={placeholder}
             successMessage={successMessage || success}
