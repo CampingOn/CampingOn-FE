@@ -57,7 +57,7 @@ function Login() {
                 const keywordResponse = await fetchSelectedTags();
                 const userKeywords = keywordResponse?.keywords || []; // 키워드 목록 가져오기
 
-                navigate(userKeywords.length === 0 ? '/keyword' : '/');
+                navigate(userKeywords.length === 0 ? '/keyword' : -1 );
 
             } catch (error) {
                 // 오류 메시지 표시
