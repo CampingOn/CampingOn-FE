@@ -39,7 +39,7 @@ const CampingCard = ({ thumbImage, name, address, keywords, lineIntro, marked, o
             onClick={onClick} // 부모 컴포넌트에서 전달받은 onClick 이벤트 연결
             className={className}
         >
-            <div className="relative w-full h-36"> {/* 이미지 영역 */}
+            <div className="relative h-36"> {/* 이미지 영역 */}
                 <img
                     src={imageUrl}
                     alt={`${name} 사진`}

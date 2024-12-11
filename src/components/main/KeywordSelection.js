@@ -205,12 +205,14 @@ const KeywordSelection = ({ skip = false }) => {
                             sx={{
                                 padding: "8px 20px",
                                 fontSize: "1rem",
-                                backgroundColor: selectedTags.length > 0 ? "#ff9100" : "#e0e0e0",
+                                backgroundColor: selectedTags.length > 0 ? "#ff8146" : "#e0e0e0",
                                 color: "#f5f5f5",
-                                borderRadius: "8px",
+                                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                                borderRadius: '0.375rem',
                                 transition: "all 0.3s ease",
                                 "&:hover": {
-                                    backgroundColor: selectedTags.length > 0 ? "#ff7043" : "#e0e0e0",
+                                    backgroundColor: selectedTags.length > 0 ? "#ff6927" : "#e0e0e0",
+                                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
                                 },
                             }}
                         >

@@ -57,7 +57,11 @@ const KakaoMap = ({ latitude, longitude, locationName, state }) => {
         };
     }, [latitude, longitude, locationName, state]);
 
-    return <div id="map" style={{ width: '100%', height: '325px', marginTop: '35px', marginBottom: '50px'}}></div>;
+    return <div id="map" style={{ 
+        width: '100%', 
+        height: '100%',  // 부모 컨테이너의 높이에 맞춤
+        minHeight: '324px'  // 최소 높이 설정
+    }}></div>;
 };
 
 export default KakaoMap;

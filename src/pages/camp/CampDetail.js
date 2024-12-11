@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
 import {useCampDetail} from "../../hooks/useCampDetail";
 import useAvailableCampSites from "../../hooks/useAvailableCampSites";
@@ -38,6 +38,7 @@ function CampDetail() {
     const [checkin, setCheckin] = useState(null); // 체크인 날짜
     const [checkout, setCheckout] = useState(null); // 체크아웃 날짜
     const [modalOpen, setModalOpen] = useState(false);
+    const [localAvailableSites, setLocalAvailableSites] = useState([]);
 
     const {data: availableSites, error} = useAvailableCampSites(
         campId,
@@ -45,16 +46,24 @@ function CampDetail() {
         checkout ? checkout.toISOString().split("T")[0] : null
     );
 
-    const handleDateChange = (dates) => {
+    useEffect(() => {
+        setLocalAvailableSites(availableSites || []);
+    }, [availableSites]);
+
+    const handleDateChange = (dates, isClearing = false) => {
         const [start, end] = dates;
         setCheckin(start);
         setCheckout(end);
 
+        if (isClearing) {
+            setLocalAvailableSites([]);
+        }
+
         const today = new Date();
-        today.setHours(0, 0, 0, 0); // 날짜만 비교하도록 시간 제거
+        today.setHours(0, 0, 0, 0);
 
         if (start && start.toDateString() === today.toDateString()) {
-            setModalOpen(true); // 당일 예약인 경우 모달 열기
+            setModalOpen(true);
         }
     };
 
@@ -77,9 +86,9 @@ function CampDetail() {
     console.log('🔍 checkin:', checkin, 'checkout:', checkout, '박 수 (nights):', nights); // 디버깅 로그
 
     return (
-        <div className="camp-detail-container">
+        <div className="camp-detail-container" style={{ padding: '0', marginTop: '60px' }}>
             <div className="camp-detail-header"
-                 style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}
+                 style={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: '20px'}}
             >
                 <h1 className="camp-detail-title">{name || "캠핑장 이름 없음"}</h1>
                 <CampInfo
@@ -108,16 +117,33 @@ function CampDetail() {
             <ModalGallery open={openModal} onClose={handleModalClose} images={images || []}/>
             <AddressInfo address={campAddr?.streetAddr} tel={tel} homepage={homepage}/>
             <CampDetailIntro intro={intro}/>
-            <div style={{display: 'flex', gap: '16px', width: '100%'}}>
-                <Box style={{flex: '1', marginRight: '10px'}}>
+            <div style={{
+                display: 'flex', 
+                gap: '16px', 
+                width: '100%', 
+                marginTop: '30px',
+                alignItems: 'stretch'
+            }}>
+                <Box style={{
+                    flex: '1',
+                    display: 'flex',
+                }}>
                     <OperationPolicy
+                        style={{ flex: '1' }}
                         industries={campDetails.indutys || []}
                         outdoorFacility={campDetails.outdoorFacility || "부대시설 정보 없음"}
                         animalAdmission={campDetails.animalAdmission}
                     />
                 </Box>
-                <Box style={{flex: '1', marginLeft: '10px'}}>
+                <Box style={{
+                    flex: '1',
+                    display: 'flex',
+                    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+                    borderRadius: '8px',
+                    border: '1px solid #000000'
+                }}>
                     <KakaoMap
+                        style={{ flex: '1' }}
                         latitude={campAddr?.latitude}
                         longitude={campAddr?.longitude}
                         locationName={name}
@@ -126,29 +152,22 @@ function CampDetail() {
                 </Box>
             </div>
 
-            <div className="camp-date-picker-container">
-                <h2>예약 선택</h2>
+            <div className="camp-date-picker-container" style={{ marginTop: '80px' }}>
+                <h2 style={{fontSize: '1.1rem', fontWeight: 'initial'}}>
+                    <span>🏕️ 캠핑을 원하시는 날짜를 선택하고,</span>
+                    <span>특별한 여행을 시작하세요! 🏕</span>
+                </h2>
                 <CampDatePicker
                     checkin={checkin}
                     checkout={checkout}
                     handleDateChange={handleDateChange}
                 />
-                <div className="date-info">
-                    <div className="date-box">
-                        <span className="label">입실일</span>
-                        <span className="date">{checkin ? checkin.toLocaleDateString("ko-KR") : "날짜를 선택하기"}</span>
-                    </div>
-                    <div className="date-box">
-                        <span className="label">퇴실일</span>
-                        <span className="date">{checkout ? checkout.toLocaleDateString("ko-KR") : "날짜를 선택하기"}</span>
-                    </div>
-                </div>
             </div>
 
             <div className="camp-site-list-available">
-                <h2>예약 가능한 캠핑지 목록</h2>
+                <h1 style={{fontSize: '1.8rem', fontWeight: 'bold', marginBottom: '20px'}}>예약 가능한 캠핑지 목록</h1>
                 {/* 캠핑지가 없을 때 빈 카드 표시 */}
-                {!availableSites || availableSites.length === 0 ? (
+                {!localAvailableSites || localAvailableSites.length === 0 ? (
                     <div
                         className="placeholder-card"
                         style={{
@@ -165,18 +184,20 @@ function CampDetail() {
                         날짜를 선택하여 캠핑지를 확인하세요.
                     </div>
                 ) : (
-                    availableSites.map((site, index) => (
-                        <CampSiteCard
-                            locale={ko}
-                            key={index}
-                            campId={campId}
-                            data={site}
-                            checkin={checkin}
-                            checkout={checkout}
-                            count={nights} // 박 수 전달
-                            // onReserve={() => console.log(${site} 예약하기)}
-                        />
-                    ))
+                    <div style={{ marginBottom: '40px' }}>
+                        {localAvailableSites.map((site, index) => (
+                            <div key={index} style={{ marginBottom: '20px' }}>
+                                <CampSiteCard
+                                    locale={ko}
+                                    campId={campId}
+                                    data={site}
+                                    checkin={checkin}
+                                    checkout={checkout}
+                                    count={nights}
+                                />
+                            </div>
+                        ))}
+                    </div>
                 )}
                 <ModalComponent
                     open={modalOpen}
@@ -185,8 +206,8 @@ function CampDetail() {
                     message="※ 당일 예약은 전화로만 가능합니다."
                 />
             </div>
-            <Box sx={{padding: 4}}>
-                <Typography variant="h4" gutterBottom sx={{fontWeight: "bold", marginBottom: 4}}>
+            <Box sx={{paddingTop: 4}}>
+                <Typography gutterBottom sx={{fontSize: '1.8rem', fontWeight: "bold", marginBottom: '20px'}}>
                     후기
                 </Typography>
                 <ReviewList campId={campId}/>

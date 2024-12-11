@@ -167,14 +167,19 @@ const Header = () => {
                             </Tabs>
                         </div>
                     )}
-                        {isAuthenticated ?
-                            <LockTwoToneIcon
-                                onClick={handleAuthClick}
-                                sx={{ fontSize: 30, color: "#ffc400", cursor: 'pointer', marginTop: '5px' }} /> :
-                            <LockOpenTwoToneIcon
-                                onClick={handleAuthClick}
-                                sx={{ fontSize: 30, color: "#ffc400", cursor: 'pointer', marginTop: '5px' }} />
-                        }
+                    <div onClick={handleAuthClick} style={{cursor: 'pointer', display: 'flex', alignItems: 'center'}}>
+                        {isAuthenticated ? (
+                            <>
+                                <span style={{color: "#ffc400", marginTop: '5px'}}>LOGOUT</span>
+                                <LockTwoToneIcon sx={{fontSize: 30, color: "#ffc400", margin: '5px 5px'}}/>
+                            </>
+                        ) : (
+                            <>
+                                <span style={{color: "#ffc400", marginTop: '5px'}}>LOGIN</span>
+                                <LockOpenTwoToneIcon sx={{fontSize: 30, color: "#ffc400", margin: '5px 5px'}}/>
+                            </>
+                        )}
+                    </div>
                 </Toolbar>
             </AppBar>
 

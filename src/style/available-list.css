@@ -64,3 +64,7 @@
 .camp-site-card button:hover {
     background-color: #FCD34D; /* YellowButton hover 효과 색상 */
 }
+
+.MuiPaper-root.MuiCard-root {
+    margin: 0 !important;
+}

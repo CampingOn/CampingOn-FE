@@ -53,7 +53,7 @@ const ReviewList = ({ campId }) => {
     };
 
     return (
-        <Box sx={{ marginTop: 4 }}>
+        <Box sx={{ }}>
             <Typography variant="h5" gutterBottom>
             </Typography>
             {loading && page === 0 ? (

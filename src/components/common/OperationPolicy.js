@@ -40,8 +40,6 @@ const OperationPolicy = ({
             width: '100%',
             maxWidth: '100%',
             padding: '20px',
-            marginTop: '35px',
-            marginBottom: '20px',
             boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
             borderRadius: '8px',
             border: '1px solid #000000',
@@ -62,10 +60,27 @@ const OperationPolicy = ({
                                 borderBottom: index === policyData.length - 1 ? 'none' : '1px solid #f0f0f0'
                             }}
                         >
-                            <Typography sx={{ fontWeight: 'bold', color: '#333', fontSize: '15px' }}>
+                            <Typography 
+                                sx={{ 
+                                    fontWeight: 'bold', 
+                                    color: '#333', 
+                                    fontSize: '15px',
+                                    minWidth: '100px',
+                                    flexShrink: 0
+                                }}
+                            >
                                 {item.label}
                             </Typography>
-                            <Typography sx={{ color: '#666', fontSize: '13px' }}>
+                            <Typography 
+                                sx={{ 
+                                    color: '#666', 
+                                    fontSize: '15px',
+                                    textAlign: 'right',
+                                    wordBreak: 'break-word',
+                                    flex: 1,
+                                    paddingLeft: '20px'
+                                }}
+                            >
                                 {item.value}
                             </Typography>
                         </ListItem>

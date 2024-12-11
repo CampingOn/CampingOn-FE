@@ -100,7 +100,7 @@ function Home() {
     }, [loadMore]);
 
     return (
-        <Container maxWidth="lg" sx={{py: 4}}>
+        <Container style={{ padding: '0', marginTop: '60px' }}>
             {/* 캐러셀 영역 */}
             <Box mb={4}>
                 <MainCarousel/>
@@ -119,9 +119,31 @@ function Home() {
             {/* 추천 캠핑장 목록 */}
             {isAuthenticated && matchedCampsData?.content?.length > 0 && (
                 <>
-                    <Typography variant="h5" fontWeight="bold" sx={{mb: 4}}>
-                        {matchedCampsData.content[0]?.username}님을 위한 추천 캠핑장
-                    </Typography>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between', // 좌우 정렬
+                            alignItems: 'flex-end', // 아래쪽 기준으로 정렬
+                            mb: 4, // 아래쪽 여백
+                        }}
+                    >
+                        <Typography variant="h5" fontWeight="bold">
+                            {matchedCampsData.content[0]?.username}님을 위한 추천 캠핑장 🏕️
+                        </Typography>
+                        <Typography
+                            variant="body2"
+                            sx={{
+                                color: "#9e9e9e",
+                                cursor: "pointer",
+                                "&:hover": { color: "#616161" }, // 호버 시 색상 변경
+                                fontSize: "0.875rem", // 작은 글씨 크기
+                            }}
+                            onClick={() => navigate("/keyword")}
+                        >
+                            키워드를 바꾸고싶다면? →
+                        </Typography>
+                    </Box>
+
                     <Box sx={{
                         display: 'grid',
                         gridTemplateColumns: {
@@ -130,7 +152,9 @@ function Home() {
                             lg: 'repeat(3, 1fr)'
                         },
                         gap: 3,
-                        mb: 4
+                        mb: 4,
+                        width: '100%',
+                        margin: '0 auto'
                     }}>
                         {matchedCampsData.content.map((camp) => (
                             <CampingCard
@@ -145,7 +169,7 @@ function Home() {
                                 onClick={() => handleCardClick(camp.campId)}
                                 onShowSnackbarNone={showSnackbarNone}
                                 onShowSnackbarBookmark={showSnackbarBookmark}
-                                className={"w-96 h-100 border border-gray-200 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:-translate-y-2"}
+                                className="border border-gray-200 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:-translate-y-2"
                             />
                         ))}
                     </Box>
@@ -153,8 +177,8 @@ function Home() {
             )}
 
             {/* 인기 캠핑장 목록 */}
-            <Typography variant="h5" fontWeight="bold" sx={{mb: 4}}>
-                인기 캠핑장
+            <Typography variant="h5" fontWeight="bold" sx={{mb: 4, mt: 4}}>
+                캠핑온 인기 캠핑장 ✨
             </Typography>
             <Box sx={{
                 display: 'grid',
@@ -164,7 +188,9 @@ function Home() {
                     lg: 'repeat(3, 1fr)'
                 },
                 gap: 3,
-                mb: 4
+                mb: 4,
+                width: '100%',
+                margin: '0 auto'
             }}>
                 {camps.map((camp) => (
                     <CampingCard
@@ -179,7 +205,7 @@ function Home() {
                         onClick={() => handleCardClick(camp.campId)}
                         onShowSnackbarNone={showSnackbarNone}
                         onShowSnackbarBookmark={showSnackbarBookmark}
-                        className={"w-96 h-64 border border-gray-200 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:-translate-y-2"}
+                        className="border border-gray-200 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:-translate-y-2"
                     />
                 ))}
             </Box>
