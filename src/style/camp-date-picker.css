@@ -18,21 +18,21 @@
 
 /* 캘린더 컨테이너 */
 .react-datepicker-container {
-    position: relative;
-    transform-origin: center;
+    transform-origin: top;
+    scale: 1.025;
     flex: 0 0 auto;
 }
 
 /* 캘린더 */
 .react-datepicker {
-    transform-origin: top left;
+    transform-origin: center;
 }
 
 /* 날짜 초기화 버튼 */
 .clear-dates-icon {
     position: absolute !important;
     top: 10px !important;
-    right: 10px !important;  /* 캘린더 내부 오른쪽에 위치 */
+    right: 10px !important;
     z-index: 1;
     cursor: pointer;
 }
@@ -42,15 +42,15 @@
     width: 320px;
     padding: 20px;
     background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     gap: 10px;
     box-sizing: border-box;
     flex: 0 0 auto;
+    box-shadow: none;
 }
 
 /* 날짜 정보 타이틀 */
@@ -180,16 +180,15 @@
     align-items: center;
     padding: 10px;
     background-color: #ffffff;
-    border: 1px dashed #ddd;  /* 점선 테두리 */
+    border: 1px dashed #ddd;
     border-radius: 6px;
     gap: 4px;
-    transition: all 0.3s ease;  /* 부드러운 전환 효과 */
+    transition: all 0.3s ease;
 }
 
 /* 날짜가 선택된 상태 */
 .date-box.selected {
     border: 1px solid #cbcbcb;
-    /*background-color: #f8f8f8;  !* 배경색 약간 변경 *!*/
 }
 
 /* 라벨과 날짜 텍스트 */
@@ -206,7 +205,7 @@
 }
 
 .date-box.selected .date {
-    color: #ffc400;
+    color: #1e1e1e;
     font-weight: bold;
 }
 
