@@ -26,7 +26,6 @@ import MapSection from "./camp/MapSection";
 import ModalGallery from "./camp/ModalGallery";
 import KeywordSelection from "./main/KeywordSelection";
 import NoResultsFound from "./main/NoResultsFound";
-import CampingCardCarousel from "./camp/CampingCardCarousel";
 
 export {
     Calendar,
@@ -57,5 +56,4 @@ export {
     ModalGallery,
     KeywordSelection,
     NoResultsFound,
-    CampingCardCarousel,
 };
