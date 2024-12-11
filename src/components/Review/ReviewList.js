@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Box, Typography, CircularProgress, Button, Snackbar, Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { reviewService } from "../../api/services/reviewService";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 const DEFAULT_IMAGE = "/default/reviewImage.jpg";
 
@@ -148,15 +149,39 @@ const ReviewList = ({ campId }) => {
 
             {/* 더보기 버튼 */}
             {hasMore && !loading && (
-                <Button
-                    variant="contained"
+                <Box
                     onClick={handleLoadMore}
-                    sx={{ marginTop: 4, display: "block", marginLeft: "auto", marginRight: "auto" }}
+                    sx={{
+                        marginTop: 4,
+                        display: "flex",
+                        justifyContent: "center", // 가로 정렬 중앙
+                        alignItems: "center", // 세로 정렬 중앙
+                        cursor: "pointer",
+                        width: "50px",
+                        height: "50px",
+                        backgroundColor: "#e0e0e0",
+                        borderRadius: "25px",
+                        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+                        marginLeft: "auto", // 가운데 정렬
+                        marginRight: "auto", // 가운데 정렬
+                        "&:hover": {
+                            backgroundColor: "#d6d6d6",
+                        },
+                    }}
                 >
-                    더보기
-                </Button>
+                    <KeyboardArrowDownIcon sx={{ fontSize: "24px", color: "#000" }} />
+                </Box>
             )}
-            {loading && <CircularProgress sx={{ marginTop: 2, display: "block", marginLeft: "auto", marginRight: "auto" }} />}
+            {loading && (
+                <CircularProgress
+                    sx={{
+                        marginTop: 2,
+                        display: "block",
+                        marginLeft: "auto", // 로딩 스피너도 가운데 정렬
+                        marginRight: "auto",
+                    }}
+                />
+            )}
 
             {/* Snackbar */}
             <Snackbar
