@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import apiClient from 'api/axiosConfig';
-import InputField from "components/common/InputField";
 import { validateEmail, validatePassword } from 'utils/Validation';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import {useAuth} from "context/AuthContext";
-import {useApi} from "../../hooks/useApi";
+import {useApi} from "hooks/useApi";
 import {userService} from "../../api/services/userService";
+import { CustomInput } from "components";
 
 function Login() {
     const [logo, setLogo] = useState(`/logo/logo.svg`);
@@ -57,7 +57,7 @@ function Login() {
                 const keywordResponse = await fetchSelectedTags();
                 const userKeywords = keywordResponse?.keywords || []; // 키워드 목록 가져오기
 
-                navigate(userKeywords.length === 0 ? '/keyword' : '/');
+                navigate(userKeywords.length === 0 ? '/keyword' : -1 );
 
             } catch (error) {
                 // 오류 메시지 표시
@@ -101,7 +101,7 @@ function Login() {
             </div>
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 <form onSubmit={handleLogin} className="space-y-6">
-                    <InputField
+                    <CustomInput
                         id="email"
                         label="이메일"
                         type="email"
@@ -111,7 +111,7 @@ function Login() {
                         error={emailError}
                         placeholder="example@example.com"
                     />
-                    <InputField
+                    <CustomInput
                         id="password"
                         label="비밀번호"
                         type="password"

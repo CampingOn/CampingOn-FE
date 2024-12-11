@@ -57,7 +57,13 @@ const ProfileView = () => {
                 <div className="mt-8">
                     <h2 className="text-xl font-bold mb-4">다가오는 예약</h2>
                     {upcomingReservation ? (
-                        <CampReservationCard data={upcomingReservation}/>
+                        <a href={`/my-reservation`}>
+                            <CampReservationCard
+                                data={upcomingReservation}
+                                buttonInVisible={true}
+                            />
+                        </a>
+
                     ) : (
                         <div className="flex flex-col items-center justify-center text-center p-6">
                             <CalendarTodayIcon

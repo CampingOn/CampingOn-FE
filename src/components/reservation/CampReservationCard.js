@@ -15,7 +15,6 @@ import {
     Alert,
     TextField
 } from "@mui/material";
-import {useNavigate} from "react-router-dom";
 import {useApi} from "../../hooks/useApi";
 import {reservationService} from "../../api/services/reservationService";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
@@ -25,8 +24,9 @@ import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
 import {FestivalOutlined} from "@mui/icons-material";
 import {ReviewModal, ReviewForm} from 'components';
 import {reviewService} from 'api/services/reviewService';
+import {useSnackbar} from "pages/reservation/MyReservation";
 
-const CampReservationCard = ({data, onReviewChange}) => {
+const CampReservationCard = ({data, buttonInVisible, onReviewChange}) => {
     const {
         id,
         checkin,
@@ -39,7 +39,6 @@ const CampReservationCard = ({data, onReviewChange}) => {
         campSiteResponseDto,
         reviewDto,
     } = data;
-    const navigate = useNavigate();
     const [open, setOpen] = useState(false); // 예약 취소 모달 상태
     const [snackbarOpen, setSnackbarOpen] = useState(false); // Snackbar 상태
     const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -47,6 +46,8 @@ const CampReservationCard = ({data, onReviewChange}) => {
     const [cancelReason, setCancelReason] = useState(""); // 취소 사유 상태
     const [selectedReservationId, setSelectedReservationId] = useState(null); // 선택된 예약 ID
     const [localStatus, setLocalStatus] = useState(status);
+
+    const showSnackbar = useSnackbar();
 
     const [reviewFormOpen, setReviewFormOpen] = useState(false);
     const [reviewModalOpen, setReviewModalOpen] = useState(false);
@@ -57,10 +58,6 @@ const CampReservationCard = ({data, onReviewChange}) => {
         execute: cancelReservation,
         loading: cancelLoading,
     } = useApi(reservationService.cancelReservation);
-
-    const handleNameClick = () => {
-        navigate(`/camps/${campResponseDto.campId}`);
-    };
 
     const handleCancelClick = (reservationId) => {
         setSelectedReservationId(reservationId);
@@ -82,16 +79,11 @@ const CampReservationCard = ({data, onReviewChange}) => {
 
                 // 클라이언트 상태 변경
                 setLocalStatus("예약취소");
+                showSnackbar("예약이 취소되었습니다.", "success");
                 setOpen(false); // 모달 닫기
-                setSnackbarMessage(`예약번호 ${selectedReservationId}: 취소되었습니다.`);
-                setSnackbarSeverity("success");
-                setSnackbarOpen(true); // Snackbar 표시
             }
         } catch (error) {
-            console.error("예약 취소 실패:", error);
-            setSnackbarMessage("예약 취소 중 문제가 발생했습니다. 다시 시도해주세요.");
-            setSnackbarSeverity("error");
-            setSnackbarOpen(true); // Snackbar 표시
+            showSnackbar("예약 취소 중 오류가 발생했습니다.", "error");
         }
     };
 
@@ -204,9 +196,10 @@ const CampReservationCard = ({data, onReviewChange}) => {
                     <Typography
                         variant="h5"
                         sx={{marginBottom: 2, fontWeight: 'bold'}}
-                        onClick={handleNameClick}
                     >
-                        {campResponseDto.campName} - {campSiteResponseDto.siteType}
+                        <a href={`/camps/${campResponseDto.campId}`} style={{textDecoration: 'none', color: 'inherit'}}>
+                            {campResponseDto.campName} - {campSiteResponseDto.siteType}
+                        </a>
                     </Typography>
                     <Box sx={{display: "flex", alignItems: "center", marginBottom: 1}}>
                         <LocationOnOutlinedIcon sx={{fontSize: 20, marginRight: 1, color: "green"}}/>
@@ -248,16 +241,19 @@ const CampReservationCard = ({data, onReviewChange}) => {
                 </CardContent>
 
                 {/* 예약 관련 처리 버튼 */}
-                <Box sx={{marginTop: "auto", textAlign: "right"}}>
-                    <Button
-                        variant={buttonProps.variant}
-                        color='warning'
-                        onClick={() => handleButtonClick(id)}
-                        disabled={buttonProps.disabled}
-                    >
-                        {buttonProps.text}
-                    </Button>
-                </Box>
+                {!buttonInVisible &&
+                    <Box sx={{marginTop: "auto", textAlign: "right"}}>
+                        <Button
+                            variant={buttonProps.variant}
+                            color='warning'
+                            onClick={() => handleButtonClick(id)}
+                            disabled={buttonProps.disabled}
+                        >
+                            {buttonProps.text}
+                        </Button>
+                    </Box>
+                }
+
             </Box>
 
             {/* 리뷰 작성 폼 */}

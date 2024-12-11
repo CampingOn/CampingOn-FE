@@ -10,7 +10,6 @@ import {userService} from "../../api/services/userService";
 
 const AccountDeletionPage = () => {
     const [reason, setReason] = useState(""); // 탈퇴 사유
-    const [password, setPassword] = useState(""); // 비밀번호
     const [open, setOpen] = useState(false); // 모달 열림 여부
 
     const handleClickOpen = () => {
@@ -64,27 +63,35 @@ const AccountDeletionPage = () => {
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
                 style={{ maxWidth: "500px", marginBottom: "20px" }}
-            />
-
-            {/* 비밀번호 입력칸 */}
-            <TextField
-                label="비밀번호"
-                type="password"
-                variant="outlined"
-                fullWidth
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                style={{ maxWidth: "500px", marginBottom: "20px" }}
+                sx={{
+                    '& .MuiOutlinedInput-root': {
+                        '& fieldset': {
+                            borderColor: '#e0e0e0',
+                        },
+                        '&:hover fieldset': {
+                            borderColor: '#ffc400',
+                        },
+                        '&.Mui-focused fieldset': {
+                            borderColor: '#ffc400',
+                        },
+                        '& textarea:focus': {
+                            outline: 'none',
+                        },
+                    },
+                    '& .MuiInputLabel-root.Mui-focused': {
+                        color: '#ffc400',
+                    },
+                }}
             />
 
             {/* 회원 탈퇴 버튼 */}
             <Button
                 variant="contained"
                 sx={{
-                    backgroundColor: '#3f51b5',
+                    backgroundColor: '#ffc400',
                     color: 'white',
                     '&:hover': {
-                        backgroundColor: '#002984',
+                        backgroundColor: '#ff8146',
                     },
                 }}
                 onClick={handleClickOpen}
