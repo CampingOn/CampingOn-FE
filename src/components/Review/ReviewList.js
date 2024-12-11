@@ -54,7 +54,6 @@ const ReviewList = ({ campId }) => {
     return (
         <Box sx={{ marginTop: 4 }}>
             <Typography variant="h5" gutterBottom>
-                캠핑장 리뷰
             </Typography>
             {loading && page === 0 ? (
                 <CircularProgress />
