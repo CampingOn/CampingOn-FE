@@ -8,6 +8,10 @@ import {CampingCard, ScrollToTopFab, MainCarousel, SearchBar, } from 'components
 import {useAuth} from "../../context/AuthContext";
 import Snackbar from "@mui/material/Snackbar";
 
+import IconButton from '@mui/material/IconButton';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+
 function Home() {
     const navigate = useNavigate();
     const {isAuthenticated} = useAuth();
@@ -17,6 +21,14 @@ function Home() {
     const [snackbarNone, setSnackbarNone] = useState(false);
     const [snackbarBookmark, setSnackbarBookmark] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
+    // 추천 목록 캐러셀
+    const [currentRecommendPage, setCurrentRecommendPage] = useState(0);
+    const [slideDirection, setSlideDirection] = useState('right');
+    const [isSliding, setIsSliding] = useState(false);
+    const [slideAnimation, setSlideAnimation] = useState({
+        isAnimating: false,
+        direction: null
+    });
 
     const handleCloseNone = () => {
         setSnackbarNone(false);
@@ -55,7 +67,7 @@ function Home() {
     useEffect(() => {
         executePopularCamps(0, 9);
         if (isAuthenticated) {
-            executeMatchedCamps(0, 3);
+            executeMatchedCamps(0, 12);
         }
     }, [isAuthenticated]);
 
@@ -99,6 +111,44 @@ function Home() {
         };
     }, [loadMore]);
 
+
+    // 추천 캠핑장 페이지 이동 핸들러
+    const handleNextPage = () => {
+        if (!slideAnimation.isAnimating && matchedCampsData?.content &&
+            currentRecommendPage < matchedCampsData.content.length - 1) {
+            setSlideAnimation({ isAnimating: true, direction: 'next' });
+            setTimeout(() => {
+                setCurrentRecommendPage(prev => prev + 1);
+                setSlideAnimation({ isAnimating: false, direction: null });
+            }, 300);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (!slideAnimation.isAnimating && currentRecommendPage > 0) {
+            setSlideAnimation({ isAnimating: true, direction: 'prev' });
+            setTimeout(() => {
+                setCurrentRecommendPage(prev => prev - 1);
+                setSlideAnimation({ isAnimating: false, direction: null });
+            }, 300);
+        }
+    };
+
+    // 현재 페이지에 표시할 아이템들 계산
+    const getCurrentPageItems = () => {
+        if (!matchedCampsData?.content) return [];
+        // 3개씩 보여주되, 현재 페이지를 중심으로 데이터를 가져옵니다
+        const items = [];
+        for (let i = 0; i < 3; i++) {
+            const index = currentRecommendPage + i;
+            if (index < matchedCampsData.content.length) {
+                items.push(matchedCampsData.content[index]);
+            }
+        }
+        return items;
+    };
+
+
     return (
         <Container style={{ padding: '0', marginTop: '60px' }}>
             {/* 캐러셀 영역 */}
@@ -117,61 +167,98 @@ function Home() {
                 <SearchBar onSearch={handleSearch} isLoading={false} />
             </Box>
             {/* 추천 캠핑장 목록 */}
-            {isAuthenticated && matchedCampsData?.content?.length > 0 && (
+            {isAuthenticated && matchedCampsData?.content?.length > 0 && !loadingMatchedCamps && (
                 <>
                     <Box
                         sx={{
                             display: 'flex',
-                            justifyContent: 'space-between', // 좌우 정렬
-                            alignItems: 'flex-end', // 아래쪽 기준으로 정렬
-                            mb: 4, // 아래쪽 여백
+                            flexDirection: 'column',  // 세로 방향 배치
+                            mb: 4,
                         }}
                     >
-                        <Typography variant="h5" fontWeight="bold">
-                            {matchedCampsData.content[0]?.username}님을 위한 추천 캠핑장 🏕️
-                        </Typography>
                         <Typography
                             variant="body2"
                             sx={{
                                 color: "#9e9e9e",
                                 cursor: "pointer",
-                                "&:hover": { color: "#616161" }, // 호버 시 색상 변경
-                                fontSize: "0.875rem", // 작은 글씨 크기
+                                "&:hover": { color: "#616161" },
+                                fontSize: "0.875rem",
+                                mb: 1
                             }}
                             onClick={() => navigate("/keyword")}
                         >
-                            키워드를 바꾸고싶다면? →
+                            ← 키워드를 바꾸고싶다면?
                         </Typography>
+                        <Box sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                        }}>
+                            <Typography variant="h5" fontWeight="bold">
+                                {matchedCampsData.content[0]?.username}님을 위한 추천 캠핑장 🏕️
+                            </Typography>
+                            <Box>
+                                <IconButton
+                                    onClick={handlePrevPage}
+                                    disabled={currentRecommendPage === 0 || isSliding}
+                                >
+                                    <ArrowBackIosNewIcon />
+                                </IconButton>
+                                <IconButton
+                                    onClick={handleNextPage}
+                                    disabled={!matchedCampsData?.content ||
+                                        currentRecommendPage >= matchedCampsData.content.length - 3 ||
+                                        isSliding}
+                                >
+                                    <ArrowForwardIosIcon />
+                                </IconButton>
+                            </Box>
+                        </Box>
                     </Box>
 
                     <Box sx={{
-                        display: 'grid',
-                        gridTemplateColumns: {
-                            xs: '1fr',
-                            sm: 'repeat(2, 1fr)',
-                            lg: 'repeat(3, 1fr)'
-                        },
-                        gap: 3,
-                        mb: 4,
-                        width: '100%',
-                        margin: '0 auto'
+                        position: 'relative',
+                        overflow: 'visible', // overflow를 visible로 변경
+                        mb: 4
                     }}>
-                        {matchedCampsData.content.map((camp) => (
-                            <CampingCard
-                                key={camp.campId}
-                                campId={camp.campId}
-                                thumbImage={camp.thumbImage}
-                                name={camp.name}
-                                address={camp.streetAddr}
-                                keywords={camp.keywords || []}
-                                lineIntro={camp.lineIntro || `${camp.streetAddr.split(' ').slice(0, 2).join(' ')}에 있는 ${camp.name}`}
-                                marked={camp.marked}
-                                onClick={() => handleCardClick(camp.campId)}
-                                onShowSnackbarNone={showSnackbarNone}
-                                onShowSnackbarBookmark={showSnackbarBookmark}
-                                className="border border-gray-200 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:-translate-y-2"
-                            />
-                        ))}
+                        <Box sx={{
+                            display: 'grid',
+                            gridTemplateColumns: {
+                                xs: '1fr',
+                                sm: 'repeat(2, 1fr)',
+                                lg: 'repeat(3, 1fr)'
+                            },
+                            gap: 3,
+                            mb: 2,
+                            width: '100%',
+                            margin: '0 auto'
+                        }}>
+                            {getCurrentPageItems().map((camp, index) => (
+                                <Box
+                                    key={camp.campId}
+                                    sx={{
+                                        opacity: slideAnimation.isAnimating ? 0.5 : 1,
+                                        transform: `scale(${slideAnimation.isAnimating ? 0.95 : 1})`,
+                                        transition: 'all 0.3s ease-in-out',
+                                    }}
+                                >
+                                    <CampingCard
+                                        key={camp.campId}
+                                        campId={camp.campId}
+                                        thumbImage={camp.thumbImage}
+                                        name={camp.name}
+                                        address={camp.streetAddr}
+                                        keywords={camp.keywords || []}
+                                        lineIntro={camp.lineIntro || `${camp.streetAddr.split(' ').slice(0, 2).join(' ')}에 있는 ${camp.name}`}
+                                        marked={camp.marked}
+                                        onClick={() => handleCardClick(camp.campId)}
+                                        onShowSnackbarNone={showSnackbarNone}
+                                        onShowSnackbarBookmark={showSnackbarBookmark}
+                                        className={"w-96 h-100 border border-gray-200 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:-translate-y-2"}
+                                    />
+                                </Box>
+                            ))}
+                        </Box>
                     </Box>
                 </>
             )}

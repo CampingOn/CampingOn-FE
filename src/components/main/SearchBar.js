@@ -45,7 +45,7 @@ function SearchBar({ onSearch, isLoading, initialCity = '', initialKeyword = '' 
 
     // 자동완성 데이터 반영
     const fetchAutocompleteSuggestions = async (value) => {
-        if (!value || value.length < 3) {   // 단어 길이 3미만은 자동완성x
+        if (!value || value.length < 2) {   // 단어 길이 2미만은 자동완성x
             setAutocompleteSuggestions([]);
             return;
         }
