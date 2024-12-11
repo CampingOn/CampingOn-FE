@@ -37,5 +37,17 @@ export const reviewService = {
     // 리뷰 상세 조회
     getReviewDetail: (reviewId) => {
         return apiClient.get(`/api/camps/reviews/${reviewId}`);
+    },
+
+    getReviewDetailWithCampName: async (reviewId) => {
+        const reviewDetail = await apiClient.get(`/api/camps/reviews/${reviewId}`);
+
+        const campId = reviewDetail.data.campId;
+        const campDetail = await apiClient.get(`/api/camps/${campId}`);
+
+        return {
+            ...reviewDetail.data,
+            campName: campDetail.data.name
+        };
     }
 }

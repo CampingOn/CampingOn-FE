@@ -24,6 +24,10 @@ const KakaoMap = ({ latitude, longitude, locationName, state }) => {
                 });
                 marker.setMap(map);
 
+                // 확대/축소 컨트롤 추가
+                const zoomControl = new window.kakao.maps.ZoomControl();
+                map.addControl(zoomControl, window.kakao.maps.ControlPosition.RIGHT);
+
                 // 커스텀 오버레이 추가 (마커에 마우스 올렸을 때 표시될 내용)
                 const overlayContent = `<div style="padding:5px; background-color: white; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 0 5px rgba(0,0,0,0.3);">${locationName}</div>`;
                 const customOverlay = new window.kakao.maps.CustomOverlay({
