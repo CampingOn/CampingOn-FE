@@ -45,8 +45,7 @@ const OperationPolicy = ({
             boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
             borderRadius: '8px',
             border: '1px solid #000000',
-            bgcolor: 'background.paper',
-            minHeight: '403px'
+            bgcolor: 'background.paper'
         }}>
             <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
                 {title}

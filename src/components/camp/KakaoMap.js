@@ -53,7 +53,7 @@ const KakaoMap = ({ latitude, longitude, locationName, state }) => {
         };
     }, [latitude, longitude, locationName, state]);
 
-    return <div id="map" style={{ width: '100%', height: '400px' }}></div>;
+    return <div id="map" style={{ width: '100%', height: '325px', marginTop: '35px', marginBottom: '50px'}}></div>;
 };
 
 export default KakaoMap;
