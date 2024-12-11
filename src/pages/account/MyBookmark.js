@@ -71,14 +71,13 @@ function MyBookmark() {
     };
 
     return (
-        <Box sx={{ padding: 2 }}>
-            <br/>
+        <Box sx={{ marginTop: '60px' }}>
             <Typography
-                variant="h4"
+                // variant="h2"
                 sx={{
-                    marginBottom: 2,
+                    marginBottom: '20px',
                     fontWeight: "bold",
-                    fontSize: "1.5rem",
+                    fontSize: "1.8rem",
                     fontFamily: "'Roboto', sans-serif",
                     color: "#333",
                     textAlign: "left",
@@ -131,7 +130,7 @@ function MyBookmark() {
                         sx={{
                             fontSize: 80, // 아이콘 크기
                             marginBottom: 2,
-                            color: '#f28b82',
+                            color: '#cccccc',
                         }}
                     />
 

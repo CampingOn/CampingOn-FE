@@ -20,11 +20,11 @@ function ReviewDetail() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchReview = async () => {
+        const fetchReviewWithCampName = async () => {
             setLoading(true);
             try {
-                const response = await reviewService.getReviewDetail(reviewId); // API 호출
-                setReview(response.data);
+                const reviewData = await reviewService.getReviewDetailWithCampName(reviewId); // API 호출
+                setReview(reviewData);
             } catch (err) {
                 console.error("리뷰 데이터를 불러오는 중 오류 발생:", err);
                 setError("리뷰 데이터를 불러오는 중 오류가 발생했습니다.");
@@ -33,7 +33,7 @@ function ReviewDetail() {
             }
         };
 
-        fetchReview();
+        fetchReviewWithCampName();
     }, [reviewId]);
 
     if (loading) {
@@ -81,9 +81,11 @@ function ReviewDetail() {
                 <IconButton aria-label="back" onClick={() => navigate(-1)}>
                     <ArrowBackIcon />
                 </IconButton>
-                <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-                    {review.campName || "캠핑장 이름"}
-                </Typography>
+                <Box sx={{ position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
+                    <Typography variant="h5" sx={{ fontWeight: "bold", textAlign: "center", color: "#000000" }}>
+                        {review.campName || "캠핑장 이름"}
+                    </Typography>
+                </Box>
             </Box>
 
             {/* 이미지 섹션 */}

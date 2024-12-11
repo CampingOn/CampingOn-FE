@@ -231,18 +231,19 @@ const Reservation = () => {
             <Box sx={{
                 padding: '0 16px',
                 minHeight: '100vh',
-                paddingBottom: '0px'
+                paddingBottom: '0px',
+                marginTop: '60px'
             }}>
                 {campSiteData ? (
                     <div>
-                        <div style={{fontSize: '1.8rem', textAlign: 'left', margin: '30px 0 20px 0', fontWeight: 'bold'}}>
+                        <div style={{fontSize: '1.8rem', textAlign: 'left', fontWeight: 'bold', marginBottom: '20px'}}>
                             예약 확인
                         </div>
                         <ReservationConfirmCard
                             data={campSiteData}
                         />
 
-                        <div className="camp-detail-intro-box" style={{ marginTop: '30px'}}>
+                        <div className="camp-detail-intro-box" style={{ margin: '30px 0'}}>
                             <span className="camp-detail-intro-title">예약 안내</span>
                             <div className="camp-detail-description" style={{
                                 padding: '10px 5px',
@@ -332,7 +333,7 @@ const Reservation = () => {
                                 size="large"
                                 style={{backgroundColor: '#ff8146'}}
                             >
-                                예약하기
+                                예약확정
                             </YellowButton>
                         </Box>
                     </div>

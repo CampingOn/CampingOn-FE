@@ -1,7 +1,7 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 import { useApi } from "hooks/useApi";
 import { reservationService } from "api/services/reservationService";
-import { CampReservationCard, ScrollToTopFab } from "components";
+import { CampReservationCard, ScrollToTopFab, PageLayout, EmptyState, PageTitle } from "components";
 import { Box, Typography, CircularProgress } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { useInView } from "react-intersection-observer";
@@ -73,7 +73,7 @@ const MyReservation = () => {
     useEffect(() => {
         if (reservationData?.content) {
             setReservations((prev) => (page === 0 ? reservationData.content : [...prev, ...reservationData.content]));
-            setHasMore(reservationData.content.length >= 5); // 데이터 5개 이하로 로드 되면 더이상 데이터 없다고 판단
+            setHasMore(reservationData.content.length >= 5); // 데이터 5개 이하로 로드 되면 더이상 데이터 다고 판단
         }
     }, [reservationData]);
 
@@ -84,90 +84,64 @@ const MyReservation = () => {
         }
     }, [inView, hasMore, loadingReservations]);
 
-    if (loadingReservations && page === 0)
-        return (
-            <Box
-                sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "100vh",
-                }}
-            >
+    // 조건에 따른 내용만 분기 처리
+    let content;
+    if (loadingReservations && page === 0) {
+        content = (
+            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
                 <CircularProgress />
             </Box>
         );
-
-    if (errorReservations)
-        return (
-            <Box sx={{ padding: 4 }}>
-                <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold", marginTop: 4 }}>
-                    나의 예약 목록
+    } else if (errorReservations) {
+        content = (
+            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+                <Typography variant="h6" color="error">
+                    에러가 발생했습니다. 다시 시도해주세요.
                 </Typography>
-                <Box
-                    sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        height: "100vh",
-                    }}
-                >
-                    <Typography variant="h6" color="error">
-                        에러가 발생했습니다. 다시 시도해주세요.
-                    </Typography>
-                </Box>
             </Box>
         );
-
-    if (!reservations || reservations.length === 0)
-        return (
-            <Box sx={{ padding: 4 }}>
-                <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold", marginTop: 4 }}>
-                    나의 예약 목록
+    } else if (!reservations || reservations.length === 0) {
+        content = (
+            <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "80vh" }}>
+                <CalendarTodayIcon sx={{ fontSize: 100, color: "#ccc", marginBottom: 2 }} />
+                <Typography variant="h6" gutterBottom>
+                    예약된 캠핑장이 없습니다.
                 </Typography>
-                <Box
-                    sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        height: "80vh",
-                    }}
-                >
-                    <CalendarTodayIcon sx={{ fontSize: 100, color: "#ccc", marginBottom: 2 }} />
-                    <Typography variant="h6" gutterBottom>
-                        예약된 캠핑장이 없습니다.
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                        마음에 드는 캠핑장에 예약을 진행해보세요!
-                    </Typography>
-                </Box>
+                <Typography variant="body2" color="textSecondary">
+                    마음에 드는 캠핑장에 예약을 진행해보세요!
+                </Typography>
             </Box>
         );
-
-    return (
-        <SnackbarProvider>
-            <Box sx={{ padding: 4 }}>
-                <Typography variant="h5" gutterBottom sx={{ fontWeight: "bold", marginTop: 4 }}>
-                    나의 예약 목록
-                </Typography>
+    } else {
+        content = (
+            <SnackbarProvider>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     {reservations.map((reservation) => (
-                        <CampReservationCard key={reservation.id} data={reservation} onReviewChange={refreshReservations} />
+                        <CampReservationCard 
+                            key={reservation.id} 
+                            data={reservation} 
+                            onReviewChange={refreshReservations} 
+                        />
                     ))}
+                    {loadingReservations && (
+                        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+                            <CircularProgress size={24} />
+                        </Box>
+                    )}
+                    <Box ref={loadMoreRef} sx={{ height: 20, mt: 2 }} />
                 </Box>
-                {/* 로딩 중이면 로딩 표시 */}
-                {loadingReservations && (
-                    <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-                        <CircularProgress size={24} />
-                    </Box>
-                )}
-                {/* 로드 더보기 트리거 */}
-                <Box ref={loadMoreRef} sx={{ height: 20, mt: 2 }} />
-                <ScrollToTopFab />
-            </Box>
-        </SnackbarProvider>
+            </SnackbarProvider>
+        );
+    }
 
+    return (
+        <Box sx={{ padding: '0', marginTop: '60px' }}>
+            <Typography sx={{ fontSize: '1.8rem', fontWeight: 'bold', marginBottom: '20px' }}>
+                나의 예약 목록
+            </Typography>
+            {content}
+            <ScrollToTopFab />
+        </Box>
     );
 };
 
