@@ -1,12 +1,17 @@
 /* camp-detail.css */
 .camp-detail-container {
-    padding: 16px;
+    width: 100%; /* 전체 화면 너비 */
+    max-width: 1200px; /* 최대 너비 제한 */
+    margin: 0 auto; /* 중앙 정렬 */
+    padding: 0 16px; /* 양옆 여백 */
+    box-sizing: border-box; /* 패딩 포함 크기 계산 */
 }
 
 .camp-detail-title {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: bold;
-    margin-bottom: 16px;
+    margin-top: 16px;
+    margin-bottom: 30px;
 }
 
 .camp-detail-gallery {
@@ -68,7 +73,8 @@
     border: 1px solid #000000; /* 테두리 색상 (검정) */
     border-radius: 8px; /* 모서리를 둥글게 처리 */
     padding: 16px; /* 내용물 여백 */
-    margin-top: 20px; /* 박스 위쪽 여백 */
+    margin-top: 10px;
+    margin-bottom: 10px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
     line-height: 1.6; /* 텍스트 간격 */
     position: relative; /* 제목을 절대 위치로 배치하기 위한 기준 */
@@ -97,8 +103,9 @@
     justify-content: space-between; /* 좌우 정렬 */
     align-items: center; /* 세로 가운데 정렬 */
     padding: 16px; /* 박스 내부 여백 추가 */
-    margin-bottom: 16px; /* 사진과 간격 */
+    margin: 40px 0; /* 위아래 16px 간격 */
     font-weight: bold; /* 전체 텍스트를 볼드체로 설정 */
+    font-size: 10px;
     border: 1px solid #000000; /* 박스 테두리 */
     border-radius: 8px; /* 모서리 둥글게 */
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 */
@@ -106,6 +113,8 @@
 }
 
 .info-bar-section {
+    margin: 8px 0; /* 위아래 8px 간격 */
+    align-items: center; /* 아이콘과 텍스트 수직 정렬 */
     flex: 1; /* 동일한 공간 분배 */
     text-align: center; /* 가운데 정렬 */
     font-size: 16px; /* 글씨 크기 */
@@ -216,7 +225,7 @@
 }
 
 .location-info-title {
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-weight: bold;
     margin-bottom: 10px;
     color: #111827;
