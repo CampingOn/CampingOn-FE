@@ -72,7 +72,7 @@ const CampingCard = ({ thumbImage, name, address, keywords, lineIntro, marked, o
                         </span>
                     ))}
                 </div>
-                <p className="text-sm text-gray-600 truncate mt-4">{lineIntro}</p> {/* 소개 */}
+                <p className="text-sm text-gray-600 truncate mt-2">{lineIntro}</p> {/* 소개 */}
             </div>
         </div>
     );
