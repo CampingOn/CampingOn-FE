@@ -24,6 +24,7 @@ import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
 import {FestivalOutlined} from "@mui/icons-material";
 import {ReviewModal, ReviewForm} from 'components';
 import {reviewService} from 'api/services/reviewService';
+import {useSnackbar} from "pages/reservation/MyReservation";
 
 const CampReservationCard = ({data, buttonInVisible, onReviewChange}) => {
     const {
@@ -45,6 +46,8 @@ const CampReservationCard = ({data, buttonInVisible, onReviewChange}) => {
     const [cancelReason, setCancelReason] = useState(""); // 취소 사유 상태
     const [selectedReservationId, setSelectedReservationId] = useState(null); // 선택된 예약 ID
     const [localStatus, setLocalStatus] = useState(status);
+
+    const showSnackbar = useSnackbar();
 
     const [reviewFormOpen, setReviewFormOpen] = useState(false);
     const [reviewModalOpen, setReviewModalOpen] = useState(false);
@@ -76,16 +79,11 @@ const CampReservationCard = ({data, buttonInVisible, onReviewChange}) => {
 
                 // 클라이언트 상태 변경
                 setLocalStatus("예약취소");
+                showSnackbar("예약이 취소되었습니다.", "success");
                 setOpen(false); // 모달 닫기
-                setSnackbarMessage(`예약번호 ${selectedReservationId}: 취소되었습니다.`);
-                setSnackbarSeverity("success");
-                setSnackbarOpen(true); // Snackbar 표시
             }
         } catch (error) {
-            console.error("예약 취소 실패:", error);
-            setSnackbarMessage("예약 취소 중 문제가 발생했습니다. 다시 시도해주세요.");
-            setSnackbarSeverity("error");
-            setSnackbarOpen(true); // Snackbar 표시
+            showSnackbar("예약 취소 중 오류가 발생했습니다.", "error");
         }
     };
 
