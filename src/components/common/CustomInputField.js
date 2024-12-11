@@ -54,7 +54,7 @@ function CustomInput({
                                     onClick={handleTogglePasswordVisibility}
                                     edge="end"
                                     aria-label="toggle password visibility"
-                                    sx={{ fontSize: '1rem', padding: '4px' }}
+                                    sx={{ fontSize: '1rem', padding: '8px'}}
                                 >
                                     {showPassword ?
                                         <VisibilityOff sx={{ fontSize: '1rem' }} />
