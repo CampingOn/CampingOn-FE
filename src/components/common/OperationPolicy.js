@@ -65,7 +65,7 @@ const OperationPolicy = ({
                             <Typography sx={{ fontWeight: 'bold', color: '#333', fontSize: '15px' }}>
                                 {item.label}
                             </Typography>
-                            <Typography sx={{ color: '#666', fontSize: '15px' }}>
+                            <Typography sx={{ color: '#666', fontSize: '13px' }}>
                                 {item.value}
                             </Typography>
                         </ListItem>

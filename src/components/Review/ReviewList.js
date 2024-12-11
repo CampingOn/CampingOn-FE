@@ -62,9 +62,9 @@ const ReviewList = ({ campId }) => {
                 <Box
                     sx={{
                         display: "grid",
-                        gridTemplateColumns: "repeat(auto-fill, minmax(400px, 1fr))", // 반응형 카드
-                        gap: 5, // 카드 간 간격
-                        alignItems: "start", // 카드 위쪽 정렬
+                        gridTemplateColumns: "repeat(auto-fill, minmax(400px, 1fr))",
+                        gap: 5,
+                        alignItems: "start",
                     }}
                 >
                     {reviews.map((review) => (
@@ -80,7 +80,7 @@ const ReviewList = ({ campId }) => {
                                 background: "#fff",
                                 cursor: "pointer",
                                 transition: "transform 0.3s",
-                                '&:hover': {
+                                "&:hover": {
                                     transform: "scale(1.02)",
                                 },
                             }}
@@ -88,7 +88,7 @@ const ReviewList = ({ campId }) => {
                         >
                             <Box
                                 sx={{
-                                    height: "200px", // 이미지 높이 고정
+                                    height: "200px",
                                     overflow: "hidden",
                                 }}
                             >
@@ -98,7 +98,7 @@ const ReviewList = ({ campId }) => {
                                     style={{
                                         width: "100%",
                                         height: "100%",
-                                        objectFit: "cover", // 이미지 크기에 맞게 조정
+                                        objectFit: "cover",
                                     }}
                                 />
                             </Box>
@@ -144,26 +144,39 @@ const ReviewList = ({ campId }) => {
                     ))}
                 </Box>
             ) : (
-                <Typography>리뷰를 작성해주세요.</Typography>
+                <Box
+                    sx={{
+                        border: "1px dashed #ddd",
+                        borderRadius: "8px",
+                        height: "400px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "#999",
+                        marginTop: 4,
+                    }}
+                >
+                    리뷰가 없습니다. 첫 번째 리뷰를 작성해보세요!
+                </Box>
             )}
 
             {/* 더보기 버튼 */}
-            {hasMore && !loading && (
+            {hasMore && !loading && reviews.length > 0 && (
                 <Box
                     onClick={handleLoadMore}
                     sx={{
                         marginTop: 4,
                         display: "flex",
-                        justifyContent: "center", // 가로 정렬 중앙
-                        alignItems: "center", // 세로 정렬 중앙
+                        justifyContent: "center",
+                        alignItems: "center",
                         cursor: "pointer",
                         width: "50px",
                         height: "50px",
                         backgroundColor: "#e0e0e0",
                         borderRadius: "25px",
                         boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-                        marginLeft: "auto", // 가운데 정렬
-                        marginRight: "auto", // 가운데 정렬
+                        marginLeft: "auto",
+                        marginRight: "auto",
                         "&:hover": {
                             backgroundColor: "#d6d6d6",
                         },
@@ -177,7 +190,7 @@ const ReviewList = ({ campId }) => {
                     sx={{
                         marginTop: 2,
                         display: "block",
-                        marginLeft: "auto", // 로딩 스피너도 가운데 정렬
+                        marginLeft: "auto",
                         marginRight: "auto",
                     }}
                 />
