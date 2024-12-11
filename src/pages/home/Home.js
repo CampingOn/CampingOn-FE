@@ -172,41 +172,47 @@ function Home() {
                     <Box
                         sx={{
                             display: 'flex',
-                            justifyContent: 'space-between', // 좌우 정렬
-                            alignItems: 'flex-end', // 아래쪽 기준으로 정렬
-                            mb: 4, // 아래쪽 여백
+                            flexDirection: 'column',  // 세로 방향 배치
+                            mb: 4,
                         }}
                     >
-                        <Typography variant="h5" fontWeight="bold">
-                            {matchedCampsData.content[0]?.username}님을 위한 추천 캠핑장 🏕️
-                        </Typography>
                         <Typography
                             variant="body2"
                             sx={{
                                 color: "#9e9e9e",
                                 cursor: "pointer",
-                                "&:hover": { color: "#616161" }, // 호버 시 색상 변경
-                                fontSize: "0.875rem", // 작은 글씨 크기
+                                "&:hover": { color: "#616161" },
+                                fontSize: "0.875rem",
+                                mb: 1
                             }}
                             onClick={() => navigate("/keyword")}
                         >
-                            키워드를 바꾸고싶다면? →
+                            ← 키워드를 바꾸고싶다면?
                         </Typography>
-                        <Box>
-                            <IconButton
-                                onClick={handlePrevPage}
-                                disabled={currentRecommendPage === 0 || isSliding}
-                            >
-                                <ArrowBackIosNewIcon />
-                            </IconButton>
-                            <IconButton
-                                onClick={handleNextPage}
-                                disabled={!matchedCampsData?.content ||
-                                    currentRecommendPage >= matchedCampsData.content.length - 3 ||
-                                    isSliding}
-                            >
-                                <ArrowForwardIosIcon />
-                            </IconButton>
+                        <Box sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                        }}>
+                            <Typography variant="h5" fontWeight="bold">
+                                {matchedCampsData.content[0]?.username}님을 위한 추천 캠핑장 🏕️
+                            </Typography>
+                            <Box>
+                                <IconButton
+                                    onClick={handlePrevPage}
+                                    disabled={currentRecommendPage === 0 || isSliding}
+                                >
+                                    <ArrowBackIosNewIcon />
+                                </IconButton>
+                                <IconButton
+                                    onClick={handleNextPage}
+                                    disabled={!matchedCampsData?.content ||
+                                        currentRecommendPage >= matchedCampsData.content.length - 3 ||
+                                        isSliding}
+                                >
+                                    <ArrowForwardIosIcon />
+                                </IconButton>
+                            </Box>
                         </Box>
                     </Box>
 
