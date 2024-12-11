@@ -29,7 +29,7 @@ const hashtags = Object.keys(tagMapping); // 표시할 해시태그 목록
 
 const MAX_SELECTION_COUNT = 5; // 최대 선택 가능 태그 수
 
-const KeywordSelection = ({ skip = false }) => {
+const KeywordSelection = ({ title, skip = false }) => {
     const [selectedTags, setSelectedTags] = useState([]); // 선택된 태그를 추적
     const { execute: fetchSelectedTags, loading } = useApi(userService.getMyKeywordList);
     const { execute: updateSelectedTags } = useApi(userService.updateMyKeyword);
@@ -113,6 +113,15 @@ const KeywordSelection = ({ skip = false }) => {
                 </div>
             ) : (
                 <>
+                    {/* 타이틀 부분 */}
+                    <Box sx={{mb: 12, textAlign:"center"}}>
+                        <Typography variant="h5" sx={{fontWeight: "bold"}}>
+                            🏕️ {title} 🏕️
+                        </Typography>
+                        <Typography variant="body2" sx={{ mb: 4 , color: "grey"}}>
+                            최대 5개까지 선택 가능합니다.
+                        </Typography>
+                    </Box>
                     {/* 키워드 목록 */}
                     <Box
                         sx={{
