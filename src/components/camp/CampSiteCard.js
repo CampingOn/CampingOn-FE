@@ -110,7 +110,7 @@ const CampSiteCard = ({ data = {}, campId, count, checkin, checkout }) => {
                 {/* 액션 버튼 */}
                 <Box sx={{ marginTop: "auto", textAlign: "right" }}>
                     {/* 총액 */}
-                    <Typography variant={"h6"}>
+                    <Typography variant={"h5"} style={{marginBottom: '10px'}}>
                         총 결제 금액: {totalPrice.toLocaleString()}원
                     </Typography>
                     {/* 예약 버튼 */}

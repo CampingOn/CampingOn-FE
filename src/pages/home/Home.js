@@ -120,7 +120,7 @@ function Home() {
             {isAuthenticated && matchedCampsData?.content?.length > 0 && (
                 <>
                     <Typography variant="h5" fontWeight="bold" sx={{mb: 4}}>
-                        {matchedCampsData.content[0]?.username}님을 위한 추천 캠핑장
+                        {matchedCampsData.content[0]?.username}님을 위한 추천 캠핑장 🏕️
                     </Typography>
                     <Box sx={{
                         display: 'grid',
@@ -155,8 +155,8 @@ function Home() {
             )}
 
             {/* 인기 캠핑장 목록 */}
-            <Typography variant="h5" fontWeight="bold" sx={{mb: 4}}>
-                인기 캠핑장
+            <Typography variant="h5" fontWeight="bold" sx={{mb: 4, mt: 4}}>
+                캠핑온 인기 캠핑장 ✨
             </Typography>
             <Box sx={{
                 display: 'grid',
