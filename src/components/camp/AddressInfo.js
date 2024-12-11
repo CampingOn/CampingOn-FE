@@ -25,7 +25,7 @@ const AddressInfo = ({ address, tel, homepage }) => (
                     rel="noopener noreferrer"
                     className="homepage-link"
                 >
-                    {homepage}
+                    홈페이지 바로가기
                 </a>
             ) : (
                 "홈페이지 정보 없음"

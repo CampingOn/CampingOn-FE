@@ -4,6 +4,7 @@ import {NotFound, Home, Keyword} from 'pages';
 import {MyReservation, Reservation} from 'pages';
 import {Search, CampDetail, MyBookmark} from 'pages';
 import ProtectedRoute from "./ProtectedRoute";
+import ReviewDetail from "pages/review/ReviewDetail";
 // import CampList from "pages/camp/CampList";
 // import CreateReview from "pages/review/CreateReview";
 // import CampSiteList from 'pages/camp/CampSiteList';
@@ -27,6 +28,7 @@ function Router() {
             <Route path="/search" element={<Search/>} />
             <Route path="/camps/:campId/sites/:siteId" element={<ProtectedRoute><Reservation/></ProtectedRoute>}/>
             <Route path="/oauth/success" element={<OAuthSuccess />} />
+            <Route path="/camps/reviews/:reviewId" element={<ReviewDetail />} />
         </Routes>
     );
 }
