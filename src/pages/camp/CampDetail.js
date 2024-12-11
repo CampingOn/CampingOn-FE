@@ -127,7 +127,7 @@ function CampDetail() {
             </div>
 
             <div className="camp-date-picker-container">
-                <h2>예약 가능한 날짜 선택</h2>
+                <h2>예약 선택</h2>
                 <CampDatePicker
                     checkin={checkin}
                     checkout={checkout}
