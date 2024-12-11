@@ -44,9 +44,8 @@
 /*캠핑장 이름 위에 작은 주소*/
 .camp-detail-small-address {
     font-size: 0.9rem; /* 작은 글씨 크기 */
-    color: #000000; /* Tailwind의 gray-500 */
-    margin-bottom: 0.5rem; /* ���래 여백 */
-    text-align: left; /* 가운데 정렬 */
+    color: #868e96; /* Tailwind의 gray-500 */
+    margin-bottom: 0.5rem; /* 아래 여백 */
 }
 
 /*캠핑장 소개(장문)*/
@@ -110,15 +109,34 @@
     border-radius: 8px; /* 모서리 둥글게 */
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 */
     background-color: #ffffff; /* 박스 배경색 흰색 */
+    flex-wrap: wrap; /* 화면 크기가 작아질 경우 줄바꿈 */
 }
 
+/* 주소 영역 */
+.info-bar-section.address {
+    flex: 2; /* 주소가 더 많은 공간을 차지 */
+    text-align: left;
+}
+/* 연락처 영역 */
+.info-bar-section.contact {
+    flex: 1; /* 연락처는 적은 공간 차지 */
+    text-align: center;
+}
+
+/* 홈페이지 영역 */
+.info-bar-section.homepage {
+    flex: 1; /* 홈페이지도 적은 공간 차지 */
+    text-align: right;
+    display: flex;
+    justify-content: flex-end; /* 내부 요소를 오른쪽으로 정렬 */
+}
+
+/* 공통 스타일 */
 .info-bar-section {
-    margin: 8px 0; /* 위아래 8px 간격 */
-    align-items: center; /* 아이콘과 텍스트 수직 정렬 */
-    flex: 1; /* 동일한 공간 분배 */
-    text-align: center; /* 가운데 정렬 */
-    font-size: 16px; /* 글씨 크기 */
-    font-weight: bold; /* 각 섹션의 텍스트를 볼드체로 설정 */
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+    font-size: 16px;
 }
 
 .info-bar-section:first-child {
@@ -251,5 +269,18 @@
     .camp-detail-container > div[style*="display: flex"] {
         flex-direction: column !important;
         gap: 30px !important;
+    }
+    .camp-detail-info-bar {
+        flex-direction: column; /* 세로 배치 */
+    }
+    .info-bar-section {
+        flex: unset;
+        width: 100%; /* 각 섹션이 한 줄을 차지 */
+        text-align: left;
+        margin-bottom: 8px; /* 섹션 간 간격 */
+    }
+    .info-bar-section.homepage {
+        text-align: left;
+        justify-content: flex-start;
     }
 }
