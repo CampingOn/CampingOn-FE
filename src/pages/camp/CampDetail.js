@@ -7,7 +7,7 @@ import {
     AddressInfo,
     CampDetailIntro,
     OperationPolicy,
-    MapSection,
+    KakaoMap,
     ModalGallery,
     CampSiteCard,
     CampDatePicker,
@@ -108,22 +108,22 @@ function CampDetail() {
             <ModalGallery open={openModal} onClose={handleModalClose} images={images || []}/>
             <AddressInfo address={campAddr?.streetAddr} tel={tel} homepage={homepage}/>
             <CampDetailIntro intro={intro}/>
-            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start'}}>
-                <div style={{flex: '1', marginRight: '10px'}}>
+            <div style={{display: 'flex', gap: '16px', width: '100%'}}>
+                <Box style={{flex: '1', marginRight: '10px'}}>
                     <OperationPolicy
                         industries={campDetails.indutys || []}
                         outdoorFacility={campDetails.outdoorFacility || "부대시설 정보 없음"}
                         animalAdmission={campDetails.animalAdmission}
                     />
-                </div>
-                <div style={{flex: '1', marginLeft: '10px'}}>
-                    <MapSection
+                </Box>
+                <Box style={{flex: '1', marginLeft: '10px'}}>
+                    <KakaoMap
                         latitude={campAddr?.latitude}
                         longitude={campAddr?.longitude}
-                        name={name}
+                        locationName={name}
                         state={campAddr?.state}
                     />
-                </div>
+                </Box>
             </div>
 
             <div className="camp-date-picker-container">
