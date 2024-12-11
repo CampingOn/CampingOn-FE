@@ -333,7 +333,7 @@ const Reservation = () => {
                                 size="large"
                                 style={{backgroundColor: '#ff8146'}}
                             >
-                                예약하기
+                                예약확정
                             </YellowButton>
                         </Box>
                     </div>

@@ -1,28 +1,170 @@
-/* 부모 컨테이너 */
-.camp-date-picker-container {
+/* 캘린더와 날짜 정보의 공통 부모 컨테이너 */
+.datepicker-wrapper {
+    width: fit-content;
+    margin: 80px auto;
     display: flex;
-    flex-direction: column; /* 세로 정렬 */
-    justify-content: center; /* 중앙 정렬 */
-    align-items: center; /* 가로로 가운데 정렬 */
-    gap: 20px; /* 위아래 섹션 간 간격 */
-    max-width: 800px; /* 최대 너비 제한 */
-    width: 100%; /* 화면 너비에 맞춤 */
-    margin: 0 auto; /* 페이지 중앙 정렬 */
-    padding: 20px; /* 내부 여백 */
-    box-sizing: border-box; /* 패딩 포함 크기 계산 */
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    box-sizing: border-box;
 }
 
+/* 캘린더와 날짜 정보를 감싸는 내부 컨테이너 */
+.picker-content-wrapper {
+    display: flex;
+    gap: 40px;
+    align-items: stretch;  /* 자식 요소들의 높이를 동일하게 맞춤 */
+}
+
+/* 캘린더 컨테이너 */
+.react-datepicker-container {
+    position: relative;
+    transform-origin: center;
+    flex: 0 0 auto;
+}
+
+/* 캘린더 */
 .react-datepicker {
-    transform: scale(1.5); /* 1.2배 확대 */
-    transform-origin: top center; /* 확대 기준 */
+    transform-origin: top left;
+}
+
+/* 날짜 초기화 버튼 */
+.clear-dates-icon {
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;  /* 캘린더 내부 오른쪽에 위치 */
+    z-index: 1;
+    cursor: pointer;
+}
+
+/* 날짜 정보 영역 */
+.date-info {
+    width: 320px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 10px;
+    box-sizing: border-box;
+    flex: 0 0 auto;
+}
+
+/* 날짜 정보 타이틀 */
+.date-info h2 {
+    text-align: center;
+    margin: 0;
+    padding: 0 20px;
+    line-height: 1.5;
+    word-break: keep-all;
+}
+
+@media (max-width: 1024px) {
+    .datepicker-wrapper {
+        width: 100%;
+        flex-direction: column;
+        gap: 30px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .react-datepicker-container {
+        transform: scale(1);
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .date-info {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+        min-height: 200px;
+    }
+}
+
+@media (max-width: 770px) {
+    .datepicker-wrapper {
+        width: 100%;
+        flex-direction: column;  /* 세로 배치 */
+        gap: 30px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .picker-content-wrapper {
+        flex-direction: column;  /* 내부 컨테이너도 세로 배치 */
+        align-items: center;
+        gap: 30px;
+    }
+
+    .react-datepicker-container {
+        transform: scale(1);
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    /* 두 번째 달력 표시 및 세로 배치 */
+    .react-datepicker__month-container:nth-child(2) {
+        display: block;
+    }
+
+    .react-datepicker {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .date-info {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+        min-height: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .datepicker-wrapper {
+        margin: 20px auto;
+    }
+
+    .react-datepicker-container {
+        transform: scale(0.9);
+    }
+
+    .date-info {
+        padding: 15px;
+    }
+
+    .date-box {
+        padding: 8px;
+    }
 }
 
 /* CampDatePicker 섹션 */
 .camp-date-picker-container h2 {
-    font-size: 1.2rem; /* 제목 크기 */
-    text-align: center; /* 중앙 정렬 */
-    margin-bottom: 10px; /* 아래 여백 */
-    font-weight: bold;
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: initial;
+    line-height: 1.5;
+    white-space: nowrap;  /* 기본적으로 한 줄로 표시 */
+}
+
+@media (max-width: 770px) {
+    .camp-date-picker-container h2 {
+        white-space: normal;  /* 미디어쿼리에서 줄바꿈 허용 */
+    }
+
+    .camp-date-picker-container h2 span {
+        display: block;  /* 각 부분을 블록으로 처리하여 줄바꿈 */
+        margin: 4px 0;
+    }
 }
 
 .camp-date-picker-container .camp-date-picker {
@@ -31,63 +173,42 @@
     margin: 0 auto; /* 가운데 정렬 */
 }
 
-/* 날짜 정보 섹션 */
-.date-info {
-    margin-top: 100px;
-    display: flex; /* 가로 정렬 */
-    justify-content: space-between; /* 내부 요소 간격 유지 */
-    gap: 20px; /* 각 날짜 박스 간격 */
-    width: 100%; /* 전체 가로 폭 */
-    max-width: 400px; /* 최대 너비 */
-    padding: 15px; /* 내부 여백 */
-    background-color: #fff; /* 배경색 */
-    border: 1px solid #ddd; /* 테두리 색상 */
-    border-radius: 8px; /* 모서리 둥글게 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
-    margin-bottom: 100px
-}
-
-/* 개별 날짜 박스 */
+/* 날짜 박스 컨테이너 - 기본 상태 (날짜 미선택) */
 .date-box {
     display: flex;
-    flex-direction: column; /* 라벨과 날짜를 세로 정렬 */
-    align-items: center; /* 가운데 정렬 */
-    gap: 8px; /* 내부 요소 간 간격 */
-    flex: 1; /* 각 박스가 동일 비율로 차지 */
-    padding: 10px; /* 내부 여백 */
-    background-color: #f5f5f5; /* 배경색 */
-    border-radius: 6px; /* 모서리 둥글게 */
-    position: relative;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px dashed #ddd;  /* 점선 테두리 */
+    border-radius: 6px;
+    gap: 4px;
+    transition: all 0.3s ease;  /* 부드러운 전환 효과 */
 }
 
-/* 라벨 텍스트 */
+/* 날짜가 선택된 상태 */
+.date-box.selected {
+    border: 1px solid #cbcbcb;
+    /*background-color: #f8f8f8;  !* 배경색 약간 변경 *!*/
+}
+
+/* 라벨과 날짜 텍스트 */
 .label {
-    font-size: 14px;
-    font-weight: bold;
-    color: #555;
+    font-size: 15px;
+    color: #666;
 }
 
-/* 날짜 텍스트 */
+
 .date {
-    font-size: 16px;
+    font-size: 15px;
+    /*font-weight: bold;*/
+    color: #868686;
+}
+
+.date-box.selected .date {
+    color: #ffc400;
     font-weight: bold;
-    color: #222;
 }
-
-/* 반응형 스타일 */
-@media (max-width: 768px) {
-    .container {
-        flex-direction: column; /* 세로 정렬 */
-        gap: 15px;
-    }
-
-    .info-section,
-    .calendar-section,
-    .map-section {
-        max-width: 100%; /* 전체 화면 너비로 확장 */
-    }
-}
-
 
 
 /* 캘린더 날짜 취소 버튼 */
@@ -97,4 +218,23 @@
 
 .react-datepicker__day--outside-month {
     visibility: hidden; /* 다음 달 날짜 숨김 */
+}
+
+/* 날짜 초기화 버튼 위치 조정 */
+.clear-dates-icon {
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+    z-index: 1;
+    cursor: pointer;
+}
+
+/* 호버 효과 추가 */
+.clear-dates-icon:hover {
+    opacity: 0.7;
+}
+
+/* 두 번째 달력 숨기기 */
+.react-datepicker__month-container:nth-child(2) {
+    display: none;
 }

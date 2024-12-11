@@ -117,7 +117,7 @@ function CampDetail() {
             }}>
                 <Box style={{
                     flex: '1',
-                    display: 'flex'
+                    display: 'flex',
                 }}>
                     <OperationPolicy
                         style={{ flex: '1' }}
@@ -143,27 +143,20 @@ function CampDetail() {
                 </Box>
             </div>
 
-            <div className="camp-date-picker-container" style={{ marginTop: '30px' }}>
-                <h2>예약 가능한 날짜 선택</h2>
+            <div className="camp-date-picker-container" style={{ marginTop: '80px' }}>
+                <h2 style={{fontSize: '1.1rem', fontWeight: 'initial'}}>
+                    <span>🏕️ 캠핑을 원하시는 날짜를 선택하고,</span>
+                    <span>특별한 여행을 시작하세요! 🏕</span>
+                </h2>
                 <CampDatePicker
                     checkin={checkin}
                     checkout={checkout}
                     handleDateChange={handleDateChange}
                 />
-                <div className="date-info">
-                    <div className="date-box">
-                        <span className="label">입실일</span>
-                        <span className="date">{checkin ? checkin.toLocaleDateString("ko-KR") : "날짜를 선택하기"}</span>
-                    </div>
-                    <div className="date-box">
-                        <span className="label">퇴실일</span>
-                        <span className="date">{checkout ? checkout.toLocaleDateString("ko-KR") : "날짜를 선택하기"}</span>
-                    </div>
-                </div>
             </div>
 
             <div className="camp-site-list-available">
-                <h1 style={{fontSize: '1.8rem', fontWeight: 'bold', marginBottom: '30px'}}>예약 가능한 캠핑지 목록</h1>
+                <h1 style={{fontSize: '1.8rem', fontWeight: 'bold', marginBottom: '20px'}}>예약 가능한 캠핑지 목록</h1>
                 {/* 캠핑지가 없을 때 빈 카드 표시 */}
                 {!availableSites || availableSites.length === 0 ? (
                     <div
@@ -182,7 +175,7 @@ function CampDetail() {
                         날짜를 선택하여 캠핑지를 확인하세요.
                     </div>
                 ) : (
-                    <div style={{ marginBottom: '20px' }}>
+                    <div style={{ marginBottom: '40px' }}>
                         {availableSites.map((site, index) => (
                             <div key={index} style={{ marginBottom: '20px' }}>
                                 <CampSiteCard
@@ -205,7 +198,7 @@ function CampDetail() {
                 />
             </div>
             <Box sx={{paddingTop: 4}}>
-                <Typography gutterBottom sx={{fontSize: '1.8rem', fontWeight: "bold", marginBottom: 4}}>
+                <Typography gutterBottom sx={{fontSize: '1.8rem', fontWeight: "bold", marginBottom: '20px'}}>
                     후기
                 </Typography>
                 <ReviewList campId={campId}/>

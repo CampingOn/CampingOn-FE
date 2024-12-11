@@ -53,7 +53,7 @@ const ReviewList = ({ campId }) => {
     };
 
     return (
-        <Box sx={{ marginTop: 4 }}>
+        <Box sx={{ }}>
             <Typography variant="h5" gutterBottom>
             </Typography>
             {loading && page === 0 ? (
@@ -144,7 +144,7 @@ const ReviewList = ({ campId }) => {
                     ))}
                 </Box>
             ) : (
-                <Typography>리뷰를 작성해주세요.</Typography>
+                <Typography>아직 작성된 리뷰가 없습니다.</Typography>
             )}
 
             {/* 더보기 버튼 */}

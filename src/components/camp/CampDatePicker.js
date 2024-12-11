@@ -50,32 +50,46 @@ const CampDatePicker = ({ checkin, checkout, handleDateChange }) => {
     return (
         <div className="camp-date-picker-container">
             <div className="datepicker-wrapper">
-                <DatePicker
-                    locale={ko} // 한글 로케일 적용
-                    selected={checkin}
-                    onChange={handleDateSelection} // 선택 처리
-                    startDate={checkin}
-                    endDate={checkout}
-                    selectsRange
-                    inline
-                    minDate={today} // 오늘 이후 날짜만 선택 가능
-                    monthsShown={2} // 두 달 표시
-                />
-                {/* 캘린더 입실일 초기화 버튼 (DisabledByDefaultIcon 사용) */}
-                {(checkin || checkout) && (
-                    <DisabledByDefaultIcon
-                        className="clear-dates-icon"
-                        onClick={clearDates} // 초기화 이벤트 핸들러
-                        style={{
-                            color: "black", // 아이콘 색상
-                            cursor: "pointer", // 클릭 가능
-                            position: "absolute", // 위치 조정
-                            top: "114px", // 적절한 위치 설정
-                            right: "-121px", // 적절한 위치 설정
-                            fontSize: "30px", // 아이콘 크기
-                        }}
-                    />
-                )}
+                <div className="picker-content-wrapper">
+                    <div className="react-datepicker-container">
+                        <DatePicker
+                            locale={ko}
+                            selected={checkin}
+                            onChange={handleDateSelection}
+                            startDate={checkin}
+                            endDate={checkout}
+                            selectsRange
+                            inline
+                            minDate={today}
+                            monthsShown={2}
+                        />
+                        {(checkin || checkout) && (
+                            <DisabledByDefaultIcon
+                                className="clear-dates-icon"
+                                onClick={clearDates}
+                                style={{
+                                    color: "black",
+                                    cursor: "pointer",
+                                    fontSize: "30px",
+                                }}
+                            />
+                        )}
+                    </div>
+                    <div className="date-info">
+                        <div className={`date-box ${checkin ? 'selected' : ''}`}>
+                            <span className="label">체크인</span>
+                            <span className="date">
+                                {checkin ? checkin.toLocaleDateString("ko-KR") : "날짜를 선택해주세요"}
+                            </span>
+                        </div>
+                        <div className={`date-box ${checkout ? 'selected' : ''}`}>
+                            <span className="label">체크아웃</span>
+                            <span className="date">
+                                {checkout ? checkout.toLocaleDateString("ko-KR") : "날짜를 선택해주세요"}
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
             {/* 모달 컴포넌트 */}
             <ModalComponent
