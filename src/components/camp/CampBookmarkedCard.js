@@ -22,10 +22,6 @@ const CampBookmarkedCard = ({ data, onBookmarkChange }) => {
         setImageUrl(randomImage);
     }, [thumbImage]);
 
-    const handleNameClick = () => {
-        navigate(`/camps/${campId}`);
-    };
-
     const toggleLike = async (event) => {
         event.stopPropagation(); // 부모의 onClick 이벤트가 실행되지 않도록 중단
 
@@ -68,7 +64,7 @@ const CampBookmarkedCard = ({ data, onBookmarkChange }) => {
                 <CardContent>
                     <Typography
                         variant="h5"
-                        sx={{ marginBottom: 2, fontWeight: 'bold' }}
+                        sx={{ marginBottom: 2, fontWeight: 'bold' ,cursor: 'pointer'}}
                     >
                         <a href={`/camps/${campId}`} style={{textDecoration: 'none', color: 'inherit'}}>
                             {name}

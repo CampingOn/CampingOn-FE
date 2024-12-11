@@ -28,10 +28,8 @@ import {reviewService} from 'api/services/reviewService';
 const CampReservationCard = ({data, buttonInVisible, onReviewChange}) => {
     const {
         id,
-        checkinDate,
-        checkoutDate,
-        checkinTime,
-        checkoutTime,
+        checkin,
+        checkout,
         guestCnt,
         status,
         totalPrice,
@@ -220,13 +218,13 @@ const CampReservationCard = ({data, buttonInVisible, onReviewChange}) => {
                     <Box sx={{display: "flex", alignItems: "center", marginBottom: 1}}>
                         <Start sx={{fontSize: 20, marginRight: 1, color: "#2c387e"}}/>
                         <Typography variant="body2">
-                            체크인 : {checkinDate} {checkinTime}
+                            체크인 : {checkin}
                         </Typography>
                     </Box>
                     <Box sx={{display: "flex", alignItems: "center", marginBottom: 1}}>
                         <KeyboardTab sx={{fontSize: 20, marginRight: 1, color: "#ffc107"}}/>
                         <Typography variant="body2">
-                            체크아웃: {checkoutDate} {checkoutTime}
+                            체크아웃: {checkout}
                         </Typography>
                     </Box>
                     <Box sx={{display: "flex", alignItems: "center", marginBottom: 1}}>
