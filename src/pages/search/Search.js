@@ -143,7 +143,7 @@ function Search() {
     };
 
     return (
-        <Container maxWidth="lg" sx={{py: 4}}>
+        <Container maxWidth="lg" sx={{marginTop: '60px'}}>
             <Box sx={{mb: 4}}>
                 <SearchBar
                     onSearch={handleSearch}
@@ -180,7 +180,7 @@ function Search() {
                         onClick={() => handleCardClick(camp.campId)}
                         onShowSnackbarNone={showSnackbarNone}   // 전달
                         onShowSnackbarBookmark={showSnackbarBookmark} // 전달
-                        className={"w-96 h-100 border border-gray-200 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:-translate-y-2"}
+                        className="border border-gray-200 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:-translate-y-2"
                     />
                 ))}
             </Box>
