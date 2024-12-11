@@ -192,7 +192,7 @@ function Home() {
                         >
                             키워드를 바꾸고싶다면? →
                         </Typography>
-                        <Box sx={{ mr: -3 }}>
+                        <Box>
                             <IconButton
                                 onClick={handlePrevPage}
                                 disabled={currentRecommendPage === 0 || isSliding}
@@ -213,45 +213,46 @@ function Home() {
                     <Box sx={{
                         position: 'relative',
                         overflow: 'visible', // overflow를 visible로 변경
-                        mb: 4,
-                        mx: -2 // 음수 마진으로 좌우 공간 확보
+                        mb: 4
                     }}>
-                    <Box sx={{
-                        display: 'grid',
-                        gridTemplateColumns: {
-                            xs: '1fr',
-                            sm: 'repeat(2, 1fr)',
-                            lg: 'repeat(3, 1fr)'
-                        },
-                        gap: 3,
-                        mb: 2,
-                        width: '100%',
-                        margin: '0 auto'
-                    }}>
-                        {getCurrentPageItems().map((camp, index) => (
-                            <Box
-                                key={camp.campId}
-                                sx={{
-                                    opacity: slideAnimation.isAnimating ? 0.5 : 1,
-                                    transform: `scale(${slideAnimation.isAnimating ? 0.95 : 1})`,
-                                    transition: 'all 0.3s ease-in-out',
-                                }}
-                            >
-                                <CampingCard
-                                key={camp.campId}
-                                campId={camp.campId}
-                                thumbImage={camp.thumbImage}
-                                name={camp.name}
-                                address={camp.streetAddr}
-                                keywords={camp.keywords || []}
-                                lineIntro={camp.lineIntro || `${camp.streetAddr.split(' ').slice(0, 2).join(' ')}에 있는 ${camp.name}`}
-                                marked={camp.marked}
-                                onClick={() => handleCardClick(camp.campId)}
-                                onShowSnackbarNone={showSnackbarNone}
-                                onShowSnackbarBookmark={showSnackbarBookmark}
-                                className={"w-96 h-100 border border-gray-200 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:-translate-y-2"}
-                            />
-                        ))}
+                        <Box sx={{
+                            display: 'grid',
+                            gridTemplateColumns: {
+                                xs: '1fr',
+                                sm: 'repeat(2, 1fr)',
+                                lg: 'repeat(3, 1fr)'
+                            },
+                            gap: 3,
+                            mb: 2,
+                            width: '100%',
+                            margin: '0 auto'
+                        }}>
+                            {getCurrentPageItems().map((camp, index) => (
+                                <Box
+                                    key={camp.campId}
+                                    sx={{
+                                        opacity: slideAnimation.isAnimating ? 0.5 : 1,
+                                        transform: `scale(${slideAnimation.isAnimating ? 0.95 : 1})`,
+                                        transition: 'all 0.3s ease-in-out',
+                                    }}
+                                >
+                                    <CampingCard
+                                        key={camp.campId}
+                                        campId={camp.campId}
+                                        thumbImage={camp.thumbImage}
+                                        name={camp.name}
+                                        address={camp.streetAddr}
+                                        keywords={camp.keywords || []}
+                                        lineIntro={camp.lineIntro || `${camp.streetAddr.split(' ').slice(0, 2).join(' ')}에 있는 ${camp.name}`}
+                                        marked={camp.marked}
+                                        onClick={() => handleCardClick(camp.campId)}
+                                        onShowSnackbarNone={showSnackbarNone}
+                                        onShowSnackbarBookmark={showSnackbarBookmark}
+                                        className={"w-96 h-100 border border-gray-200 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:-translate-y-2"}
+                                    />
+                                </Box>
+                            ))}
+                        </Box>
                     </Box>
                 </>
             )}
