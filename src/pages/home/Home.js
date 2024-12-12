@@ -256,7 +256,8 @@ function Home() {
                                     lineIntro={camp.lineIntro || `${camp.streetAddr.split(' ').slice(0, 2).join(' ')}에 있는 ${camp.name}`}
                                     marked={camp.marked}
                                     onClick={() => handleCardClick(camp.campId)}
-                                    onBookmarkClick={handleBookmarkClick}
+                                    onShowSnackbarNone={showSnackbarNone}
+                                    onShowSnackbarBookmark={showSnackbarBookmark}
                                     className="border border-gray-200 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:-translate-y-2"
                                 />
                             ))}
@@ -292,7 +293,8 @@ function Home() {
                         lineIntro={camp.lineIntro || `${camp.city} ${camp.state}에 있는 ${camp.name}`}
                         marked={camp.marked}
                         onClick={() => handleCardClick(camp.campId)}
-                        onBookmarkClick={handleBookmarkClick}
+                        onShowSnackbarNone={showSnackbarNone}
+                        onShowSnackbarBookmark={showSnackbarBookmark}
                         className="border border-gray-200 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:-translate-y-2"
                     />
                 ))}

@@ -4,7 +4,8 @@ import { userService } from "api/services/userService"; // userService 경로에
 import { useApi } from "hooks/useApi";
 import {useNavigate} from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert"; // useApi 경로에 맞게 수정
+import Alert from "@mui/material/Alert";
+import {CustomSnackbar} from "../index"; // useApi 경로에 맞게 수정
 
 // 해시태그 매핑 (표시되는 해시태그 : 실제 DB 키워드)
 const tagMapping = {
@@ -228,17 +229,13 @@ const KeywordSelection = ({ title, skip = false }) => {
                             선택 완료
                         </Button>
                     </Box>
-                    <Snackbar
+                    <CustomSnackbar
                         open={open}
-                        autoHideDuration={3000}
                         onClose={handleClose}
-                        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                        message={"키워드 업데이트가 완료되었습니다!"}
+                        severity="success"
                     >
-                        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                            키워드 업데이트가 완료되었습니다!
-                        </Alert>
-                    </Snackbar>
-
+                    </CustomSnackbar>
                 </>
             )}
         </Box>
