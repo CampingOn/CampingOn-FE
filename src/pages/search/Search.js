@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useApi } from 'hooks/useApi';
 import { Box, Container, Typography, CircularProgress } from '@mui/material';
-import {ScrollToTopFab, SearchBar, CampingCard,  NoResultsFound} from 'components';
+import {ScrollToTopFab, SearchBar, CampingCard, NoResultsFound, CustomSnackbar} from 'components';
 import { searchInfoService } from 'api/services/searchInfoService';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Snackbar from '@mui/material/Snackbar';
 
 function Search() {
     const location = useLocation();
@@ -12,6 +11,7 @@ function Search() {
     const [camps, setCamps] = useState([]);
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
+    const [snackbarKey, setSnackbarKey] = useState(0);
     const [searchParams, setSearchParams] = useState({
         city: '',
         keyword: ''
@@ -130,8 +130,12 @@ function Search() {
     };
 
     const showSnackbarBookmark = () => {
-        setSnackbarMessage('찜 상태를 변경하였습니다');
-        setSnackbarBookmark(true);
+        setSnackbarBookmark(false);
+        setTimeout(() => {
+            setSnackbarMessage("찜 상태를 변경하였습니다.");
+            setSnackbarBookmark(true);
+            setSnackbarKey(prev => prev + 1);
+        }, 100);
     };
 
     const handleCloseNone = () => {
@@ -188,17 +192,18 @@ function Search() {
             <div id="load-more-trigger" style={{height: '1px'}}/>
 
             {/* Snackbar 컴포넌트 */}
-            <Snackbar
+            <CustomSnackbar
                 open={snackbarNone}
-                autoHideDuration={6000}
                 onClose={handleCloseNone}
                 message={snackbarMessage}
+                severity="warning"
             />
-            <Snackbar
+            <CustomSnackbar
+                key={snackbarKey}
                 open={snackbarBookmark}
-                autoHideDuration={6000}
                 onClose={handleCloseBookmark}
                 message={snackbarMessage}
+                severity="info"
             />
 
             <ScrollToTopFab/>

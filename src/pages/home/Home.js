@@ -86,6 +86,14 @@ function Home() {
         navigate(`/camps/${campId}`);
     };
 
+    const handleBookmarkClick = (campId) => {
+        if (!isAuthenticated) {
+            showSnackbarNone();
+            return;
+        }
+        showSnackbarBookmark();
+    };
+
     const handleSearch = ({city, keyword}) => {
         const params = new URLSearchParams();
         if (city) params.append('city', city);
@@ -248,8 +256,7 @@ function Home() {
                                     lineIntro={camp.lineIntro || `${camp.streetAddr.split(' ').slice(0, 2).join(' ')}에 있는 ${camp.name}`}
                                     marked={camp.marked}
                                     onClick={() => handleCardClick(camp.campId)}
-                                    onShowSnackbarNone={showSnackbarNone}
-                                    onShowSnackbarBookmark={showSnackbarBookmark}
+                                    onBookmarkClick={handleBookmarkClick}
                                     className="border border-gray-200 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:-translate-y-2"
                                 />
                             ))}
@@ -285,8 +292,7 @@ function Home() {
                         lineIntro={camp.lineIntro || `${camp.city} ${camp.state}에 있는 ${camp.name}`}
                         marked={camp.marked}
                         onClick={() => handleCardClick(camp.campId)}
-                        onShowSnackbarNone={showSnackbarNone}
-                        onShowSnackbarBookmark={showSnackbarBookmark}
+                        onBookmarkClick={handleBookmarkClick}
                         className="border border-gray-200 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:-translate-y-2"
                     />
                 ))}
@@ -306,7 +312,7 @@ function Home() {
                 open={snackbarBookmark}
                 onClose={handleCloseBookmark}
                 message={snackbarMessage}
-                severity="success"
+                severity="info"
             />
 
             <ScrollToTopFab/>

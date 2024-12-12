@@ -1,12 +1,12 @@
-import { Snackbar, Alert, Grow } from '@mui/material';
+import {Snackbar, Alert, Grow} from '@mui/material';
 
-const CustomSnackbar = ({ open, message, severity, onClose }) => {
+const CustomSnackbar = ({open, message, severity, onClose}) => {
     return (
-        <Snackbar 
-            open={open} 
-            autoHideDuration={2000} 
+        <Snackbar
+            open={open}
+            autoHideDuration={2000}
             onClose={onClose}
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            anchorOrigin={{vertical: 'top', horizontal: 'center'}}
             TransitionComponent={Grow}
             TransitionProps={{
                 style: {
@@ -14,8 +14,8 @@ const CustomSnackbar = ({ open, message, severity, onClose }) => {
                 }
             }}
         >
-            <Alert 
-                onClose={onClose} 
+            <Alert
+                onClose={onClose}
                 severity={severity}
                 sx={{
                     width: '100%',
@@ -26,6 +26,14 @@ const CustomSnackbar = ({ open, message, severity, onClose }) => {
                         border: '1px solid #ff6927',
                         '& .MuiAlert-icon': {
                             color: '#ff6927'
+                        }
+                    },
+                    '&.MuiAlert-standardInfo': {
+                        backgroundColor: 'white',
+                        color: '#ffa600',
+                        border: '1px solid #ffa600',
+                        '& .MuiAlert-icon': {
+                            color: '#ffa600'
                         }
                     },
                     '&.MuiAlert-standardError': {
