@@ -3,8 +3,6 @@ import {Box, Chip, Typography, Button, CircularProgress} from "@mui/material";
 import { userService } from "api/services/userService"; // userService 경로에 맞게 수정
 import { useApi } from "hooks/useApi";
 import {useNavigate} from "react-router-dom";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
 import {CustomSnackbar} from "../index"; // useApi 경로에 맞게 수정
 
 // 해시태그 매핑 (표시되는 해시태그 : 실제 DB 키워드)
