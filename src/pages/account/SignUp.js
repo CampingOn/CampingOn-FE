@@ -47,7 +47,7 @@ function Signup() {
                     '/api/signup',
                     { name, email, password, nickname }
                 );
-                if (response.status === 201) navigate('/');
+                if (response.status === 201) navigate('/login');
             } catch {
                 setSnackbarOpen(true); // 실패 시 Snackbar 표시
             }
