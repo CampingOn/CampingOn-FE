@@ -49,7 +49,7 @@ const KakaoMap = ({ latitude, longitude, locationName, state }) => {
                 });
 
                 // 마커 클릭 시 카카오맵 웹 페이지로 이동 (검색된 상태)
-                const kakaoMapLink = `https://map.kakao.com/link/search/${state} ${locationName}`;
+                const kakaoMapLink = `https://map.kakao.com/link/search/${encodeURIComponent(`${state} ${locationName}`)}`;
                 window.kakao.maps.event.addListener(marker, 'click', () => {
                     window.open(kakaoMapLink, '_blank');
                 });
