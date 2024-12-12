@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import apiClient from 'api/axiosConfig';
 import {validateEmail, validatePassword, validateNickname, DuplicateCheckField} from 'utils/Validation';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
-import { CustomInput } from "components";
+import { CustomInput, CustomSnackbar } from "components";
 
 function Signup() {
     const [logo, setLogo] = useState(`logo/logo.svg`);
@@ -47,15 +45,16 @@ function Signup() {
                     '/api/signup',
                     { name, email, password, nickname }
                 );
-                if (response.status === 201) navigate('/');
+                if (response.status === 201) {
+                    setSnackbarOpen(true);
+                    setTimeout(() => {
+                        navigate('/login');
+                    }, 1500);
+                }
             } catch {
-                setSnackbarOpen(true); // 실패 시 Snackbar 표시
+                setSnackbarOpen(true);
             }
         }
-    };
-
-    const handleSnackbarClose = () => {
-        setSnackbarOpen(false);
     };
 
     return (
@@ -154,16 +153,11 @@ function Signup() {
             </div>
 
             {/* Snackbar */}
-            <Snackbar
+            <CustomSnackbar
                 open={snackbarOpen}
-                autoHideDuration={6000}
-                onClose={handleSnackbarClose}
-                anchorOrigin={{vertical: 'top', horizontal: 'center'}}
-            >
-                <Alert onClose={handleSnackbarClose} severity="error" sx={{width: '100%'}}>
-                    회원 가입 실패: 잠시 후 다시 시도해주세요
-                </Alert>
-            </Snackbar>
+                message={snackbarOpen ? "회원가입이 완료되었습니다." : ""}
+                severity="info"
+            />
         </div>
     );
 }

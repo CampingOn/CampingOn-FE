@@ -118,9 +118,11 @@ function CustomInput({
                             boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
                             '&:hover': {
                                 backgroundColor: '#ff8146', // 주황색
+                                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
                             },
                             '&:active': {
                                 backgroundColor: '#ff8146', // 주황색
+                                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
                             },
                         }}
                     >
