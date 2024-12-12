@@ -20,6 +20,17 @@ const StyledButton = styled(Button)(({ size, customColor }) => ({
             `#ff6927` :
             '#ff8146',
     },
+    '&.Mui-disabled': {
+        backgroundColor: 'transparent',
+        border: '1px solid #B2B2B2',
+        color: '#B2B2B2',
+        cursor: 'not-allowed',
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+        '&:hover': {
+            backgroundColor: 'transparent',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+        }
+    },
     '@media (max-width: 600px)': {
         padding: size === 'large' ? '10px 30px' :
                 size === 'small' ? '8px 30px' : 
@@ -34,14 +45,15 @@ const StyledButton = styled(Button)(({ size, customColor }) => ({
     }
 }));
 
-const YellowButton = ({ onClick, children, size = 'extra-small', style }) => {
+const YellowButton = ({ onClick, children, size = 'extra-small', style, disabled }) => {
     const customColor = style?.backgroundColor;
     return (
         <StyledButton 
             onClick={onClick} 
             size={size} 
             customColor={customColor}
-            style={{...style, backgroundColor: undefined}}  // backgroundColor를 제외한 나머지 스타일
+            disabled={disabled}
+            style={{...style, backgroundColor: undefined}}
         >
             {children}
         </StyledButton>

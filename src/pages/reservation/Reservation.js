@@ -19,6 +19,7 @@ const Reservation = () => {
         message: '',
         severity: 'success'
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const {
         execute: getCampSite, 
@@ -161,6 +162,9 @@ const Reservation = () => {
     };
 
     const handleReserve = async () => {
+        if (!validateDates()) return;
+        setIsSubmitting(true);
+
         const info = calculateReservationInfo();
         if (!info) return;
 
@@ -175,25 +179,26 @@ const Reservation = () => {
 
         console.table([{title: '새 예약 요청', ...requestData}]);
 
-        await createReservation(requestData);
-        
-        if (reservationError) {
+        try {
+            await createReservation(requestData);
+            
             setSnackbar({
                 open: true,
-                message: reservationError.message || '예약 중 오류가 발생했습니다.',
-                severity: 'error'
+                message: '예약이 완료되었습니다.',
+                severity: 'success'
             });
-            return;
+            setTimeout(() => {
+                navigate('/my-reservation', { replace: true });
+            }, 1800);
+        } catch (error) {
+            console.error("예약 실패:", error);
+            setSnackbar({
+                open: true,
+                message: error.response?.data?.message || "예약에 실패했습니다.",
+                severity: "error"
+            });
+            setIsSubmitting(false);
         }
-
-        setSnackbar({
-            open: true,
-            message: '예약이 완료되었습니다.',
-            severity: 'success'
-        });
-        setTimeout(() => {
-            navigate('/my-reservation');
-        }, 1800);
     };
 
     const handleGuestCntChange = (e) => {
@@ -332,6 +337,7 @@ const Reservation = () => {
                                 onClick={handleReserve}
                                 size="large"
                                 style={{backgroundColor: '#ff8146'}}
+                                disabled={isSubmitting}
                             >
                                 예약확정
                             </YellowButton>
