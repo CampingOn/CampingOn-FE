@@ -6,25 +6,25 @@ function MainCarousel() {
     const carouselItems = [
         {
             id: 1,
-            image: 'carousel/carousel4.jpg',
+            image: 'https://campingon.s3.ap-northeast-2.amazonaws.com/banner/carousel4.jpg',
             title: '반려동물과 함께하는 특별한 캠핑 🐕',
             link: `${process.env.REACT_APP_DOMAIN_URL}/search?keyword=반려동물`,
         },
         {
             id: 2,
-            image: 'carousel/carousel1.jpg',
+            image: 'https://campingon.s3.ap-northeast-2.amazonaws.com/banner/carousel1.jpg',
             title: '별 보러 갈래? 별 보기 좋은 캠핑장 🌌',
             link: `${process.env.REACT_APP_DOMAIN_URL}/search?keyword=별보기좋은`,
         },
         {
             id: 3,
-            image: 'carousel/carousel2.jpg',
+            image: 'https://campingon.s3.ap-northeast-2.amazonaws.com/banner/carousel2.jpg',
             title: '오늘은 즉흥 캠핑!🏃‍➡️🏃‍♀️‍➡️당장 떠나기 좋은 서울 근교 캠핑장️',
             link: `${process.env.REACT_APP_DOMAIN_URL}/search?city=서울`,
         },
         {
             id: 4,
-            image: 'carousel/carousel3.jpg',
+            image: 'https://campingon.s3.ap-northeast-2.amazonaws.com/banner/carousel3.jpg',
             title: '하얀 눈 내리는 겨울캠핑, 따뜻한 온수가 필요해!🔥🔥',
             link: `${process.env.REACT_APP_DOMAIN_URL}/search?keyword=온수`,
         },
