@@ -4,9 +4,8 @@ import {useNavigate} from "react-router-dom";
 import {Box, Container, Typography} from "@mui/material";
 import {campService} from "../../api/services/campService";
 import {searchInfoService} from "../../api/services/searchInfoService";
-import {CampingCard, ScrollToTopFab, MainCarousel, SearchBar, } from 'components';
+import {CampingCard, ScrollToTopFab, MainCarousel, SearchBar, CustomSnackbar} from 'components';
 import {useAuth} from "../../context/AuthContext";
-import Snackbar from "@mui/material/Snackbar";
 
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -21,6 +20,7 @@ function Home() {
     const [snackbarNone, setSnackbarNone] = useState(false);
     const [snackbarBookmark, setSnackbarBookmark] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [snackbarKey, setSnackbarKey] = useState(0);
     // 추천 목록 캐러셀
     const [currentRecommendPage, setCurrentRecommendPage] = useState(0);
     const [slideDirection, setSlideDirection] = useState('right');
@@ -44,8 +44,12 @@ function Home() {
     };
 
     const showSnackbarBookmark = () => {
-        setSnackbarMessage("찜 상태를 변경하였습니다.");
-        setSnackbarBookmark(true);
+        setSnackbarBookmark(false);
+        setTimeout(() => {
+            setSnackbarMessage("찜 상태를 변경하였습니다.");
+            setSnackbarBookmark(true);
+            setSnackbarKey(prev => prev + 1);
+        }, 100);
     };
 
     const {
@@ -80,6 +84,14 @@ function Home() {
 
     const handleCardClick = (campId) => {
         navigate(`/camps/${campId}`);
+    };
+
+    const handleBookmarkClick = (campId) => {
+        if (!isAuthenticated) {
+            showSnackbarNone();
+            return;
+        }
+        showSnackbarBookmark();
     };
 
     const handleSearch = ({city, keyword}) => {
@@ -291,17 +303,18 @@ function Home() {
             {/* 무한 스크롤을 위한 Intersection Observer 트리거 */}
             <div ref={observerRef} style={{height: '1px'}}/>
 
-            <Snackbar
+            <CustomSnackbar
                 open={snackbarNone}
-                autoHideDuration={1500}
                 onClose={handleCloseNone}
                 message={snackbarMessage}
+                severity="warning"
             />
-            <Snackbar
+            <CustomSnackbar
+                key={snackbarKey}
                 open={snackbarBookmark}
-                autoHideDuration={1500}
                 onClose={handleCloseBookmark}
                 message={snackbarMessage}
+                severity="info"
             />
 
             <ScrollToTopFab/>

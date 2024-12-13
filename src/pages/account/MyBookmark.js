@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { campService } from "../../api/services/campService";
-import { Box, Typography, Snackbar } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import CampBookmarkedCard from "../../components/camp/CampBookmarkedCard";
 import ScrollToTopFab from "../../components/common/ScrollToTopFab";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import * as PropTypes from "prop-types";
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import { CustomSnackbar } from "components";
 
 BookmarkBorderIcon.propTypes = {
     sx: PropTypes.shape({
@@ -23,6 +24,7 @@ function MyBookmark() {
     const [hasMore, setHasMore] = useState(true);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarKey, setSnackbarKey] = useState(0);
 
     const observerRef = useRef(null); // Intersection Observer 참조
 
@@ -70,6 +72,15 @@ function MyBookmark() {
         setSnackbarOpen(false);
     };
 
+    const showSnackbarMessage = (message) => {
+        setSnackbarOpen(false);
+        setTimeout(() => {
+            setSnackbarMessage(message);
+            setSnackbarOpen(true);
+            setSnackbarKey(prev => prev + 1);
+        }, 100);
+    };
+
     return (
         <Box sx={{ marginTop: '60px' }}>
             <Typography
@@ -107,10 +118,7 @@ function MyBookmark() {
                             keywords: camp.keywords,
                             isMarked: camp.marked
                         }}
-                        onBookmarkChange={(message) => {
-                            setSnackbarMessage(message);
-                            setSnackbarOpen(true);
-                        }}
+                        onBookmarkChange={showSnackbarMessage}
                     />
                 ))
             ) : (
@@ -150,11 +158,12 @@ function MyBookmark() {
             {/* 무한 스크롤을 위한 Intersection Observer 트리거 */}
             <div ref={observerRef} style={{ height: '1px' }} />
 
-            <Snackbar
+            <CustomSnackbar
+                key={snackbarKey}
                 open={snackbarOpen}
-                onClose={handleSnackbarClose}
                 message={snackbarMessage}
-                autoHideDuration={1500}
+                severity="success"
+                onClose={handleSnackbarClose}
             />
 
             <ScrollToTopFab />

@@ -5,8 +5,7 @@ import { CampReservationCard, ScrollToTopFab, PageLayout, EmptyState, PageTitle 
 import { Box, Typography, CircularProgress } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { useInView } from "react-intersection-observer";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
+import { CustomSnackbar } from "components";
 
 const SnackbarContext = createContext();
 
@@ -15,7 +14,7 @@ export const useSnackbar = () => useContext(SnackbarContext);
 const SnackbarProvider = ({ children }) => {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
-    const [snackbarSeverity, setSnackbarSeverity] = useState("success"); // "success" | "error" | "info" | "warning"
+    const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
     const showSnackbar = (message, severity = "success") => {
         setSnackbarMessage(message);
@@ -28,16 +27,12 @@ const SnackbarProvider = ({ children }) => {
     return (
         <SnackbarContext.Provider value={showSnackbar}>
             {children}
-            <Snackbar
+            <CustomSnackbar
                 open={snackbarOpen}
-                autoHideDuration={4000}
+                message={snackbarMessage}
+                severity={snackbarSeverity}
                 onClose={closeSnackbar}
-                anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-            >
-                <Alert onClose={closeSnackbar} severity={snackbarSeverity} sx={{ width: "100%" }}>
-                    {snackbarMessage}
-                </Alert>
-            </Snackbar>
+            />
         </SnackbarContext.Provider>
     );
 };
