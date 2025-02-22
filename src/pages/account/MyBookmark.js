@@ -25,6 +25,8 @@ function MyBookmark() {
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarKey, setSnackbarKey] = useState(0);
+    // 초기 로딩 완료 상태 추가 (첫 데이터 로드 후에 무한 스크롤이 동작하도록)
+    const [initialLoadComplete, setInitialLoadComplete] = useState(false);
 
     const observerRef = useRef(null); // Intersection Observer 참조
 
@@ -39,6 +41,10 @@ function MyBookmark() {
 
             setBookmarkCardData((prevData) => [...prevData, ...newData]); // 기존 데이터에 새 데이터 추가
             setHasMore(newData.length > 0); // 새로운 데이터가 있으면 더 로드할 수 있음
+            if (page === 0) {
+                // 첫 페이지 데이터 로드 완료 시 초기 로딩 완료 상태 설정
+                setInitialLoadComplete(true);
+            }
             setPage((prevPage) => prevPage + 1); // 페이지 번호 증가
         } catch (error) {
             console.error("북마크된 캠핑장 로딩 실패", error);
@@ -50,10 +56,12 @@ function MyBookmark() {
     // Intersection Observer의 콜백 함수
     const loadMore = useCallback((entries) => {
         const [entry] = entries;
+        // 초기 로딩이 완료되지 않았다면 추가 요청하지 않음
+        if (!initialLoadComplete) return;
         if (entry.isIntersecting && hasMore) {
             fetchBookmarkedCamps();
         }
-    }, [hasMore, loading]);
+    }, [initialLoadComplete, hasMore, loading]);
 
     // Intersection Observer 설정
     useEffect(() => {
@@ -65,7 +73,8 @@ function MyBookmark() {
     }, [loadMore]);
 
     useEffect(() => {
-        fetchBookmarkedCamps(); // 컴포넌트 로드 시 첫 번째 데이터 가져오기
+        // 컴포넌트 로드 시 첫 번째 데이터 가져오기
+        fetchBookmarkedCamps();
     }, []);
 
     const handleSnackbarClose = () => {
@@ -84,7 +93,6 @@ function MyBookmark() {
     return (
         <Box sx={{ marginTop: '60px' }}>
             <Typography
-                // variant="h2"
                 sx={{
                     marginBottom: '20px',
                     fontWeight: "bold",
@@ -94,13 +102,14 @@ function MyBookmark() {
                     textAlign: "left",
                 }}
             >
-                내가 찜한 캠핑장   <FavoriteIcon
-                sx={{
-                    fontSize: 40, // 아이콘 크기
-                    marginBottom: 1,
-                    color: '#ff0000',
-                }}
-            />
+                내가 찜한 캠핑장&nbsp;
+                <FavoriteIcon
+                    sx={{
+                        fontSize: 40, // 아이콘 크기
+                        marginBottom: 1,
+                        color: '#ff0000',
+                    }}
+                />
             </Typography>
 
             {loading && <Typography>로딩 중...</Typography>}
@@ -133,7 +142,6 @@ function MyBookmark() {
                         color: '#555',
                     }}
                 >
-                    {/* 북마크 아이콘 */}
                     <BookmarkBorderIcon
                         sx={{
                             fontSize: 80, // 아이콘 크기
@@ -141,8 +149,6 @@ function MyBookmark() {
                             color: '#cccccc',
                         }}
                     />
-
-                    {/* 텍스트 */}
                     <Typography
                         variant="h6"
                         sx={{

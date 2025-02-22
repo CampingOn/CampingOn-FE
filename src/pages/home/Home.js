@@ -21,7 +21,7 @@ function Home() {
     const [snackbarBookmark, setSnackbarBookmark] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarKey, setSnackbarKey] = useState(0);
-    // 추천 목록 캐러셀
+    // 추천 목록 캐러셀 관련 상태들
     const [currentRecommendPage, setCurrentRecommendPage] = useState(0);
     const [slideDirection, setSlideDirection] = useState('right');
     const [isSliding, setIsSliding] = useState(false);
@@ -29,6 +29,8 @@ function Home() {
         isAnimating: false,
         direction: null
     });
+    // 초기 로딩 완료 여부 (초기 페이지는 무한스크롤로 로드하지 않기 위함)
+    const [initialLoadComplete, setInitialLoadComplete] = useState(false);
 
     const handleCloseNone = () => {
         setSnackbarNone(false);
@@ -66,9 +68,10 @@ function Home() {
         execute: executeMatchedCamps
     } = useApi(searchInfoService.getMatchedCamps);
 
-    const observerRef = useRef(null); // Intersection Observer 참조
+    const observerRef = useRef(null);
 
     useEffect(() => {
+        // 첫 로딩은 페이지 0의 데이터만 요청
         executePopularCamps(0, 9);
         if (isAuthenticated) {
             executeMatchedCamps(0, 12);
@@ -77,10 +80,15 @@ function Home() {
 
     useEffect(() => {
         if (popularCampsData?.content) {
-            setCamps((prev) => (page === 0 ? popularCampsData.content : [...prev, ...popularCampsData.content]));
-            setHasMore(popularCampsData.content.length === 9); // 9개씩 로드되었는지 확인
+            // page가 0이면 기존 데이터를 대체, 아니면 추가
+            setCamps(prev => (page === 0 ? popularCampsData.content : [...prev, ...popularCampsData.content]));
+            setHasMore(popularCampsData.content.length === 9);
+            // 첫 로딩이 완료되면 initialLoadComplete를 true로 설정
+            if (page === 0) {
+                setInitialLoadComplete(true);
+            }
         }
-    }, [popularCampsData]);
+    }, [popularCampsData, page]);
 
     const handleCardClick = (campId) => {
         navigate(`/camps/${campId}`);
@@ -94,7 +102,7 @@ function Home() {
         showSnackbarBookmark();
     };
 
-    const handleSearch = ({city, keyword}) => {
+    const handleSearch = ({ city, keyword }) => {
         const params = new URLSearchParams();
         if (city) params.append('city', city);
         if (keyword) params.append('keyword', keyword);
@@ -105,13 +113,15 @@ function Home() {
     const loadMore = useCallback(
         (entries) => {
             const [entry] = entries;
+            // 초기 로딩이 완료된 경우에만 추가 데이터를 요청
+            if (!initialLoadComplete) return;
             if (entry.isIntersecting && hasMore && !loadingPopularCamps) {
                 const nextPage = page + 1;
                 executePopularCamps(nextPage, 9);
                 setPage(nextPage);
             }
         },
-        [page, hasMore, loadingPopularCamps, executePopularCamps]
+        [page, hasMore, loadingPopularCamps, executePopularCamps, initialLoadComplete]
     );
 
     // Intersection Observer 설정
@@ -122,7 +132,6 @@ function Home() {
             if (observerRef.current) observer.unobserve(observerRef.current);
         };
     }, [loadMore]);
-
 
     // 추천 캠핑장 페이지 이동 핸들러
     const handleNextPage = () => {
@@ -149,7 +158,6 @@ function Home() {
     // 현재 페이지에 표시할 아이템들 계산
     const getCurrentPageItems = () => {
         if (!matchedCampsData?.content) return [];
-        // 3개씩 보여주되, 현재 페이지를 중심으로 데이터를 가져옵니다
         const items = [];
         for (let i = 0; i < 3; i++) {
             const index = currentRecommendPage + i;
@@ -159,7 +167,6 @@ function Home() {
         }
         return items;
     };
-
 
     return (
         <Container style={{ padding: '0', marginTop: '60px' }}>
@@ -317,7 +324,7 @@ function Home() {
                 severity="info"
             />
 
-            <ScrollToTopFab/>
+            <ScrollToTopFab />
         </Container>
     );
 }
